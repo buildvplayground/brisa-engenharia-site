@@ -192,12 +192,23 @@
       setTimeout(function () { cookie.dataset.open = "true"; }, 1400);
     }
 
+    /* WCAG 4.1.3: a escolha precisa ser anunciada. O banner simplesmente
+       desaparecer nao diz a quem usa leitor de tela que a acao funcionou. */
+    var aviso = document.createElement("p");
+    aviso.className = "sr-only";
+    aviso.setAttribute("role", "status");
+    aviso.setAttribute("aria-live", "polite");
+    document.body.appendChild(aviso);
+
     cookie.querySelectorAll("[data-consent]").forEach(function (b) {
       b.addEventListener("click", function () {
         var state = b.getAttribute("data-consent");
         try { localStorage.setItem(KEY, state); } catch (err) { /* modo privado */ }
         push(state);
         cookie.dataset.open = "false";
+        aviso.textContent = state === "granted"
+          ? "Cookies aceitos. O aviso foi fechado."
+          : "Cookies recusados. O aviso foi fechado e nada sera medido.";
       });
     });
   }

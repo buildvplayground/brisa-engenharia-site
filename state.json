@@ -47,7 +47,7 @@
       "n": 6,
       "nome": "Ajustes finais e auditoria",
       "status": "done",
-      "nota": "52 webp (6,1 MB, hero ~100 KB) apos revisao de curadoria; overflow horizontal 0 de 320 a 1920px; AA em 3 paginas incluindo texto sobre foto medido por pixel; menu, lightbox e teclado testados"
+      "nota": "53 webp (6,2 MB); revisao de espacamento por medicao (escala unica de vao, line-height de display de 1.06 para 1.18 porque a tinta de duas linhas se tocava, vao de linha do grid de obras de 34 para 72px); 6 momentos de imagem em largura total (era 3); overflow horizontal 0 em 33 larguras de 320 a 1920px; WCAG 2.0/2.1/2.2 verificado por script incluindo 1.4.11, 1.4.12, 1.4.4 e 2.5.8; heuristicas de Nielsen revisadas com foco em consistencia e recuperacao de erro"
     },
     {
       "n": 7,
@@ -180,6 +180,8 @@
     "Fontes servidas pelo Google Fonts: Instrument Serif, Montserrat e Chivo. Se a hospedagem exigir auto-hospedagem, e uma troca de meia hora.",
     "prefers-reduced-motion desliga todo o movimento; o gate html[data-motion] garante que a pagina seja legivel mesmo se o JS cair.",
     "A porta 8791 estava ocupada por outro projeto na maquina; o preview deste site usa a 8834.",
-    "Referencias de design passadas pelo cliente: kingshaus.co e construtoragreenwood.com.br. O que foi incorporado esta na secao 7 do brief-pack.md."
+    "Referencias de design passadas pelo cliente: kingshaus.co e construtoragreenwood.com.br. O que foi incorporado esta na secao 7 do brief-pack.md.",
+    "Revisao de espacamento e acessibilidade rodada por medicao, com _tools/spacing.py, _tools/wcag.py e _tools/audit.py. Relatorio na secao 8 do brief-pack.md.",
+    "WCAG 2.5.8: os alvos abaixo de 24px que restaram sao links DENTRO DE FRASE, cobertos pela excecao 'inline' da propria norma. Padding neles quebraria o ritmo da linha."
   ]
 }

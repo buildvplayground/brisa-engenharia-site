@@ -33,6 +33,24 @@
   /* ritmo */
   --pad-sec:clamp(76px,9.6vw,152px);
   --gap:clamp(28px,3.4vw,56px);
+
+  /* espaco: escala unica. Toda grade da pagina referencia estes tokens, em
+     vez de um clamp proprio. Regra de ouro das grades de cartao: o vao de
+     LINHA e sempre maior que o de COLUNA, senao a legenda de uma linha cola
+     na imagem da linha seguinte. */
+  --sp-1:8px;
+  --sp-2:12px;                     /* tira de imagens colada        */
+  --sp-3:18px;
+  --sp-4:26px;
+  --sp-5:clamp(22px,2.2vw,30px);   /* coluna de grade densa         */
+  --sp-6:clamp(32px,3.6vw,52px);   /* coluna de grade padrao        */
+  --sp-7:clamp(44px,5vw,72px);     /* linha de grade, bloco a bloco */
+  --sp-8:clamp(56px,6.4vw,96px);   /* separacao de bloco maior      */
+
+  /* alvo de toque minimo: WCAG 2.2 SC 2.5.8 pede 24x24 CSS px. Links de
+     navegacao isolados usam 44px, que e o conforto real de dedo. */
+  --alvo:24px;
+  --alvo-conf:44px;
   --e:cubic-bezier(.16,.84,.28,1);
   --e2:cubic-bezier(.4,0,.2,1);
   --hdr:88px;
@@ -76,6 +94,13 @@ ul,ol{margin:0;padding:0;list-style:none}
 }
 .skip:focus{top:12px}
 
+/* titulo que existe so para a arvore de acessibilidade: da nome a secao do
+   diptico, que visualmente nao tem cabecalho */
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
 /* ---------------------------------------------------------------- layout */
 
 .container{
@@ -117,7 +142,7 @@ section{position:relative}
 
 /* -------------------------------------------------------------- tipografia */
 
-.display{font-family:var(--ff-display);font-weight:400;line-height:1.06;letter-spacing:-.005em}
+.display{font-family:var(--ff-display);font-weight:400;line-height:1.18;letter-spacing:-.005em}
 h1.display{font-size:var(--fs-display);hyphens:auto}
 h2.display{font-size:var(--fs-h2)}
 
@@ -164,7 +189,7 @@ h2.display{font-size:var(--fs-h2)}
 .btn--light{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .btn--light:hover{background:var(--olive-soft);border-color:var(--olive-soft);color:var(--ink)}
 
-.btn--sm{padding:11px 22px;font-size:.7rem}
+.btn--sm{padding:14px 24px;font-size:.7rem;min-height:var(--alvo-conf)}
 
 .btn--outline-dark{background:transparent;color:var(--bone);border-color:rgba(238,233,230,.42)}
 .btn--outline-dark:hover{background:rgba(238,233,230,.14);border-color:var(--bone);color:var(--paper)}
@@ -173,7 +198,8 @@ h2.display{font-size:var(--fs-h2)}
   display:inline-flex;align-items:center;gap:10px;
   font:600 var(--fs-small)/1 var(--ff-ui);letter-spacing:.08em;
   text-decoration:none;color:var(--ink);
-  border-bottom:1px solid var(--olive);padding-bottom:5px;
+  border-bottom:1px solid var(--olive);
+  padding:8px 0 6px;min-height:var(--alvo);  /* WCAG 2.5.8 */
   transition:color .3s var(--e2),border-color .3s var(--e2);
 }
 .linkline:hover{color:var(--olive-ink)}
@@ -259,7 +285,7 @@ h2.display{font-size:var(--fs-h2)}
 
 .hero__media{
   position:relative;flex:1 1 auto;
-  min-height:clamp(210px,44vh,600px);
+  min-height:clamp(260px,58vh,680px);       /* a foto ganha a primeira tela */
   overflow:hidden;background:var(--mist);
 }
 .hero__media img{
@@ -277,10 +303,10 @@ h2.display{font-size:var(--fs-h2)}
 }
 .hero__grid{
   display:grid;grid-template-columns:minmax(0,1.62fr) minmax(0,1fr);
-  gap:clamp(26px,3.4vw,54px);align-items:end;
+  gap:var(--sp-6);align-items:end;
 }
 /* dimensionado para caber UMA frase por linha na coluna do hero */
-.hero h1{color:var(--paper);font-size:clamp(1.85rem,5.6vw,2.92rem);line-height:1.14}
+.hero h1{color:var(--paper);font-size:clamp(1.85rem,5.6vw,2.92rem);line-height:1.18}
 .hero h1 span{display:block}
 .hero .eyebrow{color:var(--bone)}
 .hero__aside{display:flex;flex-direction:column;gap:22px;align-items:flex-start}
@@ -288,6 +314,8 @@ h2.display{font-size:var(--fs-h2)}
 .hero__phone{
   display:inline-flex;align-items:center;gap:9px;text-decoration:none;
   font:500 .82rem/1 var(--ff-ui);letter-spacing:.1em;color:var(--bone);
+  min-height:var(--alvo);                    /* WCAG 2.5.8 */
+  padding:5px 0;
 }
 .hero__phone svg{width:16px;height:16px;flex:0 0 16px}
 .hero__phone:hover{color:var(--paper)}
@@ -296,7 +324,7 @@ h2.display{font-size:var(--fs-h2)}
 
 .sobre__grid{
   display:grid;grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);
-  gap:clamp(34px,5vw,84px);align-items:start;
+  gap:var(--sp-8);align-items:start;
 }
 .sobre h2{max-width:24ch;margin-bottom:26px}
 
@@ -353,7 +381,7 @@ h2.display{font-size:var(--fs-h2)}
 
 .svc{
   display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:clamp(34px,4.4vw,72px) clamp(34px,5vw,90px);
+  gap:var(--sp-8) var(--sp-7);          /* linha > coluna, era 63 contra 72 */
 }
 .svc__item{min-width:0;padding-top:22px;position:relative}
 .svc__item .top{
@@ -456,9 +484,24 @@ h2.display{font-size:var(--fs-h2)}
 
 /* ------------------------------------------------------------------- obras */
 
+/* placa: imagem sozinha em largura total, sem texto por cima. Abre a secao
+   de obras. A secao perde o padding de cima porque a placa encosta na
+   anterior; o respiro entra depois da imagem. */
+.obras{padding-top:0}
+.plate{
+  width:100%;overflow:hidden;background:var(--mist);
+  margin-bottom:var(--pad-sec);
+}
+.plate img{
+  width:100%;height:clamp(220px,38vw,540px);object-fit:cover;
+  will-change:transform;
+}
+
 .grid3{
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:clamp(22px,2.6vw,34px) clamp(20px,2.2vw,30px);
+  /* linha 2,4x a coluna: e o que separa a legenda de uma linha da imagem
+     da linha seguinte. Era 34 contra 30, praticamente igual. */
+  gap:var(--sp-7) var(--sp-5);
 }
 
 .obra{position:relative;display:block;width:100%;min-width:0}
@@ -516,7 +559,7 @@ h2.display{font-size:var(--fs-h2)}
 .eyebrow--tight{margin-bottom:6px}
 .essencia__grid{
   display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:clamp(34px,5vw,90px);align-items:start;
+  gap:var(--sp-8);align-items:start;
 }
 .mv{padding-left:clamp(20px,2.4vw,32px);border-left:1px solid var(--olive)}
 .mv + .mv{margin-top:clamp(30px,3.4vw,44px)}
@@ -528,7 +571,7 @@ h2.display{font-size:var(--fs-h2)}
 
 .vals{
   display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-  column-gap:clamp(18px,2.4vw,34px);
+  column-gap:var(--sp-5);
 }
 .vals li{
   min-width:0;padding:15px 0;border-bottom:1px solid var(--line);
@@ -546,7 +589,7 @@ h2.display{font-size:var(--fs-h2)}
 .contato .container{position:relative;z-index:1}
 .contato__grid{
   display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr);
-  gap:clamp(38px,5vw,86px);align-items:start;
+  gap:var(--sp-8);align-items:start;
 }
 .contato h2{color:var(--paper);max-width:22ch;margin-bottom:22px}
 
@@ -580,6 +623,10 @@ h2.display{font-size:var(--fs-h2)}
 .steps[data-on="true"] li:nth-child(2){transition-delay:.38s}
 .steps[data-on="true"] li:nth-child(3){transition-delay:.58s}
 
+.card-contato a{
+  display:inline-flex;align-items:center;min-height:var(--alvo);
+  padding:3px 0;
+}
 .card-contato{
   background:rgba(238,233,230,.06);
   border:1px solid var(--line-dark);
@@ -608,7 +655,7 @@ h2.display{font-size:var(--fs-h2)}
 .ftr .container{position:relative;z-index:1}
 .ftr__top{
   display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr) minmax(0,1fr);
-  gap:clamp(30px,4vw,64px);
+  gap:var(--sp-7);
   padding:clamp(56px,6vw,86px) 0 clamp(34px,4vw,50px);
 }
 .ftr__brand img{height:56px;width:auto}
@@ -618,39 +665,55 @@ h2.display{font-size:var(--fs-h2)}
   color:var(--olive-soft);margin-bottom:18px;
 }
 .ftr__nav a,.ftr__contato a{
-  display:inline-block;text-decoration:none;
+  /* alvo de 44px: sao links de navegacao isolados, nao links dentro de frase,
+     entao a excecao "inline" da 2.5.8 nao se aplica a eles. */
+  display:inline-flex;align-items:center;min-height:var(--alvo-conf);
+  text-decoration:none;
   font:400 .92rem/1.4 var(--ff-ui);color:var(--bone);
   border-bottom:1px solid transparent;transition:border-color .3s,color .3s;
 }
-.ftr__nav li,.ftr__contato li{margin-bottom:11px}
+.ftr__nav li,.ftr__contato li{margin-bottom:0}
+.ftr__contato li span{min-height:var(--alvo-conf);display:flex;align-items:center}
 .ftr__nav a:hover,.ftr__contato a:hover{color:var(--paper);border-color:var(--olive-soft)}
 .ftr__contato li span{display:block;font:400 .92rem/1.4 var(--ff-ui);color:var(--mist)}
 
 .ftr__bot{
   border-top:1px solid var(--line-dark);
-  padding:22px 0 30px;
-  display:flex;flex-wrap:wrap;gap:12px 26px;align-items:center;justify-content:space-between;
+  padding:14px 0 22px;
+  display:flex;flex-wrap:wrap;gap:4px 26px;align-items:center;justify-content:space-between;
   font:400 .8rem/1.5 var(--ff-ui);color:var(--mist);
 }
-.ftr__bot nav{display:flex;flex-wrap:wrap;gap:12px 22px}
-.ftr__bot a{text-decoration:none;color:var(--mist);border-bottom:1px solid transparent}
+.ftr__bot nav{display:flex;flex-wrap:wrap;gap:0 22px}
+.ftr__bot a{
+  display:inline-flex;align-items:center;min-height:var(--alvo);
+  text-decoration:none;color:var(--mist);border-bottom:1px solid transparent;
+}
 .ftr__bot a:hover{color:var(--bone);border-color:var(--olive-soft)}
 
 
 /* -------------------------------------------------------- duo de imagens
-   Par de fotos grandes lado a lado. A imagem tem o protagonismo; a legenda
-   fica discreta por baixo. A cortina lateral entra nas duas em sequência. */
+   Diptico em largura total: duas fotos grandes coladas, de borda a borda da
+   tela. As legendas descem para o container, alinhadas com todo o resto da
+   pagina (a imagem sangra, o texto nunca). Sem 100vw: a secao ja e block e
+   ocupa 100% sem contar a barra de rolagem. */
 
-.duo__grid{
+.duo{padding-bottom:0}
+.duo__pair{
   display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:clamp(20px,2.6vw,40px);
+  gap:2px;width:100%;
 }
-.duo__item{margin:0;min-width:0}
-.duo__item img{
-  width:100%;aspect-ratio:4/5;object-fit:cover;background:var(--mist);
+.duo__cell{display:block;overflow:hidden;background:var(--mist);min-width:0}
+.duo__cell img{
+  width:100%;aspect-ratio:4/5;object-fit:cover;
+  will-change:transform;
 }
-.duo__item figcaption{
-  margin-top:18px;max-width:44ch;
+.duo__legend{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:var(--sp-6);
+  padding-top:var(--sp-4);padding-bottom:var(--pad-sec);
+}
+.duo__legend span{
+  display:block;max-width:42ch;
   font:400 var(--fs-small)/1.6 var(--ff-ui);color:var(--muted);
 }
 
@@ -663,9 +726,16 @@ h2.display{font-size:var(--fs-h2)}
 .feed__h{max-width:22ch}
 .feed__link{flex:0 0 auto}
 
+/* a tira sangra de borda a borda, com vao de 2px entre as pecas: o feed
+   vira uma faixa de imagem, nao quatro cartoes soltos no container.
+   A tira e 26px mais larga que a tela e recuada 13px: a deriva horizontal
+   do scroll (+/-11px) corre dentro dessa folga e nunca abre uma faixa vazia
+   na borda. O overflow escondido na secao garante que nada seja pintado
+   fora, mesmo se a folga mudar. */
+.feed{overflow:hidden;padding-bottom:0}
 .feed__grid{
   display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:clamp(12px,1.5vw,20px);
+  gap:2px;width:calc(100% + 26px);margin-left:-13px;
 }
 .feed__grid li{min-width:0}
 .feed__grid a{
@@ -759,10 +829,37 @@ h2.display{font-size:var(--fs-h2)}
 .form input:focus,.form select:focus,.form textarea:focus{border-color:var(--olive);outline:2px solid rgba(115,120,79,.28);outline-offset:0}
 .form textarea{min-height:130px;resize:vertical}
 .form .hint{font:400 .8rem/1.5 var(--ff-ui);color:var(--muted);margin-top:7px}
-.form .consent{display:flex;gap:11px;align-items:flex-start}
-.form .consent input{width:18px;height:18px;flex:0 0 18px;margin-top:3px}
-.form .consent label{text-transform:none;letter-spacing:0;font:400 .88rem/1.55 var(--ff-body);color:var(--muted);margin:0}
-.form__msg{margin-top:18px;padding:14px 16px;border-left:2px solid var(--olive);background:var(--paper);font-size:.92rem}
+.form .consent{display:flex;flex-wrap:wrap;gap:11px;align-items:flex-start}
+/* 24x24: alvo minimo da WCAG 2.5.8. Em 18px o quadradinho reprovava. */
+.form .consent input{width:24px;height:24px;flex:0 0 24px;margin-top:1px;accent-color:var(--olive)}
+.form .consent label{
+  /* flex:1 1 0 com min-width:0 mantem o rotulo AO LADO da caixa depois que o
+     flex-wrap foi ligado para o erro poder descer para a linha de baixo */
+  flex:1 1 0;min-width:0;
+  text-transform:none;letter-spacing:0;font:400 .88rem/1.55 var(--ff-body);color:var(--muted);margin:0;
+}
+
+/* erro por campo (WCAG 3.3.1 e 3.3.3): texto, nunca so a cor. O aviso tem
+   um marcador em traco e o campo ganha borda e fundo proprios. */
+.form input[aria-invalid],.form select[aria-invalid],.form textarea[aria-invalid]{
+  border-color:#8C3A2B;background:#FDF7F5;
+}
+.form .field__err{
+  display:flex;gap:8px;margin-top:8px;
+  font:500 .8rem/1.45 var(--ff-ui);color:#7A3224;
+}
+.form .field__err::before{
+  content:"";flex:0 0 2px;align-self:stretch;background:#8C3A2B;
+}
+/* o erro do consentimento e o terceiro item do flex: sem width:100% ele
+   fica ao lado do rotulo em vez de abaixo dele */
+.form .consent .field__err{flex:0 0 100%;margin-left:35px}
+
+.form__msg{
+  margin-top:18px;padding:14px 16px;border-left:2px solid var(--olive);
+  background:var(--paper);font-size:.92rem;
+}
+.form__msg[data-state="erro"]{border-left-color:#8C3A2B;color:#7A3224;background:#FDF7F5}
 
 /* ---------------------------------------------------------------- responsivo */
 
@@ -802,7 +899,20 @@ h2.display{font-size:var(--fs-h2)}
 }
 
 @media (max-width:700px){
-  .duo__grid{grid-template-columns:minmax(0,1fr);gap:clamp(32px,7vw,48px)}
+  /* No celular o diptico empilha e cada legenda precisa ficar logo abaixo
+     da SUA foto, nao as duas juntas no fim. display:contents dissolve as
+     duas caixas intermediarias, os quatro filhos viram itens da propria
+     secao e a ordem passa a ser foto, legenda, foto, legenda. */
+  .duo{
+    display:grid;grid-template-columns:minmax(0,1fr);
+    row-gap:var(--sp-3);padding-bottom:var(--pad-sec);
+  }
+  .duo__pair,.duo__legend{display:contents}
+  .duo__cell:nth-of-type(1){order:1}
+  .duo__legend span:nth-of-type(1){order:2}
+  .duo__cell:nth-of-type(2){order:3;margin-top:var(--sp-5)}
+  .duo__legend span:nth-of-type(2){order:4}
+  .duo__legend span{padding:0 24px;max-width:none}
   .proc__item{grid-template-columns:minmax(0,1fr);gap:10px}
   .pillars{grid-template-columns:repeat(2,minmax(0,1fr))}
   .pillars li{border-right:1px solid var(--line-dark)}

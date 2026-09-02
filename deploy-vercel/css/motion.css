@@ -37,6 +37,9 @@
   }
   html[data-motion] [data-curtain][data-on]{clip-path:inset(0 0 0 0 round 2px)}
   html[data-motion] [data-curtain][data-on] > img{transform:none}
+  /* celula com parallax assenta em scale(1.08), que e a folga que o JS usa
+     para deslocar a foto: assim nao ha salto quando o scroll assume */
+  html[data-motion] [data-curtain][data-parallax][data-on] > img{transform:scale(1.08)}
 
   /* escadinha de 3 filetes: entram em scaleX sequencial */
   html[data-motion] .rule3 i{
@@ -58,7 +61,7 @@
   /* título em máscara, palavra por palavra */
   html[data-motion] .w{
     display:inline-block;overflow:hidden;vertical-align:top;
-    padding-block:.06em .17em;margin-block:-.06em -.17em;
+    padding-block:.14em .2em;margin-block:-.14em -.2em;
   }
   html[data-motion] .w > i{
     display:inline-block;font-style:inherit;
@@ -66,6 +69,51 @@
     transition:transform .9s var(--e) var(--d,0s);
   }
   html[data-motion] [data-split][data-on] .w > i{transform:none}
+
+  /* diptico: as duas fotos entram em cortina, a segunda com atraso */
+  html[data-motion] .duo__cell{will-change:clip-path}
+
+  /* tira do feed: a deriva horizontal fica suave entre frames de scroll.
+     A entrada em cascata das quatro pecas usa o motor generico de reveal,
+     que ja escalona irmaos em 80ms. */
+  html[data-motion] .feed__grid{transition:transform .12s linear}
+
+  /* pilares do compromisso: divisoria desenha e o texto sobe */
+  html[data-motion] .pillars li{
+    opacity:0;transform:translateY(16px);
+    transition:opacity .78s var(--e) var(--d,0s),transform .78s var(--e) var(--d,0s);
+  }
+  html[data-motion] .pillars[data-on] li{opacity:1;transform:none}
+  html[data-motion] .pillars[data-on] li:nth-child(1){--d:0s}
+  html[data-motion] .pillars[data-on] li:nth-child(2){--d:.08s}
+  html[data-motion] .pillars[data-on] li:nth-child(3){--d:.16s}
+  html[data-motion] .pillars[data-on] li:nth-child(4){--d:.24s}
+  html[data-motion] .pillars[data-on] li:nth-child(5){--d:.32s}
+
+  /* lista de valores: divisoria de cada item desenha da esquerda */
+  html[data-motion] .vals li{
+    opacity:0;transform:translateY(12px);
+    transition:opacity .66s var(--e) var(--d,0s),transform .66s var(--e) var(--d,0s);
+  }
+  html[data-motion] .vals[data-on] li{opacity:1;transform:none}
+  html[data-motion] .vals[data-on] li:nth-child(n+1){--d:0s}
+  html[data-motion] .vals[data-on] li:nth-child(2){--d:.05s}
+  html[data-motion] .vals[data-on] li:nth-child(3){--d:.1s}
+  html[data-motion] .vals[data-on] li:nth-child(4){--d:.15s}
+  html[data-motion] .vals[data-on] li:nth-child(5){--d:.2s}
+  html[data-motion] .vals[data-on] li:nth-child(6){--d:.25s}
+  html[data-motion] .vals[data-on] li:nth-child(7){--d:.3s}
+  html[data-motion] .vals[data-on] li:nth-child(8){--d:.35s}
+
+  /* numeral de servico e de processo: entra depois do filete, nao junto */
+  html[data-motion] .svc__item .num,
+  html[data-motion] .proc__item .num{
+    opacity:0;transform:translateY(10px);
+    transition:opacity .7s var(--e) .16s,transform .7s var(--e) .16s;
+  }
+  html[data-motion] .svc__item[data-on] .num,
+  html[data-motion] .proc__item[data-on] .num,
+  html[data-motion] [data-on] .proc__item .num{opacity:1;transform:none}
 
   /* hero em duas fases: a foto assenta, a banda sobe */
   html[data-motion] .hero__media img{
@@ -96,5 +144,10 @@
     clip-path:none !important;
   }
   .steps__fill{transform:scaleY(1) !important}
-  .steps li{opacity:1 !important;transform:none !important}
+  .steps li,
+  .pillars li,
+  .vals li,
+  .svc__item .num,
+  .proc__item .num{opacity:1 !important;transform:none !important}
+  .feed__grid,.duo__cell img{transform:none !important}
 }

@@ -125,6 +125,17 @@
   var proc = document.querySelector(".proc");
   var bands = [].slice.call(document.querySelectorAll(".band__bg"));
   var heroImg = document.querySelector("[data-hero-img]");
+
+  /* parallax generico: qualquer elemento com data-parallax="0.05" move a
+     propria <img> nessa proporcao do scroll, sempre dentro de um pai com
+     overflow escondido. O fator fica em 0.05 a 0.08: acima disso o
+     deslocamento passa a ser percebido como "a pagina esta tremendo". */
+  var px = [].slice.call(document.querySelectorAll("[data-parallax]")).map(function (el) {
+    return { box: el, img: el.querySelector("img"), k: parseFloat(el.dataset.parallax) || 0.05 };
+  }).filter(function (o) { return o.img; });
+
+  /* a tira do feed deriva de lado, devagar, enquanto atravessa a tela */
+  var feed = document.querySelector(".feed__grid");
   var steps = document.querySelector(".steps");
   var ticking = false;
 
@@ -154,6 +165,29 @@
         var off = Math.max(-cap, Math.min(cap, -mid * 0.08));
         b.style.transform = "translate3d(0," + off.toFixed(2) + "px,0) scale(1.04)";
       });
+
+      /* parallax declarado: a foto sobe dentro da propria moldura */
+      px.forEach(function (o) {
+        /* espera a cortina assentar: antes disso o transform da entrada e
+           quem manda na <img>, e um estilo inline mataria a animacao */
+        if (o.box.hasAttribute("data-curtain") && o.box.dataset.on === undefined) return;
+        var rr = o.box.getBoundingClientRect();
+        if (rr.bottom < -160 || rr.top > window.innerHeight + 160) return;
+        var mid = rr.top + rr.height / 2 - window.innerHeight / 2;
+        var cap = rr.height * 0.07;                 /* folga do scale abaixo */
+        var off = Math.max(-cap, Math.min(cap, -mid * o.k));
+        o.img.style.transform = "translate3d(0," + off.toFixed(2) + "px,0) scale(1.08)";
+      });
+
+      /* tira do feed: deriva horizontal de poucos pixels, para a faixa nao
+         ficar estatica. Fica dentro do vao de 2px, sem estourar largura. */
+      if (feed) {
+        var fr = feed.getBoundingClientRect();
+        if (fr.bottom > -100 && fr.top < window.innerHeight + 100) {
+          var fp = (window.innerHeight - fr.top) / (window.innerHeight + fr.height);
+          feed.style.transform = "translate3d(" + ((fp - 0.5) * -22).toFixed(2) + "px,0,0)";
+        }
+      }
 
       /* hero: deriva lenta da foto enquanto a primeira tela sai de cena */
       /* y > 4: no topo o transform fica com o CSS, senão o estilo inline
