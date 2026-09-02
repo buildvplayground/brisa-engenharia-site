@@ -228,14 +228,16 @@ h2.display{font-size:var(--fs-h2)}
 .burger[aria-expanded="true"] i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 
 .drawer{
-  position:fixed;inset:0 0 0 auto;width:min(88vw,360px);z-index:95;
+  position:fixed;inset:0 0 0 auto;width:min(84vw,352px);z-index:95;
   background:var(--ink);color:var(--bone);
   padding:104px 30px 40px;
   transform:translateX(101%);
-  transition:transform .5s var(--e);
+  /* visibility:hidden tira o menu fechado da ordem de tabulação */
+  visibility:hidden;
+  transition:transform .5s var(--e),visibility .5s;
   overflow-y:auto;
 }
-.drawer[data-open="true"]{transform:translateX(0)}
+.drawer[data-open="true"]{transform:translateX(0);visibility:visible}
 .drawer ul{display:flex;flex-direction:column;gap:2px}
 .drawer a{
   display:block;padding:15px 0;border-bottom:1px solid var(--line-dark);

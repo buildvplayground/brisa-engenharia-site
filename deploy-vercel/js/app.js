@@ -27,9 +27,12 @@
   var scrim = document.querySelector(".scrim");
   var lastFocus = null;
 
+  if (drawer) drawer.inert = true;      // fechado: fora da tabulação e sem cliques
+
   function openDrawer() {
     if (!drawer) return;
     lastFocus = document.activeElement;
+    drawer.inert = false;
     drawer.dataset.open = "true";
     if (scrim) scrim.dataset.open = "true";
     burger.setAttribute("aria-expanded", "true");
@@ -41,12 +44,24 @@
   function closeDrawer() {
     if (!drawer || drawer.dataset.open !== "true") return;
     drawer.dataset.open = "false";
+    drawer.inert = true;
     if (scrim) scrim.dataset.open = "false";
     burger.setAttribute("aria-expanded", "false");
     document.body.style.overflow = "";
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   window.brisaCloseDrawer = closeDrawer;
+
+  /* enquanto o menu está aberto, o Tab circula entre o hambúrguer e os links
+     do menu: sem isso o foco desce para o conteúdo atrás do scrim */
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Tab" || !drawer || drawer.dataset.open !== "true") return;
+    var f = [burger].concat([].slice.call(drawer.querySelectorAll("a[href],button")));
+    if (!f.length) return;
+    var i = f.indexOf(document.activeElement);
+    e.preventDefault();
+    f[(i + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus();
+  });
 
   if (burger) {
     burger.addEventListener("click", function () {
