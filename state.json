@@ -29,7 +29,7 @@
       "n": 3,
       "nome": "Design system",
       "status": "done",
-      "nota": "paleta amostrada por pixel/vetor da marca real; logo extraido como vetor do PDF da placa em 4 SVG; contraste de cada par verificado"
+      "nota": "paleta amostrada por pixel/vetor da marca real; logo extraido como vetor do PDF da placa em 4 SVG; contraste de cada par verificado. TIPOGRAFIA definida pelo cliente: Rufina nos cabecalhos, Average Sans no corpo. Average Sans so tem peso 400, entao a hierarquia da sans vem de caixa alta, entreletra, tamanho e cor, e os subtitulos em caixa baixa usam Rufina. Zero negrito sintetico na pagina."
     },
     {
       "n": 4,
@@ -182,6 +182,7 @@
     "A porta 8791 estava ocupada por outro projeto na maquina; o preview deste site usa a 8834.",
     "Referencias de design passadas pelo cliente: kingshaus.co e construtoragreenwood.com.br. O que foi incorporado esta na secao 7 do brief-pack.md.",
     "Revisao de espacamento e acessibilidade rodada por medicao, com _tools/spacing.py, _tools/wcag.py e _tools/audit.py. Relatorio na secao 8 do brief-pack.md.",
-    "WCAG 2.5.8: os alvos abaixo de 24px que restaram sao links DENTRO DE FRASE, cobertos pela excecao 'inline' da propria norma. Padding neles quebraria o ritmo da linha."
+    "WCAG 2.5.8: os alvos abaixo de 24px que restaram sao links DENTRO DE FRASE, cobertos pela excecao 'inline' da propria norma. Padding neles quebraria o ritmo da linha.",
+    "Par tipografico trocado a pedido do cliente para Rufina (cabecalho) + Average Sans (corpo). Average Sans e de PESO UNICO 400: nenhuma regra pede peso acima disso, senao o navegador geraria negrito sintetico. A escala foi recalibrada porque o ch da Rufina e 22% mais largo que o da fonte anterior e o da Average Sans 17% mais largo que o da Chivo. Detalhe na secao 9 do brief-pack.md."
   ]
 }
