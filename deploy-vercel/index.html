@@ -3,6 +3,39 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- BuildV: consentimento (Google Consent Mode v2) ==========================
+     Vem ANTES do GTM de propósito. O padrão é tudo negado, e o container só
+     libera armazenamento de medição depois do aceite no banner de cookies.
+     A leitura do localStorage é síncrona: quem já aceitou antes entra em
+     granted no primeiro hit, sem perder pageview. -->
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+(function () {
+  var salvo = null;
+  try { salvo = localStorage.getItem("brisa_consent_v1"); } catch (e) { salvo = null; }
+  var ok = salvo === "granted" ? "granted" : "denied";
+  gtag("consent", "default", {
+    ad_storage: ok,
+    ad_user_data: ok,
+    ad_personalization: ok,
+    analytics_storage: ok,
+    functionality_storage: "granted",
+    security_storage: "granted",
+    wait_for_update: 1500
+  });
+})();
+</script>
+<!-- /BuildV: consentimento -->
+
+<!-- BuildV: GTM -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WVG6L4KB');</script>
+<!-- /BuildV: GTM -->
 <title>Brisa Engenharia · Gestão e execução de obras residenciais de alto padrão</title>
 <meta name="description" content="Gestão, planejamento e execução de empreendimentos residenciais de alto padrão. Representamos os interesses do cliente da estratégia inicial à entrega das chaves. Curitiba, PR.">
 <link rel="canonical" href="https://www.brisa.eng.br/">
@@ -47,6 +80,11 @@
 </script>
 </head>
 <body>
+
+<!-- BuildV: GTM (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVG6L4KB"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- /BuildV: GTM (noscript) -->
 
 <a class="skip" href="#conteudo">Ir para o conteúdo</a>
 
@@ -785,5 +823,55 @@
 
 <script src="js/motion.js" defer></script>
 <script src="js/app.js" defer></script>
+
+<!-- BuildV: Merlin (popup) ================================================
+     O popup só inicializa depois que o banner de cookies foi resolvido: os
+     dois são overlay, e aparecer junto seria duas camadas na cara do visitante
+     ao mesmo tempo. Quem já respondeu numa visita anterior recebe o popup
+     depois de 1,2s. Se o banner ficar aberto sem resposta, há uma rede de
+     segurança de 45s que só dispara com o banner já fechado.
+     O nonce do snippet original foi descartado: o site não tem CSP, então o
+     atributo é inerte, e nonce fixo no HTML não protege nada. -->
+<script>
+(function () {
+  var CHAVE = "brisa_consent_v1";
+  var ligado = false;
+
+  function carrega() {
+    if (ligado) return;
+    ligado = true;
+    var s = document.createElement("script");
+    s.src = "https://scripts.gomerlin.com.br/merlin.js";
+    s.async = true;
+    s.onload = function () {
+      try {
+        window.Merlin.Popup.initFromSource("https://tools.gomerlin.com.br/popup/9628ffa4-2abd-4d52-bc26-a6fa9d10638c");
+      } catch (e) { /* o vendor mudou a API: não derruba a página */ }
+    };
+    document.head.appendChild(s);
+  }
+
+  function bannerAberto() {
+    var b = document.querySelector(".cookie");
+    return !!b && b.dataset.open === "true";
+  }
+
+  var decidido = null;
+  try { decidido = localStorage.getItem(CHAVE); } catch (e) { decidido = null; }
+
+  if (decidido) {
+    setTimeout(carrega, 1200);
+  } else {
+    document.addEventListener("brisa:consent", function () {
+      setTimeout(carrega, 700);
+    }, { once: true });
+    /* rede de segurança: se o banner já não estiver aberto, entra de qualquer
+       forma depois de 45s */
+    setTimeout(function () { if (!bannerAberto()) carrega(); }, 45000);
+  }
+})();
+</script>
+<!-- /BuildV: Merlin -->
+
 </body>
 </html>

@@ -204,8 +204,24 @@
       b.addEventListener("click", function () {
         var state = b.getAttribute("data-consent");
         try { localStorage.setItem(KEY, state); } catch (err) { /* modo privado */ }
+
+        /* Consent Mode v2: é isto que realmente libera ou trava as tags de
+           medição dentro do GTM. O evento customizado abaixo continua, para
+           gatilhos próprios do container. */
+        if (typeof window.gtag === "function") {
+          window.gtag("consent", "update", {
+            ad_storage: state,
+            ad_user_data: state,
+            ad_personalization: state,
+            analytics_storage: state
+          });
+        }
         push(state);
         cookie.dataset.open = "false";
+
+        /* avisa o resto da página que o consentimento foi resolvido: o popup
+           do Merlin espera por isto para não empilhar dois overlays */
+        document.dispatchEvent(new CustomEvent("brisa:consent", { detail: state }));
         aviso.textContent = state === "granted"
           ? "Cookies aceitos. O aviso foi fechado."
           : "Cookies recusados. O aviso foi fechado e nada sera medido.";

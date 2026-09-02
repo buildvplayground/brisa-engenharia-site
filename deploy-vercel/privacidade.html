@@ -3,6 +3,39 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- BuildV: consentimento (Google Consent Mode v2) ==========================
+     Vem ANTES do GTM de propósito. O padrão é tudo negado, e o container só
+     libera armazenamento de medição depois do aceite no banner de cookies.
+     A leitura do localStorage é síncrona: quem já aceitou antes entra em
+     granted no primeiro hit, sem perder pageview. -->
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+(function () {
+  var salvo = null;
+  try { salvo = localStorage.getItem("brisa_consent_v1"); } catch (e) { salvo = null; }
+  var ok = salvo === "granted" ? "granted" : "denied";
+  gtag("consent", "default", {
+    ad_storage: ok,
+    ad_user_data: ok,
+    ad_personalization: ok,
+    analytics_storage: ok,
+    functionality_storage: "granted",
+    security_storage: "granted",
+    wait_for_update: 1500
+  });
+})();
+</script>
+<!-- /BuildV: consentimento -->
+
+<!-- BuildV: GTM -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WVG6L4KB');</script>
+<!-- /BuildV: GTM -->
 <title>Política de Privacidade · Brisa Engenharia</title>
 <meta name="description" content="Como a Brisa Engenharia coleta, usa e protege dados pessoais, em conformidade com a LGPD (Lei 13.709/2018).">
 <meta name="robots" content="index,follow">
@@ -17,6 +50,11 @@
 <script>document.documentElement.setAttribute('data-motion','on')</script>
 </head>
 <body>
+
+<!-- BuildV: GTM (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVG6L4KB"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- /BuildV: GTM (noscript) -->
 
 <a class="skip" href="#conteudo">Ir para o conteúdo</a>
 

@@ -57,6 +57,18 @@
      navegacao isolados usam 44px, que e o conforto real de dedo. */
   --alvo:24px;
   --alvo-conf:44px;
+
+  /* Empilhamento. O widget do Merlin injeta z-index 9999 no runtime, e esta
+     escala existe para as camadas modais do site ficarem ACIMA dele: sem
+     isso a bolha flutuante do vendor aparece em cima do lightbox da galeria.
+     --z-widget nao e aplicado a nada, e a referencia declarada. */
+  --z-hdr:90;
+  --z-widget:9999;        /* Merlin, injetado por script                */
+  --z-cookie:10020;
+  --z-scrim:10040;
+  --z-drawer:10041;
+  --z-lb:10060;
+  --z-skip:10080;         /* atalho de teclado: sempre no topo de tudo   */
   --e:cubic-bezier(.16,.84,.28,1);
   --e2:cubic-bezier(.4,0,.2,1);
   --hdr:88px;
@@ -93,7 +105,7 @@ ul,ol{margin:0;padding:0;list-style:none}
 ::selection{background:var(--olive);color:var(--paper)}
 
 .skip{
-  position:absolute;left:12px;top:-64px;z-index:200;
+  position:absolute;left:12px;top:-64px;z-index:var(--z-skip);
   background:var(--ink);color:var(--paper);
   padding:12px 18px;font:400 var(--fs-small)/1 var(--ff-ui);
   transition:top .2s var(--e2);
@@ -227,7 +239,7 @@ h2.display{font-size:var(--fs-h2)}
 /* ------------------------------------------------------------------ header */
 
 .hdr{
-  position:fixed;inset:0 0 auto 0;z-index:90;
+  position:fixed;inset:0 0 auto 0;z-index:var(--z-hdr);
   background:var(--bone);
   border-bottom:1px solid var(--line);
   transition:height .4s var(--e2),background .4s var(--e2);
@@ -272,7 +284,7 @@ h2.display{font-size:var(--fs-h2)}
 .burger[aria-expanded="true"] i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 
 .drawer{
-  position:fixed;inset:0 0 0 auto;width:min(84vw,352px);z-index:95;
+  position:fixed;inset:0 0 0 auto;width:min(84vw,352px);z-index:var(--z-drawer);
   background:var(--ink);color:var(--bone);
   padding:104px 30px 40px;
   transform:translateX(101%);
@@ -290,7 +302,7 @@ h2.display{font-size:var(--fs-h2)}
 }
 .drawer .btn{margin-top:30px;width:100%;justify-content:center}
 .scrim{
-  position:fixed;inset:0;z-index:94;background:rgba(30,32,36,.5);
+  position:fixed;inset:0;z-index:var(--z-scrim);background:rgba(30,32,36,.5);
   opacity:0;visibility:hidden;transition:opacity .4s var(--e2),visibility .4s;
 }
 .scrim[data-open="true"]{opacity:1;visibility:visible}
@@ -774,7 +786,7 @@ h2.display{font-size:var(--fs-h2)}
 
 
 .lb{
-  position:fixed;inset:0;z-index:140;display:none;
+  position:fixed;inset:0;z-index:var(--z-lb);display:none;
   background:rgba(24,26,29,.95);
 }
 .lb[data-open="true"]{display:grid;grid-template-rows:auto minmax(0,1fr)}
@@ -807,7 +819,7 @@ h2.display{font-size:var(--fs-h2)}
 /* ---------------------------------------------------------- banner cookies */
 
 .cookie{
-  position:fixed;left:0;right:0;bottom:0;z-index:120;
+  position:fixed;left:0;right:0;bottom:0;z-index:var(--z-cookie);
   background:var(--ink);color:var(--bone);
   border-top:1px solid var(--line-dark);
   transform:translateY(102%);transition:transform .6s var(--e);

@@ -53,7 +53,7 @@
       "n": 7,
       "nome": "Tags e modulos",
       "status": "done",
-      "nota": "LGPD instalado (cookies com dataLayer, privacidade, fornecedores, backend PHP). GTM/GA4/Pixel e Merlin pulados por falta de IDs"
+      "nota": "LGPD instalado (cookies com dataLayer, privacidade, fornecedores, backend PHP). GTM-WVG6L4KB instalado nas 3 paginas com Google Consent Mode v2: padrao denied, update no aceite do banner. Merlin (popup 9628ffa4) instalado so na home, inicializando depois que o banner de cookies e resolvido, para nao empilhar dois overlays. GA4/Pixel/Ads ficam dentro do GTM, nao no HTML."
     },
     {
       "n": 8,
@@ -81,7 +81,9 @@
     "email": "contato@brisa.eng.br",
     "instagram": "@brisa.eng",
     "responsavel_tecnica": "Elisa Andrade da Silva, CREA PR 115016/D",
-    "placeholders_no_codigo": []
+    "placeholders_no_codigo": [],
+    "gtm": "GTM-WVG6L4KB",
+    "merlin_popup": "9628ffa4-2abd-4d52-bc26-a6fa9d10638c"
   },
   "pendencias": [
     {
@@ -111,20 +113,6 @@
       "bloqueia": null,
       "titulo": "Criar o banco MySQL e preencher db-config.php (so se for Hostinger)",
       "detalhe": "Copiar Site/php/db-config.example.php para db-config.php no servidor e preencher host/nome/usuario/senha. Sem banco, o formulario ainda funciona por e-mail. A tabela e criada sozinha no primeiro envio."
-    },
-    {
-      "id": "tags",
-      "grupo": "medicao",
-      "bloqueia": null,
-      "titulo": "IDs de GTM / GA4 / Meta Pixel / Google Ads",
-      "detalhe": "Nao instalados por falta dos IDs. O banner de cookies ja emite o evento brisa_consent no dataLayer, com consent_state granted/denied, para as tags respeitarem a LGPD quando entrarem."
-    },
-    {
-      "id": "merlin",
-      "grupo": "medicao",
-      "bloqueia": null,
-      "titulo": "ID do Merlin (popup)",
-      "detalhe": "Nao instalado por falta do ID."
     },
     {
       "id": "obras-nomes",
@@ -174,6 +162,13 @@
       "bloqueia": null,
       "titulo": "Arquivos limpos dos renders da Obra HV25",
       "detalhe": "O Instagram do cliente traz renders muito bons da HV25 (fachada em brises de madeira) e a ficha tecnica dela: 515 m2, 4 pavimentos, subsolo para 4 carros, sala de jogos e adega, 4 suites, atico. Os arquivos disponiveis tem texto e marca de agua embutidos, entao os renders entraram apenas na tira do Instagram. Com os arquivos limpos da para abrir uma secao de Projetos, separada das obras executadas, com a ficha tecnica."
+    },
+    {
+      "id": "gtm-conferir-tags",
+      "grupo": "medicao",
+      "bloqueia": null,
+      "titulo": "Configurar as tags DENTRO do container GTM-WVG6L4KB",
+      "detalhe": "O container esta instalado e disparando, mas quem cria as tags de GA4, Meta Pixel e Google Ads e o painel do GTM, nao o HTML. Ao criar cada uma, marcar 'Aguardar sinais de consentimento' e exigir analytics_storage para GA4 e ad_storage para Pixel e Ads: o site ja envia o Consent Mode v2 com padrao denied e update no aceite, e tambem o evento customizado brisa_consent com consent_state granted/denied, que pode ser usado como gatilho proprio."
     }
   ],
   "notas_tecnicas": [
@@ -183,6 +178,10 @@
     "Referencias de design passadas pelo cliente: kingshaus.co e construtoragreenwood.com.br. O que foi incorporado esta na secao 7 do brief-pack.md.",
     "Revisao de espacamento e acessibilidade rodada por medicao, com _tools/spacing.py, _tools/wcag.py e _tools/audit.py. Relatorio na secao 8 do brief-pack.md.",
     "WCAG 2.5.8: os alvos abaixo de 24px que restaram sao links DENTRO DE FRASE, cobertos pela excecao 'inline' da propria norma. Padding neles quebraria o ritmo da linha.",
-    "Par tipografico trocado a pedido do cliente para Rufina (cabecalho) + Average Sans (corpo). Average Sans e de PESO UNICO 400: nenhuma regra pede peso acima disso, senao o navegador geraria negrito sintetico. A escala foi recalibrada porque o ch da Rufina e 22% mais largo que o da fonte anterior e o da Average Sans 17% mais largo que o da Chivo. Detalhe na secao 9 do brief-pack.md."
+    "Par tipografico trocado a pedido do cliente para Rufina (cabecalho) + Average Sans (corpo). Average Sans e de PESO UNICO 400: nenhuma regra pede peso acima disso, senao o navegador geraria negrito sintetico. A escala foi recalibrada porque o ch da Rufina e 22% mais largo que o da fonte anterior e o da Average Sans 17% mais largo que o da Chivo. Detalhe na secao 9 do brief-pack.md.",
+    "GTM instalado com Google Consent Mode v2: bloco de default 'denied' ANTES do container, e 'update' no clique do banner. Sem isso o container carregaria e as tags de medicao disparariam antes da resposta do visitante, o que contradiz o que a propria Politica de Privacidade promete.",
+    "O widget do Merlin injeta z-index 9999 no runtime e passava POR CIMA do lightbox da galeria. Foi criada uma escala de empilhamento (--z-cookie 10020, --z-scrim 10040, --z-drawer 10041, --z-lb 10060, --z-skip 10080) com o widget do vendor declarado como referencia em --z-widget.",
+    "O nonce do snippet do Merlin foi descartado: o site nao tem CSP, entao o atributo e inerte, e nonce fixo escrito no HTML nao protege nada, porque precisa ser gerado por requisicao.",
+    "Merlin instalado so na home. Em privacidade.html um popup de captacao sobre documento legal e intrusivo, e em fornecedores.html competiria com o formulario da propria pagina. Estender e copiar um bloco."
   ]
 }
