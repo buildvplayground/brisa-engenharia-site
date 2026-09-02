@@ -109,6 +109,12 @@
     });
   }
 
+  /* escadinha de filetes sem ancestral de reveal (páginas internas): entra
+     direto, senão ficaria em scaleX(0) para sempre */
+  document.querySelectorAll(".rule3").forEach(function (r) {
+    if (!r.closest("[data-reveal],[data-curtain],.hero")) r.setAttribute("data-on", "");
+  });
+
   /* ---------------------------------------------------------------- 3. hero */
   var hero = document.querySelector(".hero");
   if (hero) requestAnimationFrame(function () { hero.setAttribute("data-on", ""); });
@@ -153,8 +159,18 @@
     }
   }
 
+  /* camada 3 ligada ao scroll: um salto (arraste da barra, Home/End, âncora,
+     scrollTo) não gera callback de IntersectionObserver, e os blocos pulados
+     ficariam invisíveis para sempre. Debounce para não medir a cada frame. */
+  var flushT = null;
+  function scheduleFlush() {
+    if (flushT) return;
+    flushT = setTimeout(function () { flushT = null; flush(); }, 150);
+  }
+
   function onScroll() {
     if (!ticking) { ticking = true; requestAnimationFrame(frame); }
+    scheduleFlush();
   }
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll);
