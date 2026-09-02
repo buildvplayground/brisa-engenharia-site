@@ -7,26 +7,66 @@
   "atualizado_em": "2026-09-02",
   "stack": "html-estatico+css+js-vanilla (+php no formulario)",
   "etapas": [
-    { "n": 1, "nome": "Extrair do Drive", "status": "done",
-      "nota": "105 MB em _raw/: 2 apresentacoes, 2 manuais de IDV, placa vetorial clara e escura, 51 fotos de obra, 25 pecas de Instagram, 1 docx de inspiracao" },
-    { "n": 2, "nome": "Organizar pastas", "status": "done",
-      "nota": "arvore BuildV, .gitignore seguro, PROJETO.md e state.json" },
-    { "n": "2b", "nome": "Repositorio GitHub", "status": "done",
-      "nota": "dev-buildv/brisa-engenharia-site, privado; versiona so deploy-vercel/" },
-    { "n": 3, "nome": "Design system", "status": "done",
-      "nota": "paleta amostrada por pixel/vetor da marca real; logo extraido como vetor do PDF da placa em 4 SVG; contraste de cada par verificado" },
-    { "n": 4, "nome": "Copy estruturada", "status": "done",
-      "nota": "Copys/copy-site.md; so fatos do material; sem travessao no texto visivel" },
-    { "n": 5, "nome": "Front-end", "status": "done",
-      "nota": "Site/ com 3 paginas; brief-pack.md registra referencias, padroes do design-bank e 6 eixos de variacao" },
-    { "n": 6, "nome": "Ajustes finais e auditoria", "status": "done",
-      "nota": "47 webp (6,5 MB, hero 104 KB); overflow horizontal 0 de 320 a 1920px; AA em 3 paginas incluindo texto sobre foto medido por pixel; menu e lightbox testados" },
-    { "n": 7, "nome": "Tags e modulos", "status": "done",
-      "nota": "LGPD instalado (cookies com dataLayer, privacidade, fornecedores, backend PHP). GTM/GA4/Pixel e Merlin pulados por falta de IDs" },
-    { "n": 8, "nome": "Revisao humana", "status": "doing",
-      "nota": "site pronto e servido em http://127.0.0.1:8834; aguardando revisao e ajustes finais do usuario" },
-    { "n": 9, "nome": "Deploy", "status": "blocked",
-      "nota": "deploy-vercel/ pronto e versionado; falta definir hospedagem/dominio e fornecer secrets" }
+    {
+      "n": 1,
+      "nome": "Extrair do Drive",
+      "status": "done",
+      "nota": "105 MB em _raw/: 2 apresentacoes, 2 manuais de IDV, placa vetorial clara e escura, 51 fotos de obra, 25 pecas de Instagram, 1 docx de inspiracao"
+    },
+    {
+      "n": 2,
+      "nome": "Organizar pastas",
+      "status": "done",
+      "nota": "arvore BuildV, .gitignore seguro, PROJETO.md e state.json"
+    },
+    {
+      "n": "2b",
+      "nome": "Repositorio GitHub",
+      "status": "done",
+      "nota": "dev-buildv/brisa-engenharia-site, privado; versiona so deploy-vercel/"
+    },
+    {
+      "n": 3,
+      "nome": "Design system",
+      "status": "done",
+      "nota": "paleta amostrada por pixel/vetor da marca real; logo extraido como vetor do PDF da placa em 4 SVG; contraste de cada par verificado"
+    },
+    {
+      "n": 4,
+      "nome": "Copy estruturada",
+      "status": "done",
+      "nota": "Copys/copy-site.md; so fatos do material; sem travessao no texto visivel"
+    },
+    {
+      "n": 5,
+      "nome": "Front-end",
+      "status": "done",
+      "nota": "Site/ com 3 paginas e 13 secoes; brief-pack.md registra referencias, padroes do design-bank, os elementos trazidos de kingshaus.co e construtoragreenwood.com.br, e 7 eixos de variacao"
+    },
+    {
+      "n": 6,
+      "nome": "Ajustes finais e auditoria",
+      "status": "done",
+      "nota": "52 webp (6,1 MB, hero ~100 KB) apos revisao de curadoria; overflow horizontal 0 de 320 a 1920px; AA em 3 paginas incluindo texto sobre foto medido por pixel; menu, lightbox e teclado testados"
+    },
+    {
+      "n": 7,
+      "nome": "Tags e modulos",
+      "status": "done",
+      "nota": "LGPD instalado (cookies com dataLayer, privacidade, fornecedores, backend PHP). GTM/GA4/Pixel e Merlin pulados por falta de IDs"
+    },
+    {
+      "n": 8,
+      "nome": "Revisao humana",
+      "status": "doing",
+      "nota": "site pronto e servido em http://127.0.0.1:8834; aguardando revisao e ajustes finais do usuario"
+    },
+    {
+      "n": 9,
+      "nome": "Deploy",
+      "status": "blocked",
+      "nota": "deploy-vercel/ pronto e versionado; falta definir hospedagem/dominio e fornecer secrets"
+    }
   ],
   "links": {
     "drive": "https://drive.google.com/drive/folders/1oiD44ETnWRAoAkyffqE0Cgf8BXYogY3y",
@@ -44,43 +84,102 @@
     "placeholders_no_codigo": []
   },
   "pendencias": [
-    { "id": "hospedagem", "grupo": "deploy", "bloqueia": 9,
+    {
+      "id": "hospedagem",
+      "grupo": "deploy",
+      "bloqueia": 9,
       "titulo": "Definir a hospedagem",
-      "detalhe": "Vercel (estatico, mais rapido de publicar) ou Hostinger (roda o PHP do formulario de fornecedores). Ambos ja estao preparados: Root Directory = deploy-vercel no Vercel, ou o workflow .github/workflows/deploy-hostinger.yml no Hostinger. ATENCAO: no Vercel o formulario de fornecedores nao funciona sem uma serverless function; nesse caso a pagina deve apontar para e-mail/WhatsApp." },
-    { "id": "dominio", "grupo": "deploy", "bloqueia": 9,
+      "detalhe": "Vercel (estatico, mais rapido de publicar) ou Hostinger (roda o PHP do formulario de fornecedores). Ambos ja estao preparados: Root Directory = deploy-vercel no Vercel, ou o workflow .github/workflows/deploy-hostinger.yml no Hostinger. ATENCAO: no Vercel o formulario de fornecedores nao funciona sem uma serverless function; nesse caso a pagina deve apontar para e-mail/WhatsApp."
+    },
+    {
+      "id": "dominio",
+      "grupo": "deploy",
+      "bloqueia": 9,
       "titulo": "Confirmar o dominio e apontar o DNS",
-      "detalhe": "O site foi montado assumindo www.brisa.eng.br (canonical, sitemap, Open Graph). Se for outro dominio, avisar para trocar em 3 lugares por pagina." },
-    { "id": "secrets-ftp", "grupo": "deploy", "bloqueia": 9,
+      "detalhe": "O site foi montado assumindo www.brisa.eng.br (canonical, sitemap, Open Graph). Se for outro dominio, avisar para trocar em 3 lugares por pagina."
+    },
+    {
+      "id": "secrets-ftp",
+      "grupo": "deploy",
+      "bloqueia": 9,
       "titulo": "Secrets FTP (so se for Hostinger)",
-      "detalhe": "Cadastrar FTP_HOST, FTP_USER e FTP_PASSWORD nos secrets do repositorio." },
-    { "id": "banco-mysql", "grupo": "deploy", "bloqueia": null,
+      "detalhe": "Cadastrar FTP_HOST, FTP_USER e FTP_PASSWORD nos secrets do repositorio."
+    },
+    {
+      "id": "banco-mysql",
+      "grupo": "deploy",
+      "bloqueia": null,
       "titulo": "Criar o banco MySQL e preencher db-config.php (so se for Hostinger)",
-      "detalhe": "Copiar Site/php/db-config.example.php para db-config.php no servidor e preencher host/nome/usuario/senha. Sem banco, o formulario ainda funciona por e-mail. A tabela e criada sozinha no primeiro envio." },
-    { "id": "tags", "grupo": "medicao", "bloqueia": null,
+      "detalhe": "Copiar Site/php/db-config.example.php para db-config.php no servidor e preencher host/nome/usuario/senha. Sem banco, o formulario ainda funciona por e-mail. A tabela e criada sozinha no primeiro envio."
+    },
+    {
+      "id": "tags",
+      "grupo": "medicao",
+      "bloqueia": null,
       "titulo": "IDs de GTM / GA4 / Meta Pixel / Google Ads",
-      "detalhe": "Nao instalados por falta dos IDs. O banner de cookies ja emite o evento brisa_consent no dataLayer, com consent_state granted/denied, para as tags respeitarem a LGPD quando entrarem." },
-    { "id": "merlin", "grupo": "medicao", "bloqueia": null,
+      "detalhe": "Nao instalados por falta dos IDs. O banner de cookies ja emite o evento brisa_consent no dataLayer, com consent_state granted/denied, para as tags respeitarem a LGPD quando entrarem."
+    },
+    {
+      "id": "merlin",
+      "grupo": "medicao",
+      "bloqueia": null,
       "titulo": "ID do Merlin (popup)",
-      "detalhe": "Nao instalado por falta do ID." },
-    { "id": "obras-nomes", "grupo": "conteudo", "bloqueia": null,
-      "titulo": "Confirmar nome, cidade e ano de cada obra do portfolio",
-      "detalhe": "O material do Drive nao traz esses dados. Os 6 titulos atuais descrevem o que a foto mostra e o status (Concluida / Em execucao) veio das pastas do Drive. Nada foi inventado. O credito 'Projeto arquitetonico: Paola Cury' foi aplicado apenas na Residencia 17, onde o numero 17 na fachada bate com o render creditado na apresentacao tecnica." },
-    { "id": "obras-agrupamento", "grupo": "conteudo", "bloqueia": null,
+      "detalhe": "Nao instalado por falta do ID."
+    },
+    {
+      "id": "obras-nomes",
+      "grupo": "conteudo",
+      "bloqueia": null,
+      "titulo": "Confirmar nome, cidade e ano das obras do portfolio",
+      "detalhe": "As publicacoes do Instagram do cliente nomeiam duas obras: HV17 e HV25. O HV17 casa com as fotos que tem a placa 17 e com o render creditado a Paola Cury na apresentacao tecnica, entao esse card virou 'Obra HV17' com o credito. As outras cinco seguem com titulos descritivos do que a foto mostra, porque o material nao as nomeia. Nada foi inventado."
+    },
+    {
+      "id": "obras-agrupamento",
+      "grupo": "conteudo",
+      "bloqueia": null,
       "titulo": "Conferir o agrupamento das fotos por obra",
-      "detalhe": "As fotos de interiores foram agrupadas por semelhanca visual, nao por obra confirmada. Se o cliente indicar a qual obra cada foto pertence, o reagrupamento e rapido." },
-    { "id": "credenciais-empresa", "grupo": "conteudo", "bloqueia": null,
+      "detalhe": "As fotos de interiores foram agrupadas por semelhanca visual, nao por obra confirmada. Se o cliente indicar a qual obra cada foto pertence, o reagrupamento e rapido."
+    },
+    {
+      "id": "credenciais-empresa",
+      "grupo": "conteudo",
+      "bloqueia": null,
       "titulo": "Numeros para uma secao de credenciais (opcional)",
-      "detalhe": "Nao existe no material nenhum numero verificavel (anos de atuacao, obras entregues, m2). Por isso o site nao tem secao de contadores. Se o cliente informar, ela entra." },
-    { "id": "email-remetente", "grupo": "deploy", "bloqueia": null,
+      "detalhe": "Nao existe no material nenhum numero verificavel (anos de atuacao, obras entregues, m2). Por isso o site nao tem secao de contadores. Se o cliente informar, ela entra."
+    },
+    {
+      "id": "email-remetente",
+      "grupo": "deploy",
+      "bloqueia": null,
       "titulo": "Criar a caixa no-reply@brisa.eng.br",
-      "detalhe": "Usada como remetente do aviso do formulario de fornecedores. Configuravel em db-config.php (mail_from)." },
-    { "id": "revisao-visual", "grupo": "revisao", "bloqueia": 9,
+      "detalhe": "Usada como remetente do aviso do formulario de fornecedores. Configuravel em db-config.php (mail_from)."
+    },
+    {
+      "id": "revisao-visual",
+      "grupo": "revisao",
+      "bloqueia": 9,
       "titulo": "Revisao visual e ajustes finais",
-      "detalhe": "Rodar 'python _tools/serve.py' e abrir http://127.0.0.1:8834 para revisar. Ajustes de texto, foto ou ordem de secao entram nesta etapa." }
+      "detalhe": "Rodar 'python _tools/serve.py' e abrir http://127.0.0.1:8834 para revisar. Ajustes de texto, foto ou ordem de secao entram nesta etapa."
+    },
+    {
+      "id": "fotos-canteiro",
+      "grupo": "conteudo",
+      "bloqueia": null,
+      "titulo": "Fotos de obra em andamento em condicao de publicacao",
+      "detalhe": "As 13 fotos da pasta 'Fotos Obras em Execucao' ficaram TODAS fora do site: terra exposta, entulho, escoramento, pilha de madeira e mato em primeiro plano. Para um posicionamento de alto padrao nenhuma esta publicavel. Se o cliente quiser mostrar obra em andamento, e vale a pena porque e o servico dele, precisamos de um registro melhor: canteiro organizado, estrutura enquadrada sem entulho no primeiro plano, de preferencia em dia de ceu limpo."
+    },
+    {
+      "id": "renders-hv25",
+      "grupo": "conteudo",
+      "bloqueia": null,
+      "titulo": "Arquivos limpos dos renders da Obra HV25",
+      "detalhe": "O Instagram do cliente traz renders muito bons da HV25 (fachada em brises de madeira) e a ficha tecnica dela: 515 m2, 4 pavimentos, subsolo para 4 carros, sala de jogos e adega, 4 suites, atico. Os arquivos disponiveis tem texto e marca de agua embutidos, entao os renders entraram apenas na tira do Instagram. Com os arquivos limpos da para abrir uma secao de Projetos, separada das obras executadas, com a ficha tecnica."
+    }
   ],
   "notas_tecnicas": [
     "Fontes servidas pelo Google Fonts: Instrument Serif, Montserrat e Chivo. Se a hospedagem exigir auto-hospedagem, e uma troca de meia hora.",
     "prefers-reduced-motion desliga todo o movimento; o gate html[data-motion] garante que a pagina seja legivel mesmo se o JS cair.",
-    "A porta 8791 estava ocupada por outro projeto na maquina; o preview deste site usa a 8834."
+    "A porta 8791 estava ocupada por outro projeto na maquina; o preview deste site usa a 8834.",
+    "Referencias de design passadas pelo cliente: kingshaus.co e construtoragreenwood.com.br. O que foi incorporado esta na secao 7 do brief-pack.md."
   ]
 }

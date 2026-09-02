@@ -72,7 +72,7 @@
     transform:scale(1.06);
     transition:transform 1.8s var(--e) .1s;
   }
-  html[data-motion] .hero[data-on] .hero__media img{transform:none}
+  html[data-motion] .hero[data-on] .hero__media img{transform:scale(1.03)}
   html[data-motion] .hero__band{
     opacity:0;transform:translateY(26px);
     transition:opacity .95s var(--e) .28s,transform .95s var(--e) .28s;

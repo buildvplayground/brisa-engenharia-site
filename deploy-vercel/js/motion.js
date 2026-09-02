@@ -124,6 +124,7 @@
   var procFill = document.querySelector(".proc__fill");
   var proc = document.querySelector(".proc");
   var bands = [].slice.call(document.querySelectorAll(".band__bg"));
+  var heroImg = document.querySelector("[data-hero-img]");
   var steps = document.querySelector(".steps");
   var ticking = false;
 
@@ -141,7 +142,9 @@
       procFill.style.setProperty("--p", Math.max(0, Math.min(1, p)).toFixed(4));
     }
 
-    /* parallax das faixas de imagem (≤0.10, calibragem da casa) */
+    /* parallax das faixas de imagem (≤0.10, calibragem da casa).
+       O scale(1.04) constante dá folga extra para o deslocamento e evita
+       qualquer chance de revelar a borda da foto. */
     if (!reduce) {
       bands.forEach(function (b) {
         var rr = b.parentElement.getBoundingClientRect();
@@ -149,8 +152,15 @@
         var mid = rr.top + rr.height / 2 - window.innerHeight / 2;
         var cap = rr.height * 0.1;                      /* nunca revela a borda */
         var off = Math.max(-cap, Math.min(cap, -mid * 0.08));
-        b.style.transform = "translate3d(0," + off.toFixed(2) + "px,0)";
+        b.style.transform = "translate3d(0," + off.toFixed(2) + "px,0) scale(1.04)";
       });
+
+      /* hero: deriva lenta da foto enquanto a primeira tela sai de cena */
+      /* y > 4: no topo o transform fica com o CSS, senão o estilo inline
+         mataria a animação de carga (a foto assenta de scale(1.06) para 1.03) */
+      if (heroImg && y > 4 && y < window.innerHeight * 1.2) {
+        heroImg.style.transform = "translate3d(0," + (y * 0.06).toFixed(2) + "px,0) scale(1.03)";
+      }
     }
 
     if (steps && steps.dataset.on !== "true") {
