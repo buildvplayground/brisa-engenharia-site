@@ -53,7 +53,7 @@
       "n": 7,
       "nome": "Tags e modulos",
       "status": "done",
-      "nota": "LGPD instalado (cookies com dataLayer, privacidade, fornecedores, backend PHP). GTM-WVG6L4KB instalado nas 3 paginas com Google Consent Mode v2: padrao denied, update no aceite do banner. Merlin (popup 9628ffa4) instalado so na home, inicializando depois que o banner de cookies e resolvido, para nao empilhar dois overlays. GA4/Pixel/Ads ficam dentro do GTM, nao no HTML."
+      "nota": "LGPD instalado (cookies com dataLayer, privacidade, fornecedores, backend PHP). GTM-WVG6L4KB nas 3 paginas com Consent Mode v2: padrao denied, update no aceite. Merlin (popup 9628ffa4) na home, carregando 700ms apos o load: medido que nao grava nenhum cookie e nao abre modal sozinho. Os 4 CTAs Solicitar orcamento abrem o popup, com o href do WhatsApp preservado como fallback. Bolha do widget na paleta: disco --ink, hover --olive-ink, glifo do WhatsApp em branco."
     },
     {
       "n": 8,
@@ -182,6 +182,10 @@
     "GTM instalado com Google Consent Mode v2: bloco de default 'denied' ANTES do container, e 'update' no clique do banner. Sem isso o container carregaria e as tags de medicao disparariam antes da resposta do visitante, o que contradiz o que a propria Politica de Privacidade promete.",
     "O widget do Merlin injeta z-index 9999 no runtime e passava POR CIMA do lightbox da galeria. Foi criada uma escala de empilhamento (--z-cookie 10020, --z-scrim 10040, --z-drawer 10041, --z-lb 10060, --z-skip 10080) com o widget do vendor declarado como referencia em --z-widget.",
     "O nonce do snippet do Merlin foi descartado: o site nao tem CSP, entao o atributo e inerte, e nonce fixo escrito no HTML nao protege nada, porque precisa ser gerado por requisicao.",
-    "Merlin instalado so na home. Em privacidade.html um popup de captacao sobre documento legal e intrusivo, e em fornecedores.html competiria com o formulario da propria pagina. Estender e copiar um bloco."
+    "Merlin instalado so na home. Em privacidade.html um popup de captacao sobre documento legal e intrusivo, e em fornecedores.html competiria com o formulario da propria pagina. Estender e copiar um bloco.",
+    "Bolha do Merlin: o vendor entrega disco #1B98D2 com o logo do WhatsApp verde numa img de 64px dentro de um botao de 72px. Mudar so o fundo deixaria um anel de 4px na cor do site, entao o disco foi para --ink e a img do vendor deu lugar ao glifo do WhatsApp em --paper por mascara CSS. Contraste medido do glifo sobre o disco: 14,55:1. O style do Merlin entra no head DEPOIS da nossa folha, entao aqui !important e a ferramenta certa.",
+    "CTAs abrem o popup do Merlin por progressive enhancement: o href do WhatsApp fica no HTML e o clique so e interceptado quando .merlin-button-popup existe no DOM. Testado: Merlin bloqueado na rede cai para o WhatsApp em nova aba; sem JS o href e o destino real; Enter no teclado abre o popup; nao dispara os dois ao mesmo tempo. Merlin.Popup expoe so initFromSource, sem open publico, entao abrir por codigo e clicar no proprio botao do widget.",
+    "Os links de contato simples (telefone do hero, cartao de contato, rodape) NAO foram interceptados: quem clica num numero espera o WhatsApp, e eles sao a rota de escape acessivel.",
+    "Ao abrir o popup, a Merlin pede /cdn-cgi/challenge-platform/scripts/jsd/main.js com caminho relativo de dentro do proprio iframe, o que resolve contra o nosso dominio e devolve 404 (2x). E comportamento do vendor dentro do iframe dele: inofensivo e fora do nosso alcance."
   ]
 }

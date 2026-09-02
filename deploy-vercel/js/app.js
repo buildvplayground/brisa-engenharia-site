@@ -171,6 +171,31 @@
     });
   }
 
+
+  /* ------------------------------------------- CTA abre o popup do Merlin
+     O href do WhatsApp continua no HTML e continua sendo o destino real
+     sempre que o Merlin nao estiver disponivel: sem JS, antes do script
+     carregar, ou se o vendor cair. So interceptamos o clique quando o botao
+     do widget existe no DOM, o que e a unica prova de que o popup abre.
+
+     `Merlin.Popup` expoe apenas `initFromSource`, sem `open()` publico:
+     clicar no proprio botao do widget e o caminho confiavel.
+
+     Os links de contato simples (telefone do hero, cartao de contato,
+     rodape) NAO entram aqui. Quem clica num numero de telefone espera o
+     WhatsApp, e eles sao tambem a rota de escape acessivel. */
+  document.addEventListener("click", function (e) {
+    var cta = e.target.closest && e.target.closest('a.btn[href*="wa.me"]');
+    if (!cta) return;
+
+    var botao = document.querySelector(".merlin-button-popup");
+    if (!botao) return;                       /* Merlin fora: vai pro WhatsApp */
+
+    e.preventDefault();
+    if (botao.classList.contains("merlin-hidden")) return;   /* popup ja aberto */
+    botao.click();
+  });
+
   /* ------------------------------------------------------- banner de cookies
      O consentimento emite evento no dataLayer para as tags respeitarem a LGPD. */
   var KEY = "brisa_consent_v1";

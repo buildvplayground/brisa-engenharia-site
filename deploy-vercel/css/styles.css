@@ -782,6 +782,44 @@ h2.display{font-size:var(--fs-h2)}
 .feed__grid a:hover img,
 .feed__grid a:focus-visible img{transform:scale(1.05)}
 
+
+/* --------------------------------------------- widget do Merlin, na paleta
+   O vendor injeta o proprio <style> no <head> DEPOIS desta folha, entao aqui
+   e um dos poucos lugares onde !important e a ferramenta certa: sem ele a
+   regra do vendor ganha por ordem de fonte.
+
+   Ele entrega um disco #1B98D2 com o logo do WhatsApp em verde dentro. A
+   imagem tem 64px num botao de 72px, ou seja, mudar so o fundo deixaria um
+   anel de 4px na cor do site e o resto continuaria azul e verde. Entao o
+   disco vai para --ink, igual a todo CTA da pagina, e o PNG do vendor da
+   lugar ao glifo do WhatsApp em --paper, desenhado por mascara: o canal
+   continua reconhecivel e a cor passa a ser a da marca. */
+
+.merlin-button.merlin-button-popup{
+  background:var(--ink) !important;
+  display:grid !important;place-items:center !important;
+  box-shadow:0 8px 26px rgba(39,41,46,.26) !important;
+  transition:background .3s var(--e2),transform .3s var(--e2) !important;
+}
+.merlin-button.merlin-button-popup:hover{background:var(--olive-ink) !important}
+.merlin-button.merlin-button-popup:active{transform:scale(.96) !important}
+.merlin-button.merlin-button-popup:focus-visible{
+  outline:2px solid var(--olive-soft) !important;outline-offset:3px !important;
+}
+.merlin-popup-icon{display:none !important}
+.merlin-button.merlin-button-popup::after{
+  content:"" !important;
+  width:32px !important;height:32px !important;
+  background:var(--paper) !important;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.966 1.164-.198.198-.396.223-.693.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.347-.446.52-.644.174-.198.232-.34.347-.567.116-.226.058-.421-.024-.567-.082-.145-.62-1.612-.85-2.204-.223-.582-.457-.5-.633-.51-.163-.008-.348-.01-.53-.01-.183 0-.48.069-.73.343-.25.274-.958.936-.958 2.283 0 1.347.98 2.65 1.117 2.831.137.182 1.928 3.086 4.75 4.216 2.822 1.13 2.822.753 3.33.706.507-.047 1.639-.67 1.87-1.317.232-.646.232-1.2.163-1.317-.07-.116-.256-.186-.553-.335zm-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884zm8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.966 1.164-.198.198-.396.223-.693.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.347-.446.52-.644.174-.198.232-.34.347-.567.116-.226.058-.421-.024-.567-.082-.145-.62-1.612-.85-2.204-.223-.582-.457-.5-.633-.51-.163-.008-.348-.01-.53-.01-.183 0-.48.069-.73.343-.25.274-.958.936-.958 2.283 0 1.347.98 2.65 1.117 2.831.137.182 1.928 3.086 4.75 4.216 2.822 1.13 2.822.753 3.33.706.507-.047 1.639-.67 1.87-1.317.232-.646.232-1.2.163-1.317-.07-.116-.256-.186-.553-.335zm-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884zm8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+/* com movimento reduzido, nada de escala nem transicao */
+@media (prefers-reduced-motion:reduce){
+  .merlin-button.merlin-button-popup{transition:none !important}
+  .merlin-button.merlin-button-popup:active{transform:none !important}
+}
+
 /* ---------------------------------------------------------------- lightbox */
 
 

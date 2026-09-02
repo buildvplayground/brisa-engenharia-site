@@ -825,18 +825,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="js/app.js" defer></script>
 
 <!-- BuildV: Merlin (popup) ================================================
-     O popup só inicializa depois que o banner de cookies foi resolvido: os
-     dois são overlay, e aparecer junto seria duas camadas na cara do visitante
-     ao mesmo tempo. Quem já respondeu numa visita anterior recebe o popup
-     depois de 1,2s. Se o banner ficar aberto sem resposta, há uma rede de
-     segurança de 45s que só dispara com o banner já fechado.
-     O nonce do snippet original foi descartado: o site não tem CSP, então o
-     atributo é inerte, e nonce fixo no HTML não protege nada. -->
+     Carrega 700ms depois do load, sem esperar o banner de cookies. Duas
+     medicoes derrubaram o motivo de adiar: o Merlin nao grava NENHUM cookie
+     e o botao nao abre modal sozinho, e um botao flutuante de 72px que so
+     abre no clique. E agora ele e o destino dos CTAs da pagina, entao
+     precisa estar pronto cedo.
+     O nonce do snippet original foi descartado: o site nao tem CSP, entao o
+     atributo e inerte, e nonce fixo no HTML nao protege nada porque precisa
+     ser gerado por requisicao. -->
 <script>
 (function () {
-  var CHAVE = "brisa_consent_v1";
   var ligado = false;
-
   function carrega() {
     if (ligado) return;
     ligado = true;
@@ -845,30 +844,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     s.async = true;
     s.onload = function () {
       try {
-        window.Merlin.Popup.initFromSource("https://tools.gomerlin.com.br/popup/9628ffa4-2abd-4d52-bc26-a6fa9d10638c");
-      } catch (e) { /* o vendor mudou a API: não derruba a página */ }
+        window.Merlin.Popup.initFromSource(
+          "https://tools.gomerlin.com.br/popup/9628ffa4-2abd-4d52-bc26-a6fa9d10638c");
+      } catch (e) { /* o vendor mudou a API: nao derruba a pagina */ }
     };
     document.head.appendChild(s);
   }
-
-  function bannerAberto() {
-    var b = document.querySelector(".cookie");
-    return !!b && b.dataset.open === "true";
-  }
-
-  var decidido = null;
-  try { decidido = localStorage.getItem(CHAVE); } catch (e) { decidido = null; }
-
-  if (decidido) {
-    setTimeout(carrega, 1200);
-  } else {
-    document.addEventListener("brisa:consent", function () {
-      setTimeout(carrega, 700);
-    }, { once: true });
-    /* rede de segurança: se o banner já não estiver aberto, entra de qualquer
-       forma depois de 45s */
-    setTimeout(function () { if (!bannerAberto()) carrega(); }, 45000);
-  }
+  if (document.readyState === "complete") setTimeout(carrega, 700);
+  else window.addEventListener("load", function () { setTimeout(carrega, 700); });
 })();
 </script>
 <!-- /BuildV: Merlin -->
