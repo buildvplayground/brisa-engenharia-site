@@ -1,0 +1,30 @@
+name: Deploy Hostinger (FTP)
+
+# Publica a pasta deploy-vercel/ (o site estático + PHP) por FTP.
+# Requer os secrets FTP_HOST, FTP_USER e FTP_PASSWORD no repositório.
+# Rodar manualmente na primeira vez, para conferir o destino.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['deploy-vercel/**']
+
+jobs:
+  ftp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enviar por FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./deploy-vercel/
+          server-dir: ./public_html/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/db-config.php

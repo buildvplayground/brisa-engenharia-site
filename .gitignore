@@ -1,0 +1,27 @@
+# ---------------------------------------------------------------- material-fonte
+# Fica local + Google Drive. O repo versiona SÓ a pasta de deploy.
+_raw/
+_render/
+_tools/
+imagens/
+site antigo/
+Marca/
+Copys/
+design-system/
+Site/
+brief-pack.md
+
+# ---------------------------------------------------------------------- segredos
+**/db-config.php
+*.env
+.env*
+!*.example.php
+
+# ------------------------------------------------------------------------ sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+node_modules/
+.vscode/
+.idea/
