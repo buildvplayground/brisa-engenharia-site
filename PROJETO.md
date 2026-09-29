@@ -3,9 +3,9 @@
 **Cliente:** Brisa Engenharia (planejamento e gerenciamento de obras residenciais de alto padrão)
 **Slug:** `brisa-engenharia` · **Repo:** `dev-buildv/brisa-engenharia-site` (privado)
 **Drive:** https://drive.google.com/drive/folders/1oiD44ETnWRAoAkyffqE0Cgf8BXYogY3y
-**Contato real:** 41 99624-1600 · contato@brisa.eng.br · @brisa.eng · www.brisa.eng.br
+**Contato real:** 41 9 9924-3868 (novo, 2026-09-29) · contato@brisa.eng.br · @brisa.eng · www.brisa.eng.br
 **Responsável técnica:** Elisa Andrade da Silva, CREA PR 115016/D
-**Atualizado:** 2026-09-02
+**Atualizado:** 2026-09-29 · **Versão:** v4 (hero cinema em tela cheia + revisão WCAG 2.0; v1 guardada em `_versao-1/`)
 
 ---
 
@@ -22,8 +22,10 @@
       Logo extraído como **vetor** dos paths do PDF da placa, em 4 arquivos SVG.
 - [x] **4. Copy estruturada** — `Copys/copy-site.md`. Só fatos do material.
       Sem travessão em nenhum texto visível.
-- [x] **5. Front-end** — `Site/` (HTML + CSS + JS vanilla). `brief-pack.md` registra as
-      referências, os padrões do design-bank e os eixos de variação.
+- [x] **5. Front-end (v2, 2026-09-29)** — refeito do zero depois da reprovação da v1. Direção
+      "luz de projeto" (hero com janela que se abre, luz de janela dos `_patterns`, grade de cor
+      única nas fotos, explorador de serviços, método em cena travada, 3 obras em 1 linha).
+      14 pedidos da cliente aplicados. `revisar-frontend`: 0 achados bloqueantes (`brief-pack.md` §8).
 - [x] **6. Ajustes finais** — 47 imagens tratadas para `.webp` (6,5 MB; hero de 104 KB).
       Aceite auditado por medição: overflow horizontal **0** de 320 a 1920px, contraste AA
       em todas as páginas (incluindo texto sobre foto, medido por pixel real), 0 imagem
@@ -31,8 +33,7 @@
 - [x] **7. Tags e módulos** — banner de cookies com evento no `dataLayer`, Política de
       Privacidade, Fornecedores e Trabalhe Conosco, backend PHP com MySQL opcional.
       **GTM/GA4/Pixel e Merlin: pulados** (o cliente ainda não informou os IDs).
-- [ ] **8. Revisão humana** — site pronto e servido localmente. Aguardando o olhar do
-      usuário e os ajustes finais.
+- [ ] **8. Revisão humana** — v4 servida em http://127.0.0.1:8834 e sincronizada em `deploy-vercel/`. Aguardando a cliente.
 - [ ] **9. Deploy** — pasta `deploy-vercel/` pronta e versionada. Bloqueado: falta definir
       a hospedagem e o domínio, e fornecer os secrets.
 
@@ -63,9 +64,15 @@ O repositório versiona **só** `deploy-vercel/`, `.github/`, `PROJETO.md`, `sta
 
 ```bash
 python _tools/serve.py            # serve Site/ em http://127.0.0.1:8834 (MIME de .webp registrado)
-python _tools/audit.py            # auditoria por medição -> _tools/audit-out.json
+python _tools/audit-v2.py         # overflow, encaixe por seção, linha, imagens, console
+python _tools/test-interacoes.py  # 58 testes de interação e movimento
+python _tools/wcag-v3.py          # contraste sólido e por pixel (hero nos 3 planos, luz de janela)
+python _tools/wcag20-axe.py       # axe WCAG 2.0 A/AA + texto a 200%
+python _tools/test-v4.py          # 64 testes de interação e movimento (v4)
+python _tools/test-wcag-fixes.py  # 28 verificações das correções WCAG
 python _tools/contrast-foto.py    # contraste de texto sobre foto, por pixel real
-python _tools/build-images.py     # regera as .webp a partir de _raw/
+python _tools/build-images-v3.py  # regera as .webp a partir de _raw/ (retoque, verticais, grade único)
+python _tools/build-internas.py   # privacidade.html e fornecedores.html a partir do index
 python _tools/sync-deploy.py      # Site/ -> deploy-vercel/
 ```
 

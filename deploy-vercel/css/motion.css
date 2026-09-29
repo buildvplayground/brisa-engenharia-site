@@ -1,153 +1,47 @@
 /* =========================================================================
-   Brisa Engenharia — motor de movimento (CSS)
-   Todo estado inicial "invisível" vive atrás de html[data-motion]: se o JS
-   cair, a página continua 100% legível.
-   Calibragem da casa: deslocamento 24px, easing longo, intensidade ~4/10.
+   Brisa Engenharia · movimento v3 (GSAP + ScrollTrigger + SplitText + Lenis)
+   Vocabulário único, quatro verbos: EXPOSIÇÃO (fotos), LINHA (títulos),
+   BLOCO (texto, listas, botões), FILETE (juntas). Cada um tem entrada e
+   saída. Movimento curto, easing longo, intensidade ~4/10, sem bounce.
+   Tudo atrás de html[data-motion]: sem o gate (JS fora ou movimento
+   reduzido) a página é 100% legível e estática.
    ========================================================================= */
 
-@media (prefers-reduced-motion: no-preference){
+/* a saída pelo topo usa a propriedade `translate` (não disputa com os
+   tweens de entrada, que usam transform) */
+[data-m="linha"],[data-m="bloco"]{translate:0 var(--xy, 0px)}
 
-  html[data-motion] [data-reveal]{
-    opacity:0;
-    transition:
-      opacity .86s var(--e) var(--d,0s),
-      transform .86s var(--e) var(--d,0s),
-      filter .86s var(--e) var(--d,0s);
-  }
-  html[data-motion] [data-reveal="up"],
-  html[data-motion] [data-reveal=""]{transform:translateY(24px);filter:blur(5px)}
-  html[data-motion] [data-reveal="soft"]{transition-duration:1s}
-  html[data-motion] [data-reveal="fig"]{transform:scale(.968);filter:blur(4px)}
-  html[data-motion] [data-rv="left"]{transform:translateX(-26px);filter:blur(5px)}
-  html[data-motion] [data-rv="right"]{transform:translateX(26px);filter:blur(5px)}
+/* máscara das linhas do SplitText (o SplitText cria .ln-l-mask com
+   overflow:clip em volta de cada .ln-l): folga para acento e descendente */
+.ln-l-mask{padding:.12em 0 .18em;margin:-.12em 0 -.18em}
 
-  html[data-motion] [data-reveal][data-on]{
-    opacity:1;transform:none;filter:none;
-  }
+/* ------------------------------------------------------------ hero: entrada
+   Em CSS, para o LCP e o primeiro quadro não dependerem do GSAP. A sala
+   escurece em ink e a primeira foto se revela da escuridão enquanto assenta
+   da escala 1.1; as linhas do título sobem em máscara. O JS só acelera
+   (primeiro gesto) e encerra (is-done). A troca de planos e a aproximação
+   lenta de cada foto começam depois, no app.js. */
+html[data-motion]{--hi-line:.7s;--hi-d1:.05s;--hi-d2:.11s;--hi-blk:.5s;--hi-d3:.25s;--hi-d4:.32s;--hi-veil:.8s;--hi-settle:1.4s;--hi-scale:1.05;--hi-meta:.4s}
+html[data-motion][data-intro]{--hi-line:1.1s;--hi-d1:.45s;--hi-d2:.57s;--hi-blk:.8s;--hi-d3:.95s;--hi-d4:1.05s;--hi-veil:1.8s;--hi-settle:2.6s;--hi-scale:1.1;--hi-meta:1.25s}
 
-  /* cortina lateral: a foto é "desenhada" da esquerda para a direita,
-     ecoando o traço único do logo. round mantém o raio dentro do inset. */
-  html[data-motion] [data-curtain]{
-    clip-path:inset(0 100% 0 0 round 2px);
-    transition:clip-path 1.25s var(--e) var(--d,0s);
-  }
-  html[data-motion] [data-curtain] > img{
-    transform:scale(1.06);
-    transition:transform 1.6s var(--e) var(--d,0s);
-  }
-  html[data-motion] [data-curtain][data-on]{clip-path:inset(0 0 0 0 round 2px)}
-  html[data-motion] [data-curtain][data-on] > img{transform:none}
-  /* celula com parallax assenta em scale(1.08), que e a folga que o JS usa
-     para deslocar a foto: assim nao ha salto quando o scroll assume */
-  html[data-motion] [data-curtain][data-parallax][data-on] > img{transform:scale(1.08)}
+@keyframes h-rise{from{transform:translate3d(0,105%,0)}to{transform:none}}
+@keyframes h-in{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:none}}
+@keyframes h-cover{from{opacity:1}to{opacity:0}}
+@keyframes h-settle{from{transform:scale(var(--hi-scale))}to{transform:none}}
 
-  /* escadinha de 3 filetes: entram em scaleX sequencial */
-  html[data-motion] .rule3 i{
-    transform:scaleX(0);
-    transition:transform .62s var(--e);
-  }
-  html[data-motion] .rule3 i:nth-child(2){transition-delay:.09s}
-  html[data-motion] .rule3 i:nth-child(3){transition-delay:.18s}
-  html[data-motion] [data-on] .rule3 i,
-  html[data-motion] .rule3[data-on] i{transform:scaleX(1)}
+html[data-motion] .cine__h .ln{overflow:clip;padding-block:.12em .18em;margin-block:-.12em -.18em}
+html[data-motion] .cine__h .ln--a > span{animation:h-rise var(--hi-line) var(--e) var(--hi-d1) both}
+html[data-motion] .cine__h .ln--b > span{animation:h-rise var(--hi-line) var(--e) var(--hi-d2) both}
+html[data-motion] .cine__row{animation:h-in var(--hi-blk) var(--e) var(--hi-d3) both}
+html[data-motion] .cine__meta{animation:h-in var(--hi-blk) var(--e) var(--hi-meta) both}
+html[data-motion] .cine__cover{animation:h-cover var(--hi-veil) var(--e-fade) both}
+html[data-motion] .cine__s[data-i="0"] picture{animation:h-settle var(--hi-settle) var(--e) both}
+/* a foto só se revela quando está decodificada (is-ready, no máximo 1,2s) */
+html[data-motion] .cine:not(.is-ready) :is(.cine__cover, .cine__s[data-i="0"] picture){animation-play-state:paused}
+.hero.is-done,.hero.is-done *{animation:none !important}
+.hero.is-done .cine__h .ln{overflow:visible}
 
-  /* filete superior dos serviços */
-  html[data-motion] .svc__item .top{
-    transform:scaleX(0);
-    transition:transform 1s var(--e) var(--d,0s);
-  }
-  html[data-motion] .svc__item[data-on] .top{transform:scaleX(1)}
-
-  /* título em máscara, palavra por palavra */
-  html[data-motion] .w{
-    display:inline-block;overflow:hidden;vertical-align:top;
-    padding-block:.14em .2em;margin-block:-.14em -.2em;
-  }
-  html[data-motion] .w > i{
-    display:inline-block;font-style:inherit;
-    transform:translateY(108%);
-    transition:transform .9s var(--e) var(--d,0s);
-  }
-  html[data-motion] [data-split][data-on] .w > i{transform:none}
-
-  /* diptico: as duas fotos entram em cortina, a segunda com atraso */
-  html[data-motion] .duo__cell{will-change:clip-path}
-
-  /* tira do feed: a deriva horizontal fica suave entre frames de scroll.
-     A entrada em cascata das quatro pecas usa o motor generico de reveal,
-     que ja escalona irmaos em 80ms. */
-  html[data-motion] .feed__grid{transition:transform .12s linear}
-
-  /* pilares do compromisso: divisoria desenha e o texto sobe */
-  html[data-motion] .pillars li{
-    opacity:0;transform:translateY(16px);
-    transition:opacity .78s var(--e) var(--d,0s),transform .78s var(--e) var(--d,0s);
-  }
-  html[data-motion] .pillars[data-on] li{opacity:1;transform:none}
-  html[data-motion] .pillars[data-on] li:nth-child(1){--d:0s}
-  html[data-motion] .pillars[data-on] li:nth-child(2){--d:.08s}
-  html[data-motion] .pillars[data-on] li:nth-child(3){--d:.16s}
-  html[data-motion] .pillars[data-on] li:nth-child(4){--d:.24s}
-  html[data-motion] .pillars[data-on] li:nth-child(5){--d:.32s}
-
-  /* lista de valores: divisoria de cada item desenha da esquerda */
-  html[data-motion] .vals li{
-    opacity:0;transform:translateY(12px);
-    transition:opacity .66s var(--e) var(--d,0s),transform .66s var(--e) var(--d,0s);
-  }
-  html[data-motion] .vals[data-on] li{opacity:1;transform:none}
-  html[data-motion] .vals[data-on] li:nth-child(n+1){--d:0s}
-  html[data-motion] .vals[data-on] li:nth-child(2){--d:.05s}
-  html[data-motion] .vals[data-on] li:nth-child(3){--d:.1s}
-  html[data-motion] .vals[data-on] li:nth-child(4){--d:.15s}
-  html[data-motion] .vals[data-on] li:nth-child(5){--d:.2s}
-  html[data-motion] .vals[data-on] li:nth-child(6){--d:.25s}
-  html[data-motion] .vals[data-on] li:nth-child(7){--d:.3s}
-  html[data-motion] .vals[data-on] li:nth-child(8){--d:.35s}
-
-  /* numeral de servico e de processo: entra depois do filete, nao junto */
-  html[data-motion] .svc__item .num,
-  html[data-motion] .proc__item .num{
-    opacity:0;transform:translateY(10px);
-    transition:opacity .7s var(--e) .16s,transform .7s var(--e) .16s;
-  }
-  html[data-motion] .svc__item[data-on] .num,
-  html[data-motion] .proc__item[data-on] .num,
-  html[data-motion] [data-on] .proc__item .num{opacity:1;transform:none}
-
-  /* hero em duas fases: a foto assenta, a banda sobe */
-  html[data-motion] .hero__media img{
-    transform:scale(1.06);
-    transition:transform 1.8s var(--e) .1s;
-  }
-  html[data-motion] .hero[data-on] .hero__media img{transform:scale(1.03)}
-  html[data-motion] .hero__band{
-    opacity:0;transform:translateY(26px);
-    transition:opacity .95s var(--e) .28s,transform .95s var(--e) .28s;
-  }
-  html[data-motion] .hero[data-on] .hero__band{opacity:1;transform:none}
-  html[data-motion] .hero__credit{
-    opacity:0;transition:opacity .8s var(--e2) 1.1s;
-  }
-  html[data-motion] .hero[data-on] .hero__credit{opacity:1}
-}
-
-/* nenhuma dependência de movimento para o conteúdo existir */
-@media (prefers-reduced-motion: reduce){
-  html[data-motion] [data-reveal],
-  html[data-motion] [data-curtain],
-  html[data-motion] .rule3 i,
-  html[data-motion] .svc__item .top,
-  html[data-motion] .hero__band,
-  html[data-motion] .hero__credit{
-    opacity:1 !important;transform:none !important;filter:none !important;
-    clip-path:none !important;
-  }
-  .steps__fill{transform:scaleY(1) !important}
-  .steps li,
-  .pillars li,
-  .vals li,
-  .svc__item .num,
-  .proc__item .num{opacity:1 !important;transform:none !important}
-  .feed__grid,.duo__cell img{transform:none !important}
+@media (prefers-reduced-motion:reduce){
+  [data-m]{translate:none !important}
+  .fx__v,.cine__cover,.cine__exit{opacity:0 !important}
 }

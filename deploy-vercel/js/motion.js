@@ -1,297 +1,235 @@
 /* =========================================================================
-   Brisa Engenharia — motor de movimento (JS), sem dependência externa.
-   Se este arquivo falhar, o gate data-motion é removido e tudo aparece.
+   Brisa Engenharia · motor de movimento v3
+   GSAP 3.13 + ScrollTrigger + SplitText + CustomEase + Lenis, servidos do
+   próprio site (assets/vendor). Um motor de rolagem só (Lenis, e só em
+   ponteiro fino). Com movimento reduzido nada é montado: o gate
+   html[data-motion] nem liga no <head>.
+
+   Vocabulário (entrada · saída pelo topo):
+     expo    fotos   véu da cor da seção 1→0 + escala 1.04→1 · véu 0→.40 + escala 1→1.03
+     linha   títulos linhas em máscara sobem 105%→0          · translate 0→-16px
+     bloco   texto   opacidade 0→1 + 16px→0                   · translate 0→-12px
+     filete  juntas  scaleX 0→1 da esquerda                    · não sai
+   A saída nunca mexe na opacidade do texto: ele continua legível até sair.
    ========================================================================= */
 (function () {
   "use strict";
 
-  var root = document.documentElement;
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* rede de segurança: nada fica invisível para sempre */
-  var panic = setTimeout(function () { root.removeAttribute("data-motion"); }, 3200);
-
-  if (reduce) {
-    clearTimeout(panic);
-    root.removeAttribute("data-motion");
-  }
-
-  /* ------------------------------------------------------- 1. split de título
-     Só títulos de texto puro. O divisor usa [ \t\r\n]+ e NÃO \s+, senão
-     &nbsp; (U+00A0) seria tratado como espaço e as amarrações de quebra
-     de linha seriam desfeitas. */
-  function split(el) {
-    if (!el || el.dataset.splitDone) return;
-    if (el.children.length) return;                 /* tem <strong>/<br>: ignora */
-    var txt = el.textContent;
-    if (!txt || !txt.trim()) return;
-    var words = txt.trim().split(/[ \t\r\n]+/);
-    var frag = document.createDocumentFragment();
-    words.forEach(function (w, i) {
-      var s = document.createElement("span");
-      s.className = "w";
-      var inner = document.createElement("i");
-      inner.textContent = w;
-      inner.style.setProperty("--d", (i * 42) + "ms");
-      s.appendChild(inner);
-      frag.appendChild(s);
-      if (i < words.length - 1) frag.appendChild(document.createTextNode(" "));
-    });
-    el.textContent = "";
-    el.appendChild(frag);
-    el.dataset.splitDone = "1";
-    el.setAttribute("data-split", "");
-  }
-
-  /* abaixo de 560px a máscara por palavra (inline-block) impediria a quebra
-     dentro de palavras longas: mantém o título como texto corrido. */
-  if (!reduce && window.innerWidth >= 560) {
-    document.querySelectorAll("[data-h-split]").forEach(split);
-  }
-
-  /* ------------------------------------------------------------- 2. reveals */
-  var targets = [].slice.call(
-    document.querySelectorAll("[data-reveal],[data-curtain],[data-split]")
-  );
-
-  /* stagger automático: irmãos diretos com data-reveal no mesmo pai */
-  var byParent = new Map();
-  targets.forEach(function (el) {
-    if (!el.hasAttribute("data-reveal")) return;
-    var p = el.parentElement;
-    if (!byParent.has(p)) byParent.set(p, []);
-    byParent.get(p).push(el);
-  });
-  byParent.forEach(function (list) {
-    if (list.length < 2) return;
-    list.forEach(function (el, i) {
-      if (el.style.getPropertyValue("--d")) return;
-      el.style.setProperty("--d", Math.min(i, 6) * 80 + "ms");
-    });
-  });
-
-  function show(el) {
-    if (el.dataset.on !== undefined) return;
-    el.setAttribute("data-on", "");
-  }
-
-  if (!reduce && "IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { show(e.target); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -7% 0px" });
-    targets.forEach(function (el) { io.observe(el); });
-  } else {
-    targets.forEach(show);
-  }
-
-  /* camada 1: primeira tela entra por rAF + timer (observer não dispara em
-     aba de fundo) */
-  function firstScreen() {
-    var vh = window.innerHeight;
-    targets.forEach(function (el) {
-      var r = el.getBoundingClientRect();
-      if (r.top < vh * 0.94) show(el);
-    });
-  }
-  requestAnimationFrame(firstScreen);
-  setTimeout(firstScreen, 140);
-
-  /* camada 3: saltos de scroll (âncora, hash, arraste da barra) não geram
-     callback de observer — revela o que já passou */
-  function flush() {
-    var vh = window.innerHeight;
-    targets.forEach(function (el) {
-      if (el.dataset.on !== undefined) return;
-      var r = el.getBoundingClientRect();
-      if (r.bottom < vh * 0.3 || r.top < vh * 0.9) show(el);
-    });
-  }
-
-  /* escadinha de filetes sem ancestral de reveal (páginas internas): entra
-     direto, senão ficaria em scaleX(0) para sempre */
-  document.querySelectorAll(".rule3").forEach(function (r) {
-    if (!r.closest("[data-reveal],[data-curtain],.hero")) r.setAttribute("data-on", "");
-  });
-
-  /* ---------------------------------------------------------------- 3. hero */
+  var d = document.documentElement;
   var hero = document.querySelector(".hero");
-  if (hero) requestAnimationFrame(function () { hero.setAttribute("data-on", ""); });
+  var MOTION = d.hasAttribute("data-motion");
 
-  /* -------------------------------------------------- 4. header + progresso */
-  var hdr = document.querySelector(".hdr");
-  var procFill = document.querySelector(".proc__fill");
-  var proc = document.querySelector(".proc");
-  var bands = [].slice.call(document.querySelectorAll(".band__bg"));
-  var heroImg = document.querySelector("[data-hero-img]");
+  /* sem bibliotecas (rede, bloqueador): o timer do <head> libera a página */
+  if (!window.gsap || !window.ScrollTrigger) {
+    if (hero) hero.classList.add("is-done");
+    return;
+  }
+  window.__brisaMotion = true;
 
-  /* parallax generico: qualquer elemento com data-parallax="0.05" move a
-     propria <img> nessa proporcao do scroll, sempre dentro de um pai com
-     overflow escondido. O fator fica em 0.05 a 0.08: acima disso o
-     deslocamento passa a ser percebido como "a pagina esta tremendo". */
-  var px = [].slice.call(document.querySelectorAll("[data-parallax]")).map(function (el) {
-    return { box: el, img: el.querySelector("img"), k: parseFloat(el.dataset.parallax) || 0.05 };
-  }).filter(function (o) { return o.img; });
+  gsap.registerPlugin(ScrollTrigger);
+  if (window.SplitText) gsap.registerPlugin(SplitText);
+  var EASE = "power3.out";
+  if (window.CustomEase) {
+    gsap.registerPlugin(CustomEase);
+    CustomEase.create("brisa", ".16,.84,.28,1");
+    EASE = "brisa";
+  }
+  ScrollTrigger.config({ ignoreMobileResize: true });
 
-  /* a tira do feed deriva de lado, devagar, enquanto atravessa a tela */
-  var feed = document.querySelector(".feed__grid");
-  var steps = document.querySelector(".steps");
-  var ticking = false;
-
-  function frame() {
-    ticking = false;
-    var y = window.pageYOffset || root.scrollTop;
-
-    if (hdr) hdr.setAttribute("data-compact", y > 40 ? "true" : "false");
-
-    /* trilha do processo: progresso 0→1 conforme a seção atravessa a tela */
-    if (proc && procFill) {
-      var r = proc.getBoundingClientRect();
-      var vh = window.innerHeight;
-      var p = (vh * 0.82 - r.top) / Math.max(r.height * 0.86, 1);
-      procFill.style.setProperty("--p", Math.max(0, Math.min(1, p)).toFixed(4));
-    }
-
-    /* parallax das faixas de imagem (≤0.10, calibragem da casa).
-       O scale(1.04) constante dá folga extra para o deslocamento e evita
-       qualquer chance de revelar a borda da foto. */
-    if (!reduce) {
-      bands.forEach(function (b) {
-        var rr = b.parentElement.getBoundingClientRect();
-        if (rr.bottom < -200 || rr.top > window.innerHeight + 200) return;
-        var mid = rr.top + rr.height / 2 - window.innerHeight / 2;
-        var cap = rr.height * 0.1;                      /* nunca revela a borda */
-        var off = Math.max(-cap, Math.min(cap, -mid * 0.08));
-        b.style.transform = "translate3d(0," + off.toFixed(2) + "px,0) scale(1.04)";
-      });
-
-      /* parallax declarado: a foto sobe dentro da propria moldura */
-      px.forEach(function (o) {
-        /* espera a cortina assentar: antes disso o transform da entrada e
-           quem manda na <img>, e um estilo inline mataria a animacao */
-        if (o.box.hasAttribute("data-curtain") && o.box.dataset.on === undefined) return;
-        var rr = o.box.getBoundingClientRect();
-        if (rr.bottom < -160 || rr.top > window.innerHeight + 160) return;
-        var mid = rr.top + rr.height / 2 - window.innerHeight / 2;
-        var cap = rr.height * 0.07;                 /* folga do scale abaixo */
-        var off = Math.max(-cap, Math.min(cap, -mid * o.k));
-        o.img.style.transform = "translate3d(0," + off.toFixed(2) + "px,0) scale(1.08)";
-      });
-
-      /* tira do feed: deriva horizontal de poucos pixels, para a faixa nao
-         ficar estatica. Fica dentro do vao de 2px, sem estourar largura. */
-      if (feed) {
-        var fr = feed.getBoundingClientRect();
-        if (fr.bottom > -100 && fr.top < window.innerHeight + 100) {
-          var fp = (window.innerHeight - fr.top) / (window.innerHeight + fr.height);
-          feed.style.transform = "translate3d(" + ((fp - 0.5) * -22).toFixed(2) + "px,0,0)";
+  /* ------------------------------------------------ hero: fim da entrada */
+  if (hero) {
+    var done = function () { hero.classList.add("is-done"); };
+    if (!MOTION) done();
+    else {
+      var p1 = hero.querySelector('.cine__s[data-i="0"] picture');
+      if (p1) p1.addEventListener("animationend", done, { once: true });
+      setTimeout(done, 4500);
+      /* quem já começou a rolar não espera a entrada: acelera 4x */
+      var gestos = ["wheel", "touchstart", "keydown", "pointerdown"];
+      var acelera = function () {
+        if (document.getAnimations) {
+          document.getAnimations().forEach(function (a) {
+            if ((a.animationName || "").indexOf("h-") === 0) a.playbackRate = 4;
+          });
         }
+        gestos.forEach(function (g) { removeEventListener(g, acelera); });
+      };
+      gestos.forEach(function (g) { addEventListener(g, acelera, { passive: true }); });
+    }
+  }
+
+  if (!MOTION) return;
+
+  /* --------------------------------------------------------------- Lenis */
+  function startLenis() {
+    if (!window.Lenis) return function () {};
+    var lenis = new Lenis({
+      lerp: 0.1,
+      smoothWheel: true,
+      syncTouch: false,
+      wheelMultiplier: 1,
+      prevent: function (n) { return !!(n && n.closest && n.closest(".lb,.drawer,[data-lenis-prevent]")); }
+    });
+    lenis.on("scroll", ScrollTrigger.update);
+    var tick = function (t) { lenis.raf(t * 1000); };
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
+    window.brisaLenis = lenis;
+    return function () { gsap.ticker.remove(tick); lenis.destroy(); window.brisaLenis = null; };
+  }
+
+  /* --------------------------------------------------------- vocabulário */
+  var STAG = { expo: 0.14, bloco: 0.09, linha: 0.09, filete: 0.08 };
+  var hostState = new Map();   /* host -> { armed, items } */
+  var hostOf = new Map();      /* elemento -> host */
+
+  function fxOf(el) { return el.classList.contains("fx") ? el : el.querySelector(".fx"); }
+
+  function arm(it) {
+    var el = it.el;
+    if (it.type === "expo") {
+      var fx = fxOf(el), p = fx && fx.querySelector(".fx__p");
+      gsap.set(fx, { "--ev": 1 });
+      if (p) gsap.set(p, { scale: 1.04 });
+    } else if (it.type === "linha" && window.SplitText) {
+      if (it.split) it.split.revert();
+      it.split = SplitText.create(el, { type: "lines", mask: "lines", linesClass: "ln-l", aria: "auto" });
+      gsap.set(it.split.lines, { yPercent: 105 });
+    } else if (it.type === "filete") {
+      gsap.set(el, { scaleX: 0, transformOrigin: "0% 50%" });
+    } else {
+      gsap.set(el, { opacity: 0, y: 16 });
+    }
+  }
+
+  function play(it, delay, instant) {
+    var el = it.el, dur = instant ? 0 : 1;
+    if (it.type === "expo") {
+      var fx = fxOf(el), p = fx && fx.querySelector(".fx__p");
+      gsap.to(fx, { "--ev": 0, duration: 1.4 * dur, ease: "sine.inOut", delay: delay, overwrite: "auto" });
+      if (p) gsap.to(p, { scale: 1, duration: 1.8 * dur, ease: EASE, delay: delay, overwrite: "auto" });
+    } else if (it.type === "linha" && it.split) {
+      var s = it.split;
+      gsap.to(s.lines, {
+        yPercent: 0, duration: 0.9 * dur, stagger: instant ? 0 : 0.08, ease: EASE, delay: delay,
+        onComplete: function () { if (it.split === s) { s.revert(); it.split = null; } }
+      });
+    } else if (it.type === "filete") {
+      gsap.to(el, { scaleX: 1, duration: 0.9 * dur, ease: EASE, delay: delay });
+    } else if (it.type !== "linha") {
+      gsap.to(el, { opacity: 1, y: 0, duration: 0.7 * dur, ease: EASE, delay: delay, clearProps: "opacity,transform" });
+    }
+  }
+
+  function delays(host, items) {
+    /* filetes primeiro; o resto entra 200ms depois, em cascata. Legenda de
+       foto entra 300ms depois da foto. Etapas na mesma linha da grade
+       ganham um passo extra de 120ms entre si. */
+    var hasF = items.some(function (it) { return it.type === "filete"; });
+    var extra = 0;
+    if (host.classList.contains("etapa")) {
+      var idx = [].indexOf.call(host.parentElement.children, host);
+      var cols = getComputedStyle(host.parentElement).gridTemplateColumns.split(" ").length || 1;
+      extra = (idx % cols) * 0.12;
+    }
+    var fi = 0, oi = 0;
+    return items.map(function (it) {
+      if (it.type === "filete") return extra + (fi++) * STAG.filete;
+      var base = hasF ? 0.2 : 0;
+      if (it.el.classList.contains("leg")) base += 0.3;
+      return extra + base + (oi++) * (STAG[it.type] || 0.09);
+    });
+  }
+
+  function vocab() {
+    var groups = new Map();
+    gsap.utils.toArray("[data-m]").forEach(function (el) {
+      var g = el.parentElement && el.parentElement.closest("[data-m-group]");
+      var host = g || el;
+      if (!groups.has(host)) groups.set(host, []);
+      groups.get(host).push({ el: el, type: el.getAttribute("data-m") });
+      hostOf.set(el, host);
+    });
+
+    groups.forEach(function (items, host) {
+      var st = { armed: false, items: items };
+      hostState.set(host, st);
+      var dl = delays(host, items);
+      var armAll = function () { items.forEach(arm); st.armed = true; };
+      var playAll = function () {
+        if (!st.armed) return;
+        st.armed = false;
+        items.forEach(function (it, i) { play(it, dl[i], false); });
+      };
+      /* só nasce escondido o que está inteiro abaixo da janela */
+      if (host.getBoundingClientRect().top > window.innerHeight) armAll();
+      ScrollTrigger.create({ trigger: host, start: "top bottom", onEnter: playAll, onLeaveBack: armAll });
+    });
+
+    /* saída pelo topo: scrub no próprio elemento, só translate/escala/véu */
+    gsap.utils.toArray("[data-m]").forEach(function (el) {
+      var type = el.getAttribute("data-m");
+      if (type === "filete") return;
+      var trig = { trigger: el, start: "bottom 45%", end: "bottom top", scrub: 0.6 };
+      if (type === "expo") {
+        var fx = fxOf(el);
+        gsap.fromTo(fx, { "--xv": 0, "--xs": 1 }, { "--xv": 0.4, "--xs": 1.03, ease: "none", scrollTrigger: trig });
+      } else {
+        gsap.fromTo(el, { "--xy": "0px" }, { "--xy": type === "linha" ? "-16px" : "-12px", ease: "none", scrollTrigger: trig });
       }
-
-      /* hero: deriva lenta da foto enquanto a primeira tela sai de cena */
-      /* y > 4: no topo o transform fica com o CSS, senão o estilo inline
-         mataria a animação de carga (a foto assenta de scale(1.06) para 1.03) */
-      if (heroImg && y > 4 && y < window.innerHeight * 1.2) {
-        heroImg.style.transform = "translate3d(0," + (y * 0.06).toFixed(2) + "px,0) scale(1.03)";
-      }
-    }
-
-    if (steps && steps.dataset.on !== "true") {
-      var sr = steps.getBoundingClientRect();
-      if (sr.top < window.innerHeight * 0.86) steps.dataset.on = "true";
-    }
+    });
   }
 
-  /* camada 3 ligada ao scroll: um salto (arraste da barra, Home/End, âncora,
-     scrollTo) não gera callback de IntersectionObserver, e os blocos pulados
-     ficariam invisíveis para sempre. Debounce para não medir a cada frame. */
-  var flushT = null;
-  function scheduleFlush() {
-    if (flushT) return;
-    flushT = setTimeout(function () { flushT = null; flush(); }, 150);
-  }
-
-  function onScroll() {
-    if (!ticking) { ticking = true; requestAnimationFrame(frame); }
-    scheduleFlush();
-  }
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll);
-  frame();
-
-  /* --------------------------------------------------- 5. scroll suave (lerp)
-     Implementação própria sobre o scroll real da janela: sticky, :target e a
-     barra do navegador continuam funcionando. Só em ponteiro fino. */
-  var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  var headerOffset = 84;
-
-  function scrollable(node) {
-    for (var i = 0, n = node; i < 8 && n && n !== document.body; i++, n = n.parentElement) {
-      var st = getComputedStyle(n);
-      if (/(auto|scroll)/.test(st.overflowY) && n.scrollHeight > n.clientHeight + 4) return true;
-    }
-    return false;
-  }
-
-  var target = window.pageYOffset, current = target, running = false;
-
-  function maxY() {
-    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-  }
-
-  function loop() {
-    current += (target - current) * 0.1;
-    if (Math.abs(target - current) < 0.4) { current = target; running = false; }
-    window.scrollTo(0, current);
-    if (running) requestAnimationFrame(loop);
-  }
-
-  function kick() {
-    if (!running) { running = true; requestAnimationFrame(loop); }
-  }
-
-  if (fine && !reduce) {
-    window.addEventListener("wheel", function (e) {
-      if (document.body.style.overflow === "hidden") return;   /* lightbox aberto */
-      if (e.ctrlKey || e.deltaMode === 1) return;
-      if (scrollable(e.target)) return;
-      e.preventDefault();
-      if (!running) current = window.pageYOffset;
-      target = Math.max(0, Math.min(maxY(), target + e.deltaY));
-      kick();
-    }, { passive: false });
-
-    window.addEventListener("scroll", function () {
-      if (!running) { target = window.pageYOffset; current = target; }
-    }, { passive: true });
-  }
-
-  function goTo(y, delay) {
-    y = Math.max(0, Math.min(maxY(), y));
-    setTimeout(function () {
-      if (fine && !reduce) { target = y; current = window.pageYOffset; kick(); }
-      else window.scrollTo(0, y);
-      setTimeout(flush, 60);
-    }, delay || 0);
-  }
-
-  document.addEventListener("click", function (e) {
-    var a = e.target.closest && e.target.closest('a[href^="#"]');
-    if (!a) return;
-    var id = a.getAttribute("href");
-    if (!id || id === "#") return;
-    var dst = document.querySelector(id);
-    if (!dst) return;
-    e.preventDefault();
-    var fromDrawer = !!a.closest(".drawer");
-    if (fromDrawer && window.brisaCloseDrawer) window.brisaCloseDrawer();
-    var y = dst.getBoundingClientRect().top + window.pageYOffset - headerOffset;
-    goTo(y, fromDrawer ? 420 : 60);
-    history.replaceState(null, "", id);
+  /* foco nunca cai em conteúdo escondido: completa a entrada na hora */
+  document.addEventListener("focusin", function (e) {
+    var m = e.target.closest && e.target.closest("[data-m]");
+    if (!m) return;
+    var host = hostOf.get(m), st = host && hostState.get(host);
+    if (!st || !st.armed) return;
+    st.armed = false;
+    st.items.forEach(function (it) { play(it, 0, true); });
   });
 
-  window.brisaGoTo = goTo;
-  window.addEventListener("hashchange", function () { setTimeout(flush, 80); });
-  clearTimeout(panic);
+  /* ------------------------------------------------------- hero: saída
+     Ao rolar, a foto desce devagar (paralaxe) e escurece; o texto sobe 32px.
+     O degradê não se move: fica preso ao texto, e o contraste medido vale
+     durante toda a saída. */
+  function cineExit() {
+    var tl = gsap.timeline({ scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: 0.6, invalidateOnRefresh: true } });
+    tl.fromTo(hero.querySelector(".cine__media"), { yPercent: 0 }, { yPercent: 10, ease: "none" }, 0)
+      .fromTo(hero, { "--xv": 0 }, { "--xv": 0.5, ease: "none" }, 0)
+      .fromTo(hero.querySelector(".cine__in"), { "--xy": "0px" }, { "--xy": "-32px", ease: "none" }, 0);
+  }
+
+  /* --------------------------------------------------------------- início */
+  var mm = gsap.matchMedia();
+  mm.add({
+    fine: "(hover: hover) and (pointer: fine)"
+  }, function (ctx) {
+    var c = ctx.conditions, undo = [];
+    if (c.fine) undo.push(startLenis());
+    var pronto = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    pronto.then(function () {
+      ctx.add(function () {
+        vocab();
+        if (hero) cineExit();
+        ScrollTrigger.refresh();
+        if (location.hash && location.hash.length > 1) {
+          var alvo = document.querySelector(location.hash);
+          if (alvo) {
+            if (window.brisaLenis) window.brisaLenis.scrollTo(alvo, { immediate: true, force: true });
+            else alvo.scrollIntoView();
+          }
+        }
+      });
+    });
+    return function () {
+      undo.forEach(function (f) { f(); });
+      hostState.forEach(function (st) {
+        st.items.forEach(function (it) { if (it.split) { it.split.revert(); it.split = null; } });
+      });
+      hostState.clear();
+      hostOf.clear();
+    };
+  });
 })();
