@@ -4,7 +4,7 @@
   "setor": "engenharia/gerenciamento de obras residenciais de alto padrao",
   "pipeline": "criar-site",
   "etapa_atual": 8,
-  "atualizado_em": "2026-09-02",
+  "atualizado_em": "2026-09-29",
   "stack": "html-estatico+css+js-vanilla (+php no formulario)",
   "etapas": [
     {
@@ -41,25 +41,25 @@
       "n": 5,
       "nome": "Front-end",
       "status": "done",
-      "nota": "Site/ com 3 paginas e 13 secoes; brief-pack.md registra referencias, padroes do design-bank, os elementos trazidos de kingshaus.co e construtoragreenwood.com.br, e 7 eixos de variacao"
+      "nota": "v2 REFEITA DO ZERO (v1 reprovada; guardada em _versao-1/). Direção 'luz de projeto': hero com janela que se abre, luz de janela dos _patterns, grade de cor única nas fotos, explorador de serviços, método em cena travada, 3 obras em 1 linha. 14 pedidos da cliente aplicados. revisar-frontend em 2 passadas: 0 achados bloqueantes (brief-pack §8)."
     },
     {
       "n": 6,
       "nome": "Ajustes finais e auditoria",
       "status": "done",
-      "nota": "53 webp (6,2 MB); revisao de espacamento por medicao (escala unica de vao, line-height de display de 1.06 para 1.18 porque a tinta de duas linhas se tocava, vao de linha do grid de obras de 34 para 72px); 6 momentos de imagem em largura total (era 3); overflow horizontal 0 em 33 larguras de 320 a 1920px; WCAG 2.0/2.1/2.2 verificado por script incluindo 1.4.11, 1.4.12, 1.4.4 e 2.5.8; heuristicas de Nielsen revisadas com foco em consistencia e recuperacao de erro"
+      "nota": "34 webp novas (5,7 MB; 1ª carga 1,24 MB; hero 133 KB). Overflow 0 de 320 a 1920; cada seção cabe na janela de 360x740 a 1920x1080; contraste 0 falhas (sólido e por pixel sobre foto); 58/58 testes de interação."
     },
     {
       "n": 7,
       "nome": "Tags e modulos",
       "status": "done",
-      "nota": "LGPD instalado (cookies com dataLayer, privacidade, fornecedores, backend PHP). GTM-WVG6L4KB nas 3 paginas com Consent Mode v2: padrao denied, update no aceite. Merlin (popup 9628ffa4) na home, carregando 700ms apos o load: medido que nao grava nenhum cookie e nao abre modal sozinho. Os 4 CTAs Solicitar orcamento abrem o popup, com o href do WhatsApp preservado como fallback. Bolha do widget na paleta: disco --ink, hover --olive-ink, glifo do WhatsApp em branco."
+      "nota": "LGPD mantido (cookies agora no 1º scroll, canto inferior esquerdo; Consent Mode v2 denied por padrão; evento brisa_consent). GTM-WVG6L4KB nas 3 páginas. Merlin na home, CTAs abrem o popup com fallback WhatsApp; widget ganhou nome acessível. Clarity: pendente (sem ID)."
     },
     {
       "n": 8,
       "nome": "Revisao humana",
       "status": "doing",
-      "nota": "site pronto e servido em http://127.0.0.1:8834; aguardando revisao e ajustes finais do usuario"
+      "nota": "v2 pronta e servida em http://127.0.0.1:8834 (python _tools/serve.py). Aguardando revisão da cliente."
     },
     {
       "n": 9,
@@ -76,16 +76,24 @@
     "site_atual_do_cliente": "www.brisa.eng.br (informado na placa; nao verificado)"
   },
   "dados_reais_usados": {
-    "whatsapp": "5541996241600",
-    "telefone_exibido": "41 99624-1600",
+    "whatsapp": "5541999243868",
+    "telefone_exibido": "41 9 9924-3868",
     "email": "contato@brisa.eng.br",
     "instagram": "@brisa.eng",
     "responsavel_tecnica": "Elisa Andrade da Silva, CREA PR 115016/D",
     "placeholders_no_codigo": [],
     "gtm": "GTM-WVG6L4KB",
-    "merlin_popup": "9628ffa4-2abd-4d52-bc26-a6fa9d10638c"
+    "merlin_popup": "9628ffa4-2abd-4d52-bc26-a6fa9d10638c",
+    "telefone_anterior": "41 99624-1600 (substituído em todo o site em 2026-09-29, a pedido da cliente)"
   },
   "pendencias": [
+    {
+      "id": "revisao-visual",
+      "grupo": "revisao",
+      "bloqueia": 9,
+      "titulo": "Revisão da v2 pela cliente",
+      "detalhe": "Rodar 'python _tools/serve.py' e abrir http://127.0.0.1:8834. Confirmar também 4 decisões de conteúdo: (1) seção de método mantida, porque a cliente editou a etapa 03; (2) cadeia Planejar › Compatibilizar... removida por repetir as 6 etapas; (3) texto do pilar Controle reescrito para não repetir a etapa 05; (4) 'compatibilização de projetos' saiu da lista do serviço 02 e ficou no serviço 04 e na etapa 03."
+    },
     {
       "id": "hospedagem",
       "grupo": "deploy",
@@ -143,20 +151,6 @@
       "detalhe": "Usada como remetente do aviso do formulario de fornecedores. Configuravel em db-config.php (mail_from)."
     },
     {
-      "id": "revisao-visual",
-      "grupo": "revisao",
-      "bloqueia": 9,
-      "titulo": "Revisao visual e ajustes finais",
-      "detalhe": "Rodar 'python _tools/serve.py' e abrir http://127.0.0.1:8834 para revisar. Ajustes de texto, foto ou ordem de secao entram nesta etapa."
-    },
-    {
-      "id": "fotos-canteiro",
-      "grupo": "conteudo",
-      "bloqueia": null,
-      "titulo": "Fotos de obra em andamento em condicao de publicacao",
-      "detalhe": "As 13 fotos da pasta 'Fotos Obras em Execucao' ficaram TODAS fora do site: terra exposta, entulho, escoramento, pilha de madeira e mato em primeiro plano. Para um posicionamento de alto padrao nenhuma esta publicavel. Se o cliente quiser mostrar obra em andamento, e vale a pena porque e o servico dele, precisamos de um registro melhor: canteiro organizado, estrutura enquadrada sem entulho no primeiro plano, de preferencia em dia de ceu limpo."
-    },
-    {
       "id": "renders-hv25",
       "grupo": "conteudo",
       "bloqueia": null,
@@ -169,10 +163,30 @@
       "bloqueia": null,
       "titulo": "Configurar as tags DENTRO do container GTM-WVG6L4KB",
       "detalhe": "O container esta instalado e disparando, mas quem cria as tags de GA4, Meta Pixel e Google Ads e o painel do GTM, nao o HTML. Ao criar cada uma, marcar 'Aguardar sinais de consentimento' e exigir analytics_storage para GA4 e ad_storage para Pixel e Ads: o site ja envia o Consent Mode v2 com padrao denied e update no aceite, e tambem o evento customizado brisa_consent com consent_state granted/denied, que pode ser usado como gatilho proprio."
+    },
+    {
+      "id": "merlin-telefone",
+      "grupo": "medicao",
+      "bloqueia": null,
+      "titulo": "Trocar o WhatsApp DENTRO do painel do Merlin",
+      "detalhe": "Os CTAs abrem o popup do Merlin (9628ffa4). O número de destino do popup é configurado no painel do vendor, não no site: trocar para 41 9 9924-3868 (5541999243868) e conferir se o texto do popup fala em 'proposta' (a cliente pediu para remover). O fallback do site já usa o número novo."
+    },
+    {
+      "id": "clarity",
+      "grupo": "medicao",
+      "bloqueia": null,
+      "titulo": "Microsoft Clarity (scroll death)",
+      "detalhe": "Padrão BuildV para medir até onde o visitante rola e cliques mortos/raiva. Falta o Project ID do Clarity; com ele, entra pelo GTM já instalado, respeitando o consentimento."
+    },
+    {
+      "id": "fotos-profissionais",
+      "grupo": "conteudo",
+      "bloqueia": null,
+      "titulo": "Ensaio fotográfico profissional das obras (maior ganho de percepção premium que resta)",
+      "detalhe": "Todas as fotos são de celular, com grande-angular deformando verticais e ambientes ainda com móveis embalados. A v2 aplicou recorte e grade de cor únicos, mas um ensaio de arquitetura (verticais corrigidas, luz de fim de tarde, ambientes vestidos) é o que mais aproxima o site das referências. As fotos de canteiro continuam fora por falta de condição de publicação."
     }
   ],
   "notas_tecnicas": [
-    "Fontes servidas pelo Google Fonts: Instrument Serif, Montserrat e Chivo. Se a hospedagem exigir auto-hospedagem, e uma troca de meia hora.",
     "prefers-reduced-motion desliga todo o movimento; o gate html[data-motion] garante que a pagina seja legivel mesmo se o JS cair.",
     "A porta 8791 estava ocupada por outro projeto na maquina; o preview deste site usa a 8834.",
     "Referencias de design passadas pelo cliente: kingshaus.co e construtoragreenwood.com.br. O que foi incorporado esta na secao 7 do brief-pack.md.",
@@ -186,6 +200,12 @@
     "Bolha do Merlin: o vendor entrega disco #1B98D2 com o logo do WhatsApp verde numa img de 64px dentro de um botao de 72px. Mudar so o fundo deixaria um anel de 4px na cor do site, entao o disco foi para --ink e a img do vendor deu lugar ao glifo do WhatsApp em --paper por mascara CSS. Contraste medido do glifo sobre o disco: 14,55:1. O style do Merlin entra no head DEPOIS da nossa folha, entao aqui !important e a ferramenta certa.",
     "CTAs abrem o popup do Merlin por progressive enhancement: o href do WhatsApp fica no HTML e o clique so e interceptado quando .merlin-button-popup existe no DOM. Testado: Merlin bloqueado na rede cai para o WhatsApp em nova aba; sem JS o href e o destino real; Enter no teclado abre o popup; nao dispara os dois ao mesmo tempo. Merlin.Popup expoe so initFromSource, sem open publico, entao abrir por codigo e clicar no proprio botao do widget.",
     "Os links de contato simples (telefone do hero, cartao de contato, rodape) NAO foram interceptados: quem clica num numero espera o WhatsApp, e eles sao a rota de escape acessivel.",
-    "Ao abrir o popup, a Merlin pede /cdn-cgi/challenge-platform/scripts/jsd/main.js com caminho relativo de dentro do proprio iframe, o que resolve contra o nosso dominio e devolve 404 (2x). E comportamento do vendor dentro do iframe dele: inofensivo e fora do nosso alcance."
-  ]
+    "Ao abrir o popup, a Merlin pede /cdn-cgi/challenge-platform/scripts/jsd/main.js com caminho relativo de dentro do proprio iframe, o que resolve contra o nosso dominio e devolve 404 (2x). E comportamento do vendor dentro do iframe dele: inofensivo e fora do nosso alcance.",
+    "v2: container 1600px com gutter fluido (a cliente pediu a logo mais à esquerda); header em grade 1fr/auto/1fr com o menu no centro óptico.",
+    "v2: tipografia e espaçamento com min(vw, vh) + regras por max-height: cada seção cabe na janela sem esconder conteúdo (exceto fotos de apoio em celulares com menos de 760px de altura).",
+    "v2 ARMADILHA: clip-path fechado zera a área visível; IntersectionObserver e lazy loading ignoram o elemento. O motor observa o PAI da máscara e troca loading para eager a 1,5 tela de distância.",
+    "v2: vercel.json com cache de 7 dias em /assets (era 1 ano immutable). Os nomes das imagens não têm hash; com immutable, qualquer troca de foto numa rodada de ajuste ficaria presa no cache.",
+    "v2: v1 completa guardada em _versao-1/ (fora do git)."
+  ],
+  "versao": "v2 (refação high premium, 2026-09-29)"
 }

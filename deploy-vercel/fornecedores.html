@@ -36,6 +36,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-WVG6L4KB');</script>
 <!-- /BuildV: GTM -->
+
 <title>Fornecedores e Trabalhe Conosco · Brisa Engenharia</title>
 <meta name="description" content="Cadastre sua empresa como fornecedora ou envie sua candidatura para trabalhar com a Brisa Engenharia.">
 <link rel="canonical" href="https://www.brisa.eng.br/fornecedores.html">
@@ -46,7 +47,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rufina:wght@400;700&family=Average+Sans&display=swap">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/motion.css">
-<script>document.documentElement.setAttribute('data-motion','on')</script>
+<script>
+(function () {
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  document.documentElement.setAttribute("data-motion", "on");
+  setTimeout(function () { if (!window.__brisaMotion) document.documentElement.removeAttribute("data-motion"); }, 4000);
+})();
+</script>
 </head>
 <body>
 
@@ -57,64 +64,79 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <a class="skip" href="#conteudo">Ir para o conteúdo</a>
 
-<header class="hdr" data-compact="false">
-  <div class="container hdr__in">
-    <a class="brand" href="index.html" aria-label="Brisa Engenharia, ir para a página inicial">
-      <img src="assets/logo/logo-brisa-escuro.svg" width="1280" height="350" alt="Brisa Engenharia">
+<!-- ====================================================== header -->
+<header class="hdr hdr--solid">
+  <div class="wrap hdr__in">
+    <a class="brand" href="index.html" aria-label="Brisa Engenharia, página inicial">
+      <img class="brand__l" src="assets/logo/logo-brisa-claro.svg" width="1280" height="350" alt="">
+      <img class="brand__d" src="assets/logo/logo-brisa-escuro.svg" width="1280" height="350" alt="">
     </a>
+
     <nav class="nav" aria-label="Navegação principal">
       <ul>
-        <li><a href="index.html#sobre">Sobre<span class="mk" aria-hidden="true"></span></a></li>
-        <li><a href="index.html#servicos">Serviços<span class="mk" aria-hidden="true"></span></a></li>
-        <li><a href="index.html#obras">Obras<span class="mk" aria-hidden="true"></span></a></li>
-        <li><a href="index.html#contato">Contato<span class="mk" aria-hidden="true"></span></a></li>
+        <li><a href="index.html#obras">Obras<span class="nav__dot" aria-hidden="true"></span></a></li>
+        <li><a href="index.html#sobre">Sobre<span class="nav__dot" aria-hidden="true"></span></a></li>
+        <li><a href="index.html#servicos">Serviços<span class="nav__dot" aria-hidden="true"></span></a></li>
+        <li><a href="index.html#metodo">Método<span class="nav__dot" aria-hidden="true"></span></a></li>
+        <li><a href="index.html#contato">Contato<span class="nav__dot" aria-hidden="true"></span></a></li>
       </ul>
     </nav>
-    <div class="hdr__cta">
-      <a class="btn btn--ghost btn--sm" data-wa-btn="" href="https://wa.me/5541996241600">
-        Solicitar orçamento
-        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1 8h13M9.5 3.5 14 8l-4.5 4.5" stroke="currentColor" stroke-width="1.4"/></svg>
+
+    <div class="hdr__end">
+      <a class="btn btn--sm hdr__cta" data-wa-btn href="https://wa.me/5541999243868">
+        <span>Solicitar orçamento</span>
+        <svg class="btn__ar" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M0 6h18.5M13.5 1l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
       </a>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
+        <i></i><i></i>
+      </button>
     </div>
-    <button class="burger" type="button" aria-expanded="false" aria-controls="menu-mobile" aria-label="Abrir menu">
-      <i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i>
-    </button>
   </div>
 </header>
 
-<div class="scrim" data-open="false" aria-hidden="true"></div>
-<nav class="drawer" id="menu-mobile" data-open="false" aria-label="Navegação">
-  <ul>
-    <li><a href="index.html">Início</a></li>
-    <li><a href="index.html#sobre">Sobre</a></li>
-    <li><a href="index.html#servicos">Serviços</a></li>
-    <li><a href="index.html#obras">Obras</a></li>
-    <li><a href="index.html#contato">Contato</a></li>
-  </ul>
-  <a class="btn btn--light" data-wa-btn="" href="https://wa.me/5541996241600">Solicitar orçamento</a>
-</nav>
+<div class="drawer" id="menu" data-open="false">
+  <div class="wrap drawer__in">
+    <nav aria-label="Navegação">
+      <ol class="drawer__nav">
+        <li><a href="index.html#obras"><span class="drawer__n">01</span>Obras</a></li>
+        <li><a href="index.html#sobre"><span class="drawer__n">02</span>Sobre</a></li>
+        <li><a href="index.html#servicos"><span class="drawer__n">03</span>Serviços</a></li>
+        <li><a href="index.html#metodo"><span class="drawer__n">04</span>Método</a></li>
+        <li><a href="index.html#contato"><span class="drawer__n">05</span>Contato</a></li>
+      </ol>
+    </nav>
+    <div class="drawer__foot">
+      <a class="btn btn--light" data-wa-btn href="https://wa.me/5541999243868">
+        <span>Solicitar orçamento</span>
+        <svg class="btn__ar" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M0 6h18.5M13.5 1l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+      </a>
+      <p class="drawer__contact">
+        <a href="https://wa.me/5541999243868" target="_blank" rel="noopener">41 9 9924-3868</a>
+        <a href="mailto:contato@brisa.eng.br">contato@brisa.eng.br</a>
+      </p>
+    </div>
+  </div>
+</div>
 
 <main id="conteudo">
-
-<section class="ph bg-ink">
-  <span class="dots dots--ink" aria-hidden="true"></span>
-  <div class="container">
-    <p class="eyebrow" data-reveal="up">
-      <span class="rule3" aria-hidden="true"><i></i><i></i><i></i></span>
+<section class="ph">
+  <img class="luz luz--ph" src="assets/luz/luz-008.svg" alt="" aria-hidden="true">
+  <div class="wrap">
+    <p class="label">
       Parcerias
     </p>
-    <h1 class="display">Fornecedores e Trabalhe Conosco</h1>
-    <p class="lede ph__lede">Obra de alto padrão depende de quem executa. Se sua empresa presta
+    <h1>Fornecedores e Trabalhe Conosco</h1>
+    <p class="ph__lede">Obra de alto padrão depende de quem executa. Se sua empresa presta
       serviços ou fornece materiais para o segmento residencial de alto padrão, ou se você quer
       integrar nossa equipe técnica, envie seus dados por aqui.</p>
   </div>
 </section>
 
-<section class="doc bg-bone">
-  <div class="container">
+<section class="doc">
+  <div class="wrap">
     <div class="doc__body">
       <h2>Como avaliamos</h2>
-      <p>Cadastros recebidos são analisados pela coordenação técnica. Entramos em contato quando
+      <p>Cadastros recebidos são analisados pela equipe técnica. Entramos em contato quando
         houver demanda compatível com a sua área de atuação. Não há prazo fixo de resposta e o
         cadastro não gera obrigação de contratação.</p>
 
@@ -170,7 +192,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <button class="btn" type="submit">
           Enviar cadastro
-          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1 8h13M9.5 3.5 14 8l-4.5 4.5" stroke="currentColor" stroke-width="1.4"/></svg>
+          <svg class="btn__ar" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M0 6h18.5M13.5 1l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
         </button>
 
         <p class="form__msg" id="form-msg" role="status" hidden></p>
@@ -178,40 +200,47 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <h2>Prefere falar direto?</h2>
       <p>Escreva para <a href="mailto:contato@brisa.eng.br">contato@brisa.eng.br</a> ou chame no
-        WhatsApp <a href="https://wa.me/5541996241600" target="_blank" rel="noopener">41 99624-1600</a>.</p>
+        WhatsApp <a href="https://wa.me/5541999243868" target="_blank" rel="noopener">41 9 9924-3868</a>.</p>
     </div>
   </div>
 </section>
-
 </main>
 
-<footer class="ftr">
-  <img class="ftr__mark" src="assets/logo/simbolo-casa-claro.svg" width="512" height="512" alt="" aria-hidden="true" loading="lazy">
-  <div class="container">
+<!-- ====================================================== rodapé -->
+<footer class="ftr" data-bg="dark">
+  <div class="wrap">
     <div class="ftr__top">
       <div class="ftr__brand">
         <img src="assets/logo/logo-brisa-claro.svg" width="1280" height="350" alt="Brisa Engenharia" loading="lazy">
-        <p>Planejamento e gerenciamento de obras residenciais de alto padrão.</p>
+        <p>Planejamento, execução e gestão de empreendimentos de alto padrão.</p>
       </div>
-      <div class="ftr__nav">
-        <h3>Navegação</h3>
+
+      <nav class="ftr__col" aria-label="Navegação do rodapé">
+        <h2 class="ftr__h">Navegação</h2>
         <ul>
-          <li><a href="index.html">Início</a></li>
-          <li><a href="index.html#servicos">Serviços</a></li>
           <li><a href="index.html#obras">Obras</a></li>
+          <li><a href="index.html#sobre">Sobre</a></li>
+          <li><a href="index.html#servicos">Serviços</a></li>
+          <li><a href="index.html#metodo">Método</a></li>
           <li><a href="index.html#contato">Contato</a></li>
         </ul>
-      </div>
-      <div class="ftr__contato">
-        <h3>Contato</h3>
+      </nav>
+
+      <div class="ftr__col">
+        <h2 class="ftr__h">Contato</h2>
         <ul>
-          <li><a href="https://wa.me/5541996241600" target="_blank" rel="noopener">WhatsApp 41 99624-1600</a></li>
+          <li><a href="https://wa.me/5541999243868" target="_blank" rel="noopener">WhatsApp 41 9 9924-3868</a></li>
           <li><a href="mailto:contato@brisa.eng.br">contato@brisa.eng.br</a></li>
           <li><a href="https://www.instagram.com/brisa.eng" target="_blank" rel="noopener">@brisa.eng</a></li>
-          <li><span>Elisa Andrade da Silva, CREA PR 115016/D</span></li>
         </ul>
       </div>
+
+      <div class="ftr__col">
+        <h2 class="ftr__h">Responsável técnica</h2>
+        <p>Elisa Andrade da Silva<br>CREA PR 115016/D</p>
+      </div>
     </div>
+
     <div class="ftr__bot">
       <p>&copy; <span data-year>2026</span> Brisa Engenharia. Todos os direitos reservados.</p>
       <nav aria-label="Links legais">
@@ -222,14 +251,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </footer>
 
+<!-- ====================================================== cookies (LGPD) -->
 <div class="cookie" data-open="false" role="region" aria-label="Aviso de cookies">
-  <div class="container cookie__in">
+  <div class="cookie__in">
     <p>Usamos cookies para entender como o site é usado e melhorar sua experiência.
-      Você decide: as tags de medição só são ativadas depois do seu aceite.
+      As tags de medição só são ativadas depois do seu aceite.
       Saiba mais na <a href="privacidade.html">Política de Privacidade</a>.</p>
     <div class="cookie__acts">
-      <button class="btn btn--light btn--sm" type="button" data-consent="granted">Aceitar</button>
-      <button class="btn btn--sm btn--outline-dark" type="button" data-consent="denied">Recusar</button>
+      <button class="btn btn--sm btn--light" type="button" data-consent="granted">Aceitar</button>
+      <button class="btn btn--sm btn--ghost-light" type="button" data-consent="denied">Recusar</button>
     </div>
   </div>
 </div>

@@ -1,153 +1,105 @@
 /* =========================================================================
-   Brisa Engenharia — motor de movimento (CSS)
-   Todo estado inicial "invisível" vive atrás de html[data-motion]: se o JS
-   cair, a página continua 100% legível.
-   Calibragem da casa: deslocamento 24px, easing longo, intensidade ~4/10.
+   Brisa Engenharia · movimento (sistema de movimento BuildV)
+   Movimento curto, easing longo, intensidade ~4/10, sem bounce.
+   TODO estado inicial invisível vive atrás de html[data-motion]: sem o gate
+   (JS fora, movimento reduzido) a página é 100% legível e estática.
    ========================================================================= */
 
-@media (prefers-reduced-motion: no-preference){
-
-  html[data-motion] [data-reveal]{
-    opacity:0;
-    transition:
-      opacity .86s var(--e) var(--d,0s),
-      transform .86s var(--e) var(--d,0s),
-      filter .86s var(--e) var(--d,0s);
-  }
-  html[data-motion] [data-reveal="up"],
-  html[data-motion] [data-reveal=""]{transform:translateY(24px);filter:blur(5px)}
-  html[data-motion] [data-reveal="soft"]{transition-duration:1s}
-  html[data-motion] [data-reveal="fig"]{transform:scale(.968);filter:blur(4px)}
-  html[data-motion] [data-rv="left"]{transform:translateX(-26px);filter:blur(5px)}
-  html[data-motion] [data-rv="right"]{transform:translateX(26px);filter:blur(5px)}
-
-  html[data-motion] [data-reveal][data-on]{
-    opacity:1;transform:none;filter:none;
-  }
-
-  /* cortina lateral: a foto é "desenhada" da esquerda para a direita,
-     ecoando o traço único do logo. round mantém o raio dentro do inset. */
-  html[data-motion] [data-curtain]{
-    clip-path:inset(0 100% 0 0 round 2px);
-    transition:clip-path 1.25s var(--e) var(--d,0s);
-  }
-  html[data-motion] [data-curtain] > img{
-    transform:scale(1.06);
-    transition:transform 1.6s var(--e) var(--d,0s);
-  }
-  html[data-motion] [data-curtain][data-on]{clip-path:inset(0 0 0 0 round 2px)}
-  html[data-motion] [data-curtain][data-on] > img{transform:none}
-  /* celula com parallax assenta em scale(1.08), que e a folga que o JS usa
-     para deslocar a foto: assim nao ha salto quando o scroll assume */
-  html[data-motion] [data-curtain][data-parallax][data-on] > img{transform:scale(1.08)}
-
-  /* escadinha de 3 filetes: entram em scaleX sequencial */
-  html[data-motion] .rule3 i{
-    transform:scaleX(0);
-    transition:transform .62s var(--e);
-  }
-  html[data-motion] .rule3 i:nth-child(2){transition-delay:.09s}
-  html[data-motion] .rule3 i:nth-child(3){transition-delay:.18s}
-  html[data-motion] [data-on] .rule3 i,
-  html[data-motion] .rule3[data-on] i{transform:scaleX(1)}
-
-  /* filete superior dos serviços */
-  html[data-motion] .svc__item .top{
-    transform:scaleX(0);
-    transition:transform 1s var(--e) var(--d,0s);
-  }
-  html[data-motion] .svc__item[data-on] .top{transform:scaleX(1)}
-
-  /* título em máscara, palavra por palavra */
-  html[data-motion] .w{
-    display:inline-block;overflow:hidden;vertical-align:top;
-    padding-block:.14em .2em;margin-block:-.14em -.2em;
-  }
-  html[data-motion] .w > i{
-    display:inline-block;font-style:inherit;
-    transform:translateY(108%);
-    transition:transform .9s var(--e) var(--d,0s);
-  }
-  html[data-motion] [data-split][data-on] .w > i{transform:none}
-
-  /* diptico: as duas fotos entram em cortina, a segunda com atraso */
-  html[data-motion] .duo__cell{will-change:clip-path}
-
-  /* tira do feed: a deriva horizontal fica suave entre frames de scroll.
-     A entrada em cascata das quatro pecas usa o motor generico de reveal,
-     que ja escalona irmaos em 80ms. */
-  html[data-motion] .feed__grid{transition:transform .12s linear}
-
-  /* pilares do compromisso: divisoria desenha e o texto sobe */
-  html[data-motion] .pillars li{
-    opacity:0;transform:translateY(16px);
-    transition:opacity .78s var(--e) var(--d,0s),transform .78s var(--e) var(--d,0s);
-  }
-  html[data-motion] .pillars[data-on] li{opacity:1;transform:none}
-  html[data-motion] .pillars[data-on] li:nth-child(1){--d:0s}
-  html[data-motion] .pillars[data-on] li:nth-child(2){--d:.08s}
-  html[data-motion] .pillars[data-on] li:nth-child(3){--d:.16s}
-  html[data-motion] .pillars[data-on] li:nth-child(4){--d:.24s}
-  html[data-motion] .pillars[data-on] li:nth-child(5){--d:.32s}
-
-  /* lista de valores: divisoria de cada item desenha da esquerda */
-  html[data-motion] .vals li{
-    opacity:0;transform:translateY(12px);
-    transition:opacity .66s var(--e) var(--d,0s),transform .66s var(--e) var(--d,0s);
-  }
-  html[data-motion] .vals[data-on] li{opacity:1;transform:none}
-  html[data-motion] .vals[data-on] li:nth-child(n+1){--d:0s}
-  html[data-motion] .vals[data-on] li:nth-child(2){--d:.05s}
-  html[data-motion] .vals[data-on] li:nth-child(3){--d:.1s}
-  html[data-motion] .vals[data-on] li:nth-child(4){--d:.15s}
-  html[data-motion] .vals[data-on] li:nth-child(5){--d:.2s}
-  html[data-motion] .vals[data-on] li:nth-child(6){--d:.25s}
-  html[data-motion] .vals[data-on] li:nth-child(7){--d:.3s}
-  html[data-motion] .vals[data-on] li:nth-child(8){--d:.35s}
-
-  /* numeral de servico e de processo: entra depois do filete, nao junto */
-  html[data-motion] .svc__item .num,
-  html[data-motion] .proc__item .num{
-    opacity:0;transform:translateY(10px);
-    transition:opacity .7s var(--e) .16s,transform .7s var(--e) .16s;
-  }
-  html[data-motion] .svc__item[data-on] .num,
-  html[data-motion] .proc__item[data-on] .num,
-  html[data-motion] [data-on] .proc__item .num{opacity:1;transform:none}
-
-  /* hero em duas fases: a foto assenta, a banda sobe */
-  html[data-motion] .hero__media img{
-    transform:scale(1.06);
-    transition:transform 1.8s var(--e) .1s;
-  }
-  html[data-motion] .hero[data-on] .hero__media img{transform:scale(1.03)}
-  html[data-motion] .hero__band{
-    opacity:0;transform:translateY(26px);
-    transition:opacity .95s var(--e) .28s,transform .95s var(--e) .28s;
-  }
-  html[data-motion] .hero[data-on] .hero__band{opacity:1;transform:none}
-  html[data-motion] .hero__credit{
-    opacity:0;transition:opacity .8s var(--e2) 1.1s;
-  }
-  html[data-motion] .hero[data-on] .hero__credit{opacity:1}
+:root{
+  --m-e:cubic-bezier(.16,.84,.28,1);
+  --m-d:.9s;
 }
 
-/* nenhuma dependência de movimento para o conteúdo existir */
-@media (prefers-reduced-motion: reduce){
-  html[data-motion] [data-reveal],
-  html[data-motion] [data-curtain],
-  html[data-motion] .rule3 i,
-  html[data-motion] .svc__item .top,
-  html[data-motion] .hero__band,
-  html[data-motion] .hero__credit{
-    opacity:1 !important;transform:none !important;filter:none !important;
-    clip-path:none !important;
-  }
-  .steps__fill{transform:scaleY(1) !important}
-  .steps li,
-  .pillars li,
-  .vals li,
-  .svc__item .num,
-  .proc__item .num{opacity:1 !important;transform:none !important}
-  .feed__grid,.duo__cell img{transform:none !important}
+/* ------------------------------------------------------------- reveals */
+html[data-motion] [data-reveal]{
+  opacity:0;
+  transform:translate3d(0,24px,0);
+  filter:blur(5px);
+  transition:opacity var(--m-d) var(--m-e),transform var(--m-d) var(--m-e),filter var(--m-d) var(--m-e);
+  transition-delay:var(--rv-d,0ms);
+}
+html[data-motion] [data-reveal="soft"]{transform:none;filter:none;transition:opacity 1s var(--m-e);transition-delay:var(--rv-d,0ms)}
+
+/* máscara: a foto sobe de trás de uma cortina e assenta da escala 1.08 */
+html[data-motion] [data-reveal="mask"]{
+  opacity:1;transform:none;filter:none;
+  clip-path:inset(100% 0 0 0);
+  transition:clip-path 1.5s var(--m-e);
+  transition-delay:var(--rv-d,0ms);
+}
+html[data-motion] [data-reveal="mask"] img{transform:scale(1.08);transition:transform 1.8s var(--m-e)}
+html[data-motion] [data-reveal="mask"].is-in{clip-path:inset(0 0 0 0)}
+html[data-motion] [data-reveal="mask"].is-in img{transform:none}
+/* a imagem ativa dos serviços tem escala própria: a máscara não briga com ela */
+html[data-motion] .serv__media[data-reveal="mask"] img{transform:scale(1.06)}
+html[data-motion] .serv__media[data-reveal="mask"].is-in img.is-on{transform:scale(1)}
+/* o zoom de hover das obras continua funcionando depois do reveal */
+html[data-motion] .obra[data-reveal="mask"].is-in .obra__btn:hover .obra__fig img{transform:scale(1.045)}
+
+html[data-motion] [data-reveal].is-in{opacity:1;transform:none;filter:none}
+html[data-motion] [data-reveal].no-anim,
+html[data-motion] [data-reveal].no-anim img{transition:none !important}
+
+/* ------------------------------------------------- títulos palavra a palavra */
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em}
+.w > i{display:inline-block;font-style:normal}
+html[data-motion] [data-split] .w > i{
+  transform:translate3d(0,108%,0);
+  transition:transform .9s var(--m-e);
+  transition-delay:calc(var(--wi,0) * 42ms);
+}
+html[data-motion] [data-split].is-in .w > i{transform:none}
+
+/* ------------------------------------------------------------- hero: a janela
+   A foto aparece por uma janela no centro que se abre até a tela cheia, e
+   assenta da escala 1.16. As linhas do título sobem depois. */
+html[data-motion] .hero__media{clip-path:inset(16% 33% 16% 33%)}
+html[data-motion] .hero__media img{transform:scale(1.16)}
+html[data-motion] .hero__veil{opacity:0}
+html[data-motion] .hero__h .ln > span{transform:translate3d(0,110%,0)}
+html[data-motion] .hero__aside{opacity:0;transform:translate3d(0,24px,0)}
+html[data-motion] .hdr{opacity:0}
+
+html[data-motion].hero-go .hero__media{clip-path:inset(0 0 0 0);transition:clip-path 1.7s var(--m-e)}
+html[data-motion].hero-go .hero__media img{transform:scale(1.02);transition:transform 2.6s var(--m-e)}
+html[data-motion].hero-go .hero__veil{opacity:1;transition:opacity 1.4s var(--m-e) .5s}
+html[data-motion].hero-go .hero__h .ln > span{transform:none;transition:transform 1.15s var(--m-e)}
+html[data-motion].hero-go .hero__h .ln:nth-child(1) > span{transition-delay:.75s}
+html[data-motion].hero-go .hero__h .ln:nth-child(2) > span{transition-delay:.89s}
+html[data-motion].hero-go .hero__aside{opacity:1;transform:none;transition:opacity 1s var(--m-e) 1.15s,transform 1s var(--m-e) 1.15s}
+html[data-motion].hero-go .hdr{opacity:1;transition:opacity .9s var(--m-e) 1.2s,background-color .5s,color .5s,height .5s,border-color .5s}
+
+/* ------------------------------------------------------------ carregamento
+   Só na primeira visita da sessão: o símbolo da casa se ergue do chão e a
+   tela de papel sobe. ~1,3s no total. */
+.ld{display:none}
+html[data-motion][data-intro] .ld{
+  display:grid;place-items:center;position:fixed;inset:0;z-index:var(--z-ld,10090);
+  background:var(--bone,#EEE9E6);
+}
+.ld__mark{display:block;width:62px;height:62px;overflow:hidden}
+.ld__mark img{width:100%;height:100%}
+html[data-motion][data-intro] .ld__mark img{transform:translate3d(0,102%,0);animation:ld-rise .9s var(--m-e) .12s forwards}
+@keyframes ld-rise{to{transform:none}}
+html[data-motion][data-intro].ld-out .ld{transform:translate3d(0,-100%,0);transition:transform 1s var(--m-e)}
+html[data-motion][data-intro].ld-out .ld__mark{opacity:0;transition:opacity .3s}
+
+/* ------------------------------------------------------------- parallax */
+[data-parallax]{will-change:transform}
+
+/* ------------------------------------------------------ método: cena travada */
+html[data-motion] .metodo[data-pin="on"] .etapa{
+  opacity:.34;transform:translate3d(0,12px,0);
+  transition:opacity .6s var(--m-e),transform .8s var(--m-e);
+}
+html[data-motion] .metodo[data-pin="on"] .etapa[data-on]{opacity:1;transform:none}
+.metodo[data-pin="on"] .trilho__fill{transition:transform .12s linear}
+
+/* --------------------------------------------------------- cursor das obras */
+@media (hover:hover) and (pointer:fine){
+  html[data-motion] .obras__grid[data-cur-on] .obra__btn{cursor:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  [data-parallax]{transform:none !important}
 }
