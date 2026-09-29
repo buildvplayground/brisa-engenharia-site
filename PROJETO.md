@@ -5,7 +5,7 @@
 **Drive:** https://drive.google.com/drive/folders/1oiD44ETnWRAoAkyffqE0Cgf8BXYogY3y
 **Contato real:** 41 9 9924-3868 (novo, 2026-09-29) · contato@brisa.eng.br · @brisa.eng · www.brisa.eng.br
 **Responsável técnica:** Elisa Andrade da Silva, CREA PR 115016/D
-**Atualizado:** 2026-09-29 · **Versão:** v2 (refação high premium; v1 reprovada, guardada em `_versao-1/`)
+**Atualizado:** 2026-09-29 · **Versão:** v4 (hero cinema em tela cheia + revisão WCAG 2.0; v1 guardada em `_versao-1/`)
 
 ---
 
@@ -33,7 +33,7 @@
 - [x] **7. Tags e módulos** — banner de cookies com evento no `dataLayer`, Política de
       Privacidade, Fornecedores e Trabalhe Conosco, backend PHP com MySQL opcional.
       **GTM/GA4/Pixel e Merlin: pulados** (o cliente ainda não informou os IDs).
-- [ ] **8. Revisão humana** — v2 servida em http://127.0.0.1:8834. Aguardando a cliente.
+- [ ] **8. Revisão humana** — v4 servida em http://127.0.0.1:8834 e sincronizada em `deploy-vercel/`. Aguardando a cliente.
 - [ ] **9. Deploy** — pasta `deploy-vercel/` pronta e versionada. Bloqueado: falta definir
       a hospedagem e o domínio, e fornecer os secrets.
 
@@ -66,9 +66,12 @@ O repositório versiona **só** `deploy-vercel/`, `.github/`, `PROJETO.md`, `sta
 python _tools/serve.py            # serve Site/ em http://127.0.0.1:8834 (MIME de .webp registrado)
 python _tools/audit-v2.py         # overflow, encaixe por seção, linha, imagens, console
 python _tools/test-interacoes.py  # 58 testes de interação e movimento
-python _tools/wcag-v2.py          # contraste sólido e por pixel sobre foto
+python _tools/wcag-v3.py          # contraste sólido e por pixel (hero nos 3 planos, luz de janela)
+python _tools/wcag20-axe.py       # axe WCAG 2.0 A/AA + texto a 200%
+python _tools/test-v4.py          # 64 testes de interação e movimento (v4)
+python _tools/test-wcag-fixes.py  # 28 verificações das correções WCAG
 python _tools/contrast-foto.py    # contraste de texto sobre foto, por pixel real
-python _tools/build-images-v2.py  # regera as .webp a partir de _raw/ (grade de cor única)
+python _tools/build-images-v3.py  # regera as .webp a partir de _raw/ (retoque, verticais, grade único)
 python _tools/build-internas.py   # privacidade.html e fornecedores.html a partir do index
 python _tools/sync-deploy.py      # Site/ -> deploy-vercel/
 ```

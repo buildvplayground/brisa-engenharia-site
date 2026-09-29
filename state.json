@@ -41,13 +41,13 @@
       "n": 5,
       "nome": "Front-end",
       "status": "done",
-      "nota": "v2 REFEITA DO ZERO (v1 reprovada; guardada em _versao-1/). Direção 'luz de projeto': hero com janela que se abre, luz de janela dos _patterns, grade de cor única nas fotos, explorador de serviços, método em cena travada, 3 obras em 1 linha. 14 pedidos da cliente aplicados. revisar-frontend em 2 passadas: 0 achados bloqueantes (brief-pack §8)."
+      "nota": "v4: hero 'cinema em tela cheia' escolhido pela cliente (3 fotos reais em fusão com aproximação lenta, grão, degradê preso ao texto, botão de pausar). Resto da página em 'placa e legenda' com vocabulário de movimento de 4 verbos (entrada e saída em todas as seções), GSAP+ScrollTrigger+SplitText+Lenis servidos do site. Painel de design: 4 conceitos, 3 juízes, síntese. Revisão WCAG 2.0 com correções confirmadas (brief-pack)."
     },
     {
       "n": 6,
       "nome": "Ajustes finais e auditoria",
       "status": "done",
-      "nota": "34 webp novas (5,7 MB; 1ª carga 1,24 MB; hero 133 KB). Overflow 0 de 320 a 1920; cada seção cabe na janela de 360x740 a 1920x1080; contraste 0 falhas (sólido e por pixel sobre foto); 58/58 testes de interação."
+      "nota": "Imagens v3/v4 com retoque (cv2.inpaint), verticais corrigidas e grade único; 1ª carga do hero 163 KB. Overflow 0 de 320 a 1920; seções cabem de 360x740 a 1920x1080 (320x568: só o rodapé). WCAG 2.0: axe 0 violações, contraste 0 falhas (hero medido por pixel nos 3 planos), texto 200% e zoom 400% sem corte, foco nunca coberto, 64/64 testes de interação + 28/28 das correções."
     },
     {
       "n": 7,
@@ -59,7 +59,7 @@
       "n": 8,
       "nome": "Revisao humana",
       "status": "doing",
-      "nota": "v2 pronta e servida em http://127.0.0.1:8834 (python _tools/serve.py). Aguardando revisão da cliente."
+      "nota": "v4 servida em http://127.0.0.1:8834 e sincronizada em deploy-vercel/. Aguardando a cliente."
     },
     {
       "n": 9,
@@ -92,7 +92,7 @@
       "grupo": "revisao",
       "bloqueia": 9,
       "titulo": "Revisão da v2 pela cliente",
-      "detalhe": "Rodar 'python _tools/serve.py' e abrir http://127.0.0.1:8834. Confirmar também 4 decisões de conteúdo: (1) seção de método mantida, porque a cliente editou a etapa 03; (2) cadeia Planejar › Compatibilizar... removida por repetir as 6 etapas; (3) texto do pilar Controle reescrito para não repetir a etapa 05; (4) 'compatibilização de projetos' saiu da lista do serviço 02 e ficou no serviço 04 e na etapa 03."
+      "detalhe": "Rodar 'python _tools/serve.py' e abrir http://127.0.0.1:8834. Confirmar também: (1) seção de método mantida; (2) cadeia Planejar › Compatibilizar removida por repetir as 6 etapas; (3) pilar Controle reescrito; (4) 'compatibilização de projetos' no serviço 04 e na etapa 03; (5) as legendas das fotos do hero e da faixa (descrevem o que se vê: 'Living de pé-direito duplo', 'Escada em balanço', 'Cozinha com iluminação embutida', 'Mezanino')."
     },
     {
       "id": "hospedagem",
@@ -184,6 +184,13 @@
       "bloqueia": null,
       "titulo": "Ensaio fotográfico profissional das obras (maior ganho de percepção premium que resta)",
       "detalhe": "Todas as fotos são de celular, com grande-angular deformando verticais e ambientes ainda com móveis embalados. A v2 aplicou recorte e grade de cor únicos, mas um ensaio de arquitetura (verticais corrigidas, luz de fim de tarde, ambientes vestidos) é o que mais aproxima o site das referências. As fotos de canteiro continuam fora por falta de condição de publicação."
+    },
+    {
+      "id": "obsoletos-v3",
+      "grupo": "limpeza",
+      "bloqueia": null,
+      "titulo": "Autorizar a exclusão de imagens obsoletas em Site/",
+      "detalhe": "A exclusão foi bloqueada pela permissão automática (Site/ está fora do git). Não são referenciadas pelo HTML e já não sobem para o deploy: Site/assets/img/hero/ (6 planos da v3), Site/assets/img/faixa.webp e faixa-m.webp (cozinha) e Site/assets/img/og.jpg, com o espelho em imagens/tratadas/."
     }
   ],
   "notas_tecnicas": [
@@ -207,5 +214,5 @@
     "v2: vercel.json com cache de 7 dias em /assets (era 1 ano immutable). Os nomes das imagens não têm hash; com immutable, qualquer troca de foto numa rodada de ajuste ficaria presa no cache.",
     "v2: v1 completa guardada em _versao-1/ (fora do git)."
   ],
-  "versao": "v2 (refação high premium, 2026-09-29)"
+  "versao": "v4 (hero cinema em tela cheia + refino da página + revisão WCAG 2.0, 2026-09-29)"
 }

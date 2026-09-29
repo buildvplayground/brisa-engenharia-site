@@ -50,6 +50,28 @@
     hdr.addEventListener("focusin", function () { hdr.setAttribute("data-hide", "false"); });
   }
 
+  /* WCAG 1.4.4: com o texto ampliado (200%), menu e botão podem não caber
+     numa linha. Em vez de empurrar o botão para fora da tela, o header passa
+     para o menu em tela cheia. Medido, não adivinhado por largura. */
+  var hIn = hdr && hdr.querySelector(".hdr__in");
+  var nav = hdr && hdr.querySelector(".nav");
+  var cabe = function () {
+    if (!hIn || !nav) return;
+    hdr.classList.remove("is-tight");
+    if (getComputedStyle(nav).display === "none") return;
+    var brand = hdr.querySelector(".brand").getBoundingClientRect();
+    var n = nav.getBoundingClientRect();
+    var fim = hdr.querySelector(".hdr__end").getBoundingClientRect();
+    var borda = hIn.getBoundingClientRect().right - parseFloat(getComputedStyle(hIn).paddingRight);
+    if (n.left < brand.right + 16 || fim.left < n.right + 16 || fim.right > borda + 1) hdr.classList.add("is-tight");
+  };
+  if (hIn) {
+    cabe();
+    window.addEventListener("resize", cabe);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(cabe);
+    if ("ResizeObserver" in window) new ResizeObserver(cabe).observe(nav);
+  }
+
   /* -------------------------------------------------- saída do hero
      Um sentinela na base do hero. Quando ele sobe acima da metade da
      janela, o hero "saiu": o header passa a poder se recolher e o aviso de
@@ -162,6 +184,32 @@
     }
     setTimeout(inicia, 5200);
   }
+
+  /* ------------------------------------------ foco nunca atrás de camadas
+     WCAG 2.4.7: o aviso de cookies e a bolha do Merlin ficam fixos na base
+     da tela. Se o Tab leva o foco para algo que está por baixo deles, a
+     página rola o suficiente para o elemento aparecer inteiro acima. */
+  var revela = function (el) {
+    if (!el || !el.getBoundingClientRect || el === document.body) return;
+    if (el.closest(".cookie,.merlin-button,.lb,.drawer,.hdr")) return;
+    var r = el.getBoundingClientRect();
+    var topo = Infinity;
+    [document.querySelector('.cookie[data-open="true"]'), document.querySelector(".merlin-button-popup")].forEach(function (c) {
+      if (!c) return;
+      var k = c.getBoundingClientRect();
+      if (!k.width) return;
+      if (r.bottom > k.top && r.top < k.bottom && r.right > k.left && r.left < k.right) topo = Math.min(topo, k.top);
+    });
+    if (topo === Infinity) return;
+    var dy = r.bottom - topo + 16;
+    requestAnimationFrame(function () {
+      var y = window.pageYOffset + dy;
+      if (lenis()) lenis().scrollTo(y, { immediate: true, force: true });
+      else window.scrollTo(0, y);
+    });
+  };
+  document.addEventListener("focusin", function (e) { revela(e.target); });
+  window.brisaRevela = revela;
 
   /* ------------------------------------------------- menu em tela cheia */
   var burger = document.querySelector(".burger");
@@ -445,9 +493,23 @@
     var saved = null;
     try { saved = localStorage.getItem(KEY); } catch (err) { saved = null; }
 
+    /* WCAG 2.4.7: com o aviso aberto, nada focado pode ficar escondido atrás
+       dele. A rolagem por foco respeita scroll-padding, então reservamos a
+       altura do aviso enquanto ele estiver na tela. */
+    var reserva = function (on) {
+      var h = on ? cookie.offsetHeight + 24 : 0;
+      d.style.scrollPaddingBottom = on ? h + "px" : "";
+      /* folga no fim da página: os últimos links podem subir acima do aviso */
+      d.style.setProperty("--cookie-h", h + "px");
+    };
+
     if (saved) push(saved);
     else {
-      var mostrar = function () { cookie.dataset.open = "true"; };
+      /* o aviso pode abrir por cima de algo que JÁ está focado: confere na hora */
+      var mostrar = function () {
+        cookie.dataset.open = "true"; reserva(true);
+        setTimeout(function () { if (window.brisaRevela) window.brisaRevela(document.activeElement); }, 60);
+      };
       if (heroOut) setTimeout(mostrar, 1200);
       else document.addEventListener("brisa:hero-out", function () { setTimeout(mostrar, 400); }, { once: true });
     }
@@ -469,6 +531,7 @@
         }
         push(state);
         cookie.dataset.open = "false";
+        reserva(false);
         document.dispatchEvent(new CustomEvent("brisa:consent", { detail: state }));
         aviso.textContent = state === "granted"
           ? "Cookies aceitos. O aviso foi fechado."
