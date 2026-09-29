@@ -1,8 +1,13 @@
 /* =========================================================================
    Brisa Engenharia · comportamento do site (independente do motor de movimento)
+   Tudo aqui funciona também com movimento reduzido e sem as bibliotecas.
    ========================================================================= */
 (function () {
   "use strict";
+
+  var d = document.documentElement;
+  var MOTION = d.hasAttribute("data-motion");
+  var lenis = function () { return window.brisaLenis || null; };
 
   /* ------------------------------------------------------------- WhatsApp
      Número informado pela cliente na revisão de 2026-09-29: 41 9 9924-3868. */
@@ -21,8 +26,144 @@
     el.setAttribute("rel", "noopener");
   });
 
-  /* ------------------------------------------------- menu em tela cheia */
+  /* --------------------------------------------------------------- header
+     Compacta depois de 40px. Depois que o hero sai, recolhe ao descer e
+     volta ao subir, com foco dentro dele ou com o menu aberto. */
   var hdr = document.querySelector(".hdr");
+  var heroOut = !document.querySelector(".hero");
+  var lastY = window.pageYOffset;
+
+  function headerState() {
+    if (!hdr) return;
+    var y = window.pageYOffset;
+    hdr.setAttribute("data-solid", y > 40 ? "true" : "false");
+    if (hdr.getAttribute("data-menu") === "open" || hdr.contains(document.activeElement)) {
+      hdr.setAttribute("data-hide", "false");
+    } else if (heroOut && y > lastY + 6) {
+      hdr.setAttribute("data-hide", "true");
+    } else if (y < lastY - 6 || y < 120) {
+      hdr.setAttribute("data-hide", "false");
+    }
+    if (Math.abs(y - lastY) > 6) lastY = y;
+  }
+  if (hdr) {
+    hdr.addEventListener("focusin", function () { hdr.setAttribute("data-hide", "false"); });
+  }
+
+  /* -------------------------------------------------- saída do hero
+     Um sentinela na base do hero. Quando ele sobe acima da metade da
+     janela, o hero "saiu": o header passa a poder se recolher e o aviso de
+     cookies pode aparecer. Funciona com pin, sem pin e sem movimento. */
+  var sentinela = document.querySelector(".hero__end");
+  var avisaSaida = function () {
+    if (heroOut) return;
+    heroOut = true;
+    document.dispatchEvent(new CustomEvent("brisa:hero-out"));
+  };
+  if (sentinela && "IntersectionObserver" in window) {
+    var ioHero = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting || en.boundingClientRect.top < 0) { avisaSaida(); ioHero.disconnect(); }
+      });
+    }, { rootMargin: "0px 0px -50% 0px", threshold: 0 });
+    ioHero.observe(sentinela);
+  } else if (sentinela) {
+    avisaSaida();
+  }
+
+  /* ------------------------------------------------- hero: troca de planos
+     Três planos em fusão lenta (1,6s no CSS), cada um com aproximação lenta.
+     A duração de cada plano é a da barra de progresso: quando a barra
+     termina, entra o próximo; pausar a barra pausa tudo.
+     WCAG 2.2.2 (conteúdo que se move sozinho por mais de 5s): botão de
+     pausar visível, pausa automática fora da janela e com a aba oculta, e
+     nada disso existe com movimento reduzido (o gate data-motion nem liga). */
+  var cine = document.querySelector(".cine");
+  if (cine && MOTION && window.Element && Element.prototype.animate) {
+    var slides = [].slice.call(cine.querySelectorAll(".cine__s"));
+    var segs = [].slice.call(cine.querySelectorAll(".cine__prog b"));
+    var bPause = cine.querySelector(".cine__pause");
+    var elN = cine.querySelector("[data-cine-n]");
+    var elT = cine.querySelector("[data-cine-t]");
+    var HOLD = 6500, FADE = 1600;
+    var KB = [
+      [{ transform: "scale(1.08)" }, { transform: "scale(1)" }],
+      [{ transform: "scale(1.06) translate3d(-1.2%,0,0)" }, { transform: "scale(1.06) translate3d(1.2%,0,0)" }],
+      [{ transform: "scale(1)" }, { transform: "scale(1.07)" }]
+    ];
+    var at = 0, prog = null, kbs = [], userP = false, autoP = false, visivel = true, iniciou = false;
+
+    var carrega = function (s) {
+      s.querySelectorAll("[data-srcset]").forEach(function (x) {
+        x.srcset = x.getAttribute("data-srcset");
+        x.removeAttribute("data-srcset");
+      });
+      var im = s.querySelector("img[data-src]");
+      if (im) { im.src = im.getAttribute("data-src"); im.removeAttribute("data-src"); }
+    };
+    var parado = function () { return userP || autoP; };
+    var aplica = function () {
+      var p = parado();
+      [prog].concat(kbs).forEach(function (a) { if (a) { if (p) a.pause(); else a.play(); } });
+      bPause.setAttribute("aria-pressed", userP ? "true" : "false");
+    };
+
+    var mostra = function (i, primeira) {
+      at = i;
+      slides.forEach(function (s, k) {
+        var ativo = k === i;
+        s.classList.toggle("is-on", ativo);
+        s.setAttribute("aria-hidden", ativo ? "false" : "true");
+      });
+      elN.textContent = String(i + 1).padStart(2, "0");
+      elT.textContent = slides[i].getAttribute("data-t");
+      if (prog) { prog.onfinish = null; prog.cancel(); }
+      segs.forEach(function (b, k) { b.style.transform = k < i ? "scaleX(1)" : "scaleX(0)"; });
+      prog = segs[i].animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }],
+                             { duration: HOLD, easing: "linear", fill: "forwards" });
+      prog.onfinish = function () { mostra((at + 1) % slides.length); };
+      /* na primeira vez o plano 01 acabou de assentar da entrada: aproxima devagar */
+      var quadros = primeira ? [{ transform: "scale(1)" }, { transform: "scale(1.05)" }] : KB[i % KB.length];
+      kbs.push(slides[i].querySelector("img").animate(quadros, { duration: HOLD + FADE * 2, easing: "linear", fill: "both" }));
+      if (kbs.length > 2) kbs.shift().cancel();
+      carrega(slides[(i + 1) % slides.length]);
+      if (parado()) aplica();
+    };
+
+    var inicia = function () {
+      if (iniciou) return;
+      iniciou = true;
+      cine.setAttribute("data-show", "");
+      bPause.hidden = false;
+      mostra(0, true);
+    };
+
+    bPause.addEventListener("click", function () { userP = !userP; aplica(); });
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (en) {
+        visivel = en[0].isIntersecting;
+        autoP = !visivel || document.hidden;
+        if (iniciou) aplica();
+      }, { threshold: 0.2 }).observe(cine);
+    }
+    document.addEventListener("visibilitychange", function () {
+      autoP = !visivel || document.hidden;
+      if (iniciou) aplica();
+    });
+
+    /* começa quando a entrada termina (o motion.js marca is-done) */
+    if (cine.classList.contains("is-done")) inicia();
+    else if ("MutationObserver" in window) {
+      var moCine = new MutationObserver(function () {
+        if (cine.classList.contains("is-done")) { moCine.disconnect(); inicia(); }
+      });
+      moCine.observe(cine, { attributes: true, attributeFilter: ["class"] });
+    }
+    setTimeout(inicia, 5200);
+  }
+
+  /* ------------------------------------------------- menu em tela cheia */
   var burger = document.querySelector(".burger");
   var drawer = document.querySelector(".drawer");
   var lastFocus = null;
@@ -34,10 +175,11 @@
     lastFocus = document.activeElement;
     drawer.inert = false;
     drawer.dataset.open = "true";
-    if (hdr) hdr.setAttribute("data-menu", "open");
+    if (hdr) { hdr.setAttribute("data-menu", "open"); hdr.setAttribute("data-hide", "false"); }
     burger.setAttribute("aria-expanded", "true");
     burger.setAttribute("aria-label", "Fechar menu");
     document.body.style.overflow = "hidden";
+    if (lenis()) lenis().stop();
     var first = drawer.querySelector("a,button");
     if (first) setTimeout(function () { first.focus(); }, 60);
   }
@@ -50,6 +192,7 @@
     burger.setAttribute("aria-expanded", "false");
     burger.setAttribute("aria-label", "Abrir menu");
     document.body.style.overflow = "";
+    if (lenis()) lenis().start();
     if (!keepFocus && lastFocus && lastFocus.focus) lastFocus.focus();
   }
   window.brisaCloseDrawer = closeDrawer;
@@ -75,38 +218,67 @@
     if (window.innerWidth > 1024) closeDrawer(true);
   });
 
+  /* -------------------------------------------------------------- âncoras
+     Com a Lenis: rolagem suave dela. Sem ela: rolagem suave nativa (ou pulo,
+     com movimento reduzido). O topo de cada seção já comporta o header
+     compacto, então o destino é o topo da seção. Depois, foco na seção. */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute("href");
+    if (id.length < 2) return;
+    var el = document.querySelector(id);
+    if (!el) return;
+    e.preventDefault();
+    var fromMenu = !!a.closest(".drawer");
+    if (fromMenu) closeDrawer(true);
+    setTimeout(function () {
+      var y = el.id === "topo" ? 0 : el.getBoundingClientRect().top + window.pageYOffset;
+      if (lenis()) lenis().scrollTo(y, { duration: 1.2, force: true });
+      else window.scrollTo({ top: y, behavior: MOTION ? "smooth" : "auto" });
+      if (history.replaceState) history.replaceState(null, "", id);
+      if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "-1");
+      el.focus({ preventScroll: true });
+    }, fromMenu ? 420 : 0);
+  });
+
   /* ------------------------------------------------- seção ativa no menu */
   var navLinks = [].slice.call(document.querySelectorAll('.nav a[href^="#"]'));
   var secs = navLinks.map(function (a) { return document.querySelector(a.getAttribute("href")); });
 
-  if (navLinks.length) {
-    var markActive = function () {
-      var y = window.innerHeight * 0.4;
-      var idx = -1;
-      secs.forEach(function (s, i) {
-        if (!s) return;
-        var r = s.getBoundingClientRect();
-        if (r.top <= y && r.bottom > y) idx = i;
-      });
-      navLinks.forEach(function (a, i) {
-        if (i === idx) a.setAttribute("aria-current", "true");
-        else a.removeAttribute("aria-current");
-      });
-    };
-    var t = false;
-    window.addEventListener("scroll", function () {
-      if (t) return; t = true;
-      requestAnimationFrame(function () { t = false; markActive(); });
-    }, { passive: true });
-    markActive();
+  function markActive() {
+    if (!navLinks.length) return;
+    var y = window.innerHeight * 0.4;
+    var idx = -1;
+    secs.forEach(function (s, i) {
+      if (!s) return;
+      var r = s.getBoundingClientRect();
+      if (r.top <= y && r.bottom > y) idx = i;
+    });
+    navLinks.forEach(function (a, i) {
+      if (i === idx) a.setAttribute("aria-current", "true");
+      else a.removeAttribute("aria-current");
+    });
   }
 
+  var ticking = false;
+  window.addEventListener("scroll", function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () { ticking = false; headerState(); markActive(); });
+  }, { passive: true });
+  headerState();
+  markActive();
+
   /* ------------------------------------------ serviços: acordeão + foto
-     Um item aberto por vez. A foto da coluna acompanha o item aberto. */
+     Um item aberto por vez. A foto da coluna e a legenda dela acompanham o
+     item aberto. */
   var svc = document.querySelector("[data-svc]");
   if (svc) {
     var items = [].slice.call(svc.querySelectorAll(".svc__it"));
     var imgs = [].slice.call(document.querySelectorAll("[data-svc-img]"));
+    var legN = document.querySelector("[data-svc-n]");
+    var legT = document.querySelector("[data-svc-leg]");
 
     var abrir = function (idx) {
       items.forEach(function (it, i) {
@@ -117,6 +289,8 @@
       imgs.forEach(function (im) {
         im.classList.toggle("is-on", +im.getAttribute("data-svc-img") === idx);
       });
+      if (legN) legN.textContent = String(idx + 1).padStart(2, "0");
+      if (legT) legT.textContent = items[idx].querySelector(".svc__t").textContent;
     };
 
     items.forEach(function (it, i) {
@@ -146,14 +320,13 @@
         lbImg.classList.remove("is-swap");
       };
       clearTimeout(swapT);
-      if (swap) { lbImg.classList.add("is-swap"); swapT = setTimeout(put, 180); }
+      if (swap) { lbImg.classList.add("is-swap"); swapT = setTimeout(put, 200); }
       else put();
       lbCount.textContent = String(at + 1).padStart(2, "0") + " / " + String(list.length).padStart(2, "0");
       var solo = list.length < 2;
       btnPrev.hidden = solo;
       btnNext.hidden = solo;
       lbCount.hidden = solo;
-      /* pré-carrega a vizinha */
       if (!solo) { var pre = new Image(); pre.src = list[(at + 1) % list.length]; }
     };
 
@@ -168,14 +341,16 @@
       render(false);
       lb.dataset.open = "true";
       document.body.style.overflow = "hidden";
+      if (lenis()) lenis().stop();
       btnClose.focus();
     };
 
     var close = function () {
       lb.dataset.open = "false";
       document.body.style.overflow = "";
+      if (lenis()) lenis().start();
       setTimeout(function () { if (lb.dataset.open !== "true") lbImg.removeAttribute("src"); }, 500);
-      if (opener && opener.focus) opener.focus();
+      if (opener && opener.focus) opener.focus({ preventScroll: true });
     };
 
     var step = function (dir) {
@@ -256,7 +431,10 @@
   }
 
   /* ------------------------------------------------------- banner de cookies
-     O consentimento emite evento no dataLayer para as tags respeitarem a LGPD. */
+     O consentimento emite evento no dataLayer para as tags respeitarem a LGPD.
+     O aviso aparece quando o hero sai (nunca em cima dele); nas páginas sem
+     hero, logo depois da carga. Até lá nada é medido: o Consent Mode já
+     começa em "denied". */
   var KEY = "brisa_consent_v1";
   var cookie = document.querySelector(".cookie");
 
@@ -267,19 +445,11 @@
     var saved = null;
     try { saved = localStorage.getItem(KEY); } catch (err) { saved = null; }
 
-    /* O aviso não nasce em cima do hero: aparece no primeiro scroll (ou de
-       imediato nas páginas sem hero). Até lá nada é medido, porque o Consent
-       Mode já começa em "denied". */
     if (saved) push(saved);
     else {
-      var mostrar = function () {
-        if (cookie.dataset.open === "true") return;
-        cookie.dataset.open = "true";
-        window.removeEventListener("scroll", porScroll);
-      };
-      var porScroll = function () { if (window.pageYOffset > 160) mostrar(); };
-      if (document.querySelector(".hero")) window.addEventListener("scroll", porScroll, { passive: true });
-      else setTimeout(mostrar, 1200);
+      var mostrar = function () { cookie.dataset.open = "true"; };
+      if (heroOut) setTimeout(mostrar, 1200);
+      else document.addEventListener("brisa:hero-out", function () { setTimeout(mostrar, 400); }, { once: true });
     }
 
     var aviso = document.createElement("p");

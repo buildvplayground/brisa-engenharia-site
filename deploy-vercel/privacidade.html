@@ -41,13 +41,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="description" content="Como a Brisa Engenharia coleta, usa e protege dados pessoais, em conformidade com a LGPD (Lei 13.709/2018).">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://www.brisa.eng.br/privacidade.html">
-<meta name="theme-color" content="#27292E">
+<meta name="theme-color" content="#EEE9E6">
 <link rel="icon" href="assets/logo/simbolo-casa-escuro.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rufina:wght@400;700&family=Average+Sans&display=swap">
-<link rel="stylesheet" href="css/styles.css">
-<link rel="stylesheet" href="css/motion.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rufina&family=Average+Sans&display=swap">
+<link rel="stylesheet" href="assets/vendor/lenis.css">
+<link rel="stylesheet" href="css/styles.css?v=3">
+<link rel="stylesheet" href="css/motion.css?v=3">
 <script>
 (function () {
   if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -66,7 +67,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <a class="skip" href="#conteudo">Ir para o conteúdo</a>
 
 <!-- ====================================================== header -->
-<header class="hdr hdr--solid">
+<header class="hdr hdr--solid" data-solid="true">
   <div class="wrap hdr__in">
     <a class="brand" href="index.html" aria-label="Brisa Engenharia, página inicial">
       <img class="brand__l" src="assets/logo/logo-brisa-claro.svg" width="1280" height="350" alt="">
@@ -95,15 +96,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </header>
 
-<div class="drawer" id="menu" data-open="false">
+<div class="drawer" id="menu" data-open="false" data-lenis-prevent>
   <div class="wrap drawer__in">
     <nav aria-label="Navegação">
       <ol class="drawer__nav">
-        <li><a href="index.html#obras"><span class="drawer__n">01</span>Obras</a></li>
-        <li><a href="index.html#sobre"><span class="drawer__n">02</span>Sobre</a></li>
-        <li><a href="index.html#servicos"><span class="drawer__n">03</span>Serviços</a></li>
-        <li><a href="index.html#metodo"><span class="drawer__n">04</span>Método</a></li>
-        <li><a href="index.html#contato"><span class="drawer__n">05</span>Contato</a></li>
+        <li style="--i:0"><a href="index.html#obras"><span class="drawer__n">01</span>Obras</a></li>
+        <li style="--i:1"><a href="index.html#sobre"><span class="drawer__n">02</span>Sobre</a></li>
+        <li style="--i:2"><a href="index.html#servicos"><span class="drawer__n">03</span>Serviços</a></li>
+        <li style="--i:3"><a href="index.html#metodo"><span class="drawer__n">04</span>Método</a></li>
+        <li style="--i:4"><a href="index.html#contato"><span class="drawer__n">05</span>Contato</a></li>
       </ol>
     </nav>
     <div class="drawer__foot">
@@ -218,7 +219,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ====================================================== rodapé -->
 <footer class="ftr" data-bg="dark">
   <div class="wrap">
-    <div class="ftr__top">
+    <div class="ftr__top" data-m="bloco">
       <div class="ftr__brand">
         <img src="assets/logo/logo-brisa-claro.svg" width="1280" height="350" alt="Brisa Engenharia" loading="lazy">
         <p>Planejamento, execução e gestão de empreendimentos de alto padrão.</p>
@@ -273,8 +274,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </div>
 
-<script src="js/motion.js" defer></script>
-<script src="js/app.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/SplitText.min.js" defer></script>
+<script src="assets/vendor/CustomEase.min.js" defer></script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="js/motion.js?v=3" defer></script>
+<script src="js/app.js?v=3" defer></script>
 
 </body>
 </html>

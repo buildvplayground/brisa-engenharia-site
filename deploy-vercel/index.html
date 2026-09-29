@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta property="og:title" content="Brisa Engenharia · Excelência em cada etapa">
 <meta property="og:description" content="Planejamento, execução e gestão de empreendimentos de alto padrão.">
 <meta property="og:url" content="https://www.brisa.eng.br/">
-<meta property="og:image" content="https://www.brisa.eng.br/assets/img/og.jpg">
+<meta property="og:image" content="https://www.brisa.eng.br/assets/img/og-v4.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -58,24 +58,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rufina:wght@400;700&family=Average+Sans&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rufina&family=Average+Sans&display=swap">
 
-<link rel="preload" as="image" href="assets/img/hero.webp" media="(min-width: 641px)" fetchpriority="high">
-<link rel="preload" as="image" href="assets/img/hero-m.webp" media="(max-width: 640px)" fetchpriority="high">
-<link rel="stylesheet" href="css/styles.css">
-<link rel="stylesheet" href="css/motion.css">
+<!-- o primeiro plano do hero é o LCP: um preload por formato de tela, sem sobreposição -->
+<link rel="preload" as="image" href="assets/img/cine/cine-01-m.webp?v=4" media="(max-width:640px), (max-width:1024px) and (orientation:portrait)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/img/cine/cine-01-d.webp?v=4" media="(min-width:1025px), (min-width:641px) and (orientation:landscape)" fetchpriority="high">
+
+<link rel="stylesheet" href="assets/vendor/lenis.css">
+<link rel="stylesheet" href="css/styles.css?v=3">
+<link rel="stylesheet" href="css/motion.css?v=3">
 <script>
-/* Gate do movimento: o estado inicial invisível só existe atrás deste atributo.
-   Com movimento reduzido ele nem é ligado, e a página nasce estática. */
+/* Gate do movimento: todo estado inicial invisível vive atrás de html[data-motion].
+   Com movimento reduzido ele nem liga e a página nasce pronta e estática.
+   data-intro = primeira visita da sessão (entrada mais lenta), nunca com hash. */
 (function () {
   var d = document.documentElement;
   if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   d.setAttribute("data-motion", "on");
   var primeira = true;
-  try { primeira = !sessionStorage.getItem("brisa_intro"); } catch (e) {}
-  if (primeira) d.setAttribute("data-intro", "on");
-  /* segurança: se o motor não subir em 4s, a página aparece inteira */
-  setTimeout(function () { if (!window.__brisaMotion) { d.removeAttribute("data-motion"); d.removeAttribute("data-intro"); } }, 4000);
+  try { primeira = !sessionStorage.getItem("brisa_intro"); sessionStorage.setItem("brisa_intro", "1"); } catch (e) {}
+  if (primeira && !location.hash) d.setAttribute("data-intro", "on");
+  /* segurança: se o motor não subir em 3s, a página aparece inteira */
+  setTimeout(function () { if (!window.__brisaMotion) { d.removeAttribute("data-motion"); d.removeAttribute("data-intro"); } }, 3000);
 })();
 </script>
 
@@ -88,7 +92,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   "url":"https://www.brisa.eng.br/",
   "telephone":"+55-41-99924-3868",
   "email":"contato@brisa.eng.br",
-  "image":"https://www.brisa.eng.br/assets/img/og.jpg",
+  "image":"https://www.brisa.eng.br/assets/img/og-v4.jpg",
   "areaServed":{"@type":"State","name":"Paraná"},
   "address":{"@type":"PostalAddress","addressRegion":"PR","addressCountry":"BR"},
   "sameAs":["https://www.instagram.com/brisa.eng"],
@@ -104,11 +108,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- /BuildV: GTM (noscript) -->
 
 <a class="skip" href="#conteudo">Ir para o conteúdo</a>
-
-<!-- carregamento: só na primeira visita da sessão, e só com movimento ligado -->
-<div class="ld" aria-hidden="true">
-  <span class="ld__mark"><img src="assets/logo/simbolo-casa-escuro.svg" width="512" height="512" alt=""></span>
-</div>
 
 <!-- ====================================================== header -->
 <header class="hdr" data-solid="false">
@@ -141,15 +140,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </header>
 
 <!-- menu mobile: tela cheia -->
-<div class="drawer" id="menu" data-open="false">
+<div class="drawer" id="menu" data-open="false" data-lenis-prevent>
   <div class="wrap drawer__in">
     <nav aria-label="Navegação">
       <ol class="drawer__nav">
-        <li><a href="#obras"><span class="drawer__n">01</span>Obras</a></li>
-        <li><a href="#sobre"><span class="drawer__n">02</span>Sobre</a></li>
-        <li><a href="#servicos"><span class="drawer__n">03</span>Serviços</a></li>
-        <li><a href="#metodo"><span class="drawer__n">04</span>Método</a></li>
-        <li><a href="#contato"><span class="drawer__n">05</span>Contato</a></li>
+        <li style="--i:0"><a href="#obras"><span class="drawer__n">01</span>Obras</a></li>
+        <li style="--i:1"><a href="#sobre"><span class="drawer__n">02</span>Sobre</a></li>
+        <li style="--i:2"><a href="#servicos"><span class="drawer__n">03</span>Serviços</a></li>
+        <li style="--i:3"><a href="#metodo"><span class="drawer__n">04</span>Método</a></li>
+        <li style="--i:4"><a href="#contato"><span class="drawer__n">05</span>Contato</a></li>
       </ol>
     </nav>
     <div class="drawer__foot">
@@ -167,25 +166,48 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <main id="conteudo">
 
-<!-- ====================================================== 1. hero -->
-<section class="hero" id="topo" aria-labelledby="h-hero" data-bg="dark">
-  <div class="hero__media" data-hero-media>
-    <picture>
-      <source media="(max-width: 640px)" srcset="assets/img/hero-m.webp" width="900" height="1601">
-      <img src="assets/img/hero.webp" width="2200" height="1100" fetchpriority="high" decoding="async"
-           alt="Fachada de residência de alto padrão com volume revestido em madeira, pedra e pele de vidro">
-    </picture>
+<!-- ====================================================== 1. hero: cinema em tela cheia
+     Três planos reais em tela cheia, trocando por fusão lenta, com leve
+     aproximação (Ken Burns). WCAG 2.2.2: a troca automática tem botão de
+     pausar, para sozinha fora da janela e não existe com movimento reduzido.
+     O degradê é fixo em relação ao texto: só a foto se move por baixo. -->
+<section class="hero cine" id="topo" aria-labelledby="h-hero" data-bg="dark">
+  <div class="cine__media">
+    <div class="cine__s is-on" data-i="0" data-t="Living de pé-direito duplo">
+      <picture>
+        <source media="(max-width:640px), (max-width:1024px) and (orientation:portrait)" srcset="assets/img/cine/cine-01-m.webp?v=4">
+        <img src="assets/img/cine/cine-01-d.webp?v=4" width="1920" height="990" fetchpriority="high" decoding="async"
+             alt="Living de pé-direito duplo com pele de vidro, escada em balanço, lustre dourado e vista para a mata">
+      </picture>
+    </div>
+    <div class="cine__s" data-i="1" data-t="Escada em balanço" aria-hidden="true">
+      <picture>
+        <source media="(max-width:640px), (max-width:1024px) and (orientation:portrait)" data-srcset="assets/img/cine/cine-02-m.webp?v=4">
+        <img data-src="assets/img/cine/cine-02-d.webp?v=4" width="1280" height="850" decoding="async"
+             alt="Escada em balanço com degraus de mármore junto a uma parede revestida em madeira">
+      </picture>
+    </div>
+    <div class="cine__s" data-i="2" data-t="Cozinha com iluminação embutida" aria-hidden="true">
+      <picture>
+        <source media="(max-width:640px), (max-width:1024px) and (orientation:portrait)" data-srcset="assets/img/cine/cine-03-m.webp?v=4">
+        <img data-src="assets/img/cine/cine-03-d.webp?v=4" width="1920" height="1164" decoding="async"
+             alt="Cozinha com ilha central em pedra, coifa suspensa, marcenaria escura e iluminação embutida">
+      </picture>
+    </div>
   </div>
-  <span class="hero__veil" aria-hidden="true"></span>
+  <span class="cine__grain" aria-hidden="true"></span>
+  <span class="cine__veil" aria-hidden="true"></span>
+  <span class="cine__exit" aria-hidden="true"></span>
+  <span class="cine__cover" aria-hidden="true"></span>
 
-  <div class="wrap hero__in">
-    <h1 class="t-hero hero__h" id="h-hero">
-      <span class="ln"><span>Excelência em cada etapa.</span></span>
-      <span class="ln"><span>Tranquilidade em todo o processo.</span></span>
+  <div class="wrap cine__in">
+    <h1 class="cine__h" id="h-hero">
+      <span class="ln ln--a"><span>Excelência em cada etapa.</span></span>
+      <span class="ln ln--b"><span>Tranquilidade em todo o processo.</span></span>
     </h1>
-    <div class="hero__aside" data-hero-aside>
-      <p class="hero__lede">Planejamento, execução e gestão de empreendimentos de alto padrão.</p>
-      <div class="hero__acts">
+    <div class="cine__row">
+      <p class="cine__lede">Planejamento, execução e gestão de empreendimentos de alto padrão.</p>
+      <div class="cine__acts">
         <a class="btn btn--light" data-wa-btn href="https://wa.me/5541999243868">
           <span>Solicitar orçamento</span>
           <svg class="btn__ar" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M0 6h18.5M13.5 1l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
@@ -193,27 +215,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a class="lnk lnk--light" href="#obras">Ver obras</a>
       </div>
     </div>
+    <div class="cine__meta">
+      <p class="cine__cap"><span class="cine__n" aria-hidden="true"><span data-cine-n>01</span><span class="cine__tot">&nbsp;/&nbsp;03</span></span><span data-cine-t>Living de pé-direito duplo</span></p>
+      <span class="cine__prog" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i></span>
+      <button class="cine__pause" type="button" hidden aria-pressed="false" aria-label="Pausar a troca de fotos">
+        <svg class="cine__ic cine__ic--p" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9M11 3.5v9" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        <svg class="cine__ic cine__ic--r" viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 3.5 12 8l-6.5 4.5z" fill="currentColor"/></svg>
+      </button>
+    </div>
   </div>
+  <script>(function(){var h=document.currentScript.parentElement,i=h.querySelector('.cine__s img'),d=0;
+    function ok(){if(d)return;d=1;h.classList.add('is-ready')}
+    if(i.complete&&i.naturalWidth){(i.decode?i.decode():Promise.resolve()).then(ok,ok)}
+    else{i.addEventListener('load',function(){(i.decode?i.decode():Promise.resolve()).then(ok,ok)},{once:true});i.addEventListener('error',ok,{once:true})}
+    setTimeout(ok,1200)})();</script>
+  <span class="hero__end" aria-hidden="true"></span>
 </section>
 
 <!-- ====================================================== 2. obras (sem eyebrow, sem texto de apoio) -->
-<section class="obras" id="obras" aria-labelledby="h-obras" data-bg="light">
+<section class="obras" id="obras" aria-labelledby="h-obras" data-bg="light" style="--sec-bg:var(--bone-2)">
   <div class="wrap">
-    <h2 class="t-h2 obras__h" id="h-obras" data-split>Obras</h2>
+    <h2 class="t-h2 obras__h" id="h-obras" data-m="linha">Obras</h2>
 
-    <ul class="obras__grid" data-cursor="Ver obra">
-      <li class="obra" data-reveal="mask">
+    <ul class="obras__grid" data-m-group>
+      <li class="obra">
         <button class="obra__btn" type="button"
           data-title="Obra HV17"
           data-sub="Projeto arquitetônico: Paola Cury"
-          data-gallery="assets/img/obras/hv17/01.webp|assets/img/obras/hv17/02.webp|assets/img/obras/hv17/03.webp|assets/img/obras/hv17/04.webp|assets/img/obras/hv17/05.webp|assets/img/obras/hv17/06.webp"
+          data-gallery="assets/img/obras/hv17/01.webp?v=3|assets/img/obras/hv17/02.webp?v=3|assets/img/obras/hv17/03.webp?v=3|assets/img/obras/hv17/04.webp?v=3|assets/img/obras/hv17/05.webp?v=3|assets/img/obras/hv17/06.webp?v=3"
           aria-label="Obra HV17, projeto arquitetônico de Paola Cury. Abrir galeria com 6 fotos">
-          <span class="obra__fig">
-            <picture>
-              <source media="(max-width: 900px)" srcset="assets/img/obras/hv17/capa-larga.webp" width="1400" height="875">
-              <img src="assets/img/obras/hv17/capa.webp" width="1000" height="1250" loading="lazy" decoding="async"
+          <span class="obra__fig fx" data-m="expo">
+            <picture class="fx__p">
+              <source media="(max-width: 900px)" srcset="assets/img/obras/hv17/capa-larga.webp?v=3" width="1400" height="875">
+              <img src="assets/img/obras/hv17/capa.webp?v=3" width="1000" height="1250" loading="lazy" decoding="async"
                    alt="Fachada da Obra HV17, residência concluída, com jardim e pátio de acesso">
             </picture>
+            <span class="fx__v" aria-hidden="true"></span>
           </span>
           <span class="obra__cap" aria-hidden="true">
             <span class="obra__n">01</span>
@@ -223,18 +260,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </button>
       </li>
 
-      <li class="obra" data-reveal="mask">
+      <li class="obra">
         <button class="obra__btn" type="button"
           data-title="Residência em madeira e vidro"
           data-sub="Fachada e volumetria"
-          data-gallery="assets/img/obras/madeira-e-vidro/01.webp|assets/img/obras/madeira-e-vidro/02.webp|assets/img/obras/madeira-e-vidro/03.webp|assets/img/obras/madeira-e-vidro/04.webp|assets/img/obras/madeira-e-vidro/05.webp|assets/img/obras/madeira-e-vidro/06.webp"
+          data-gallery="assets/img/obras/madeira-e-vidro/01.webp?v=3|assets/img/obras/madeira-e-vidro/02.webp?v=3|assets/img/obras/madeira-e-vidro/03.webp?v=3|assets/img/obras/madeira-e-vidro/04.webp?v=3|assets/img/obras/madeira-e-vidro/05.webp?v=3|assets/img/obras/madeira-e-vidro/06.webp?v=3"
           aria-label="Residência em madeira e vidro. Abrir galeria com 6 fotos">
-          <span class="obra__fig">
-            <picture>
-              <source media="(max-width: 900px)" srcset="assets/img/obras/madeira-e-vidro/capa-larga.webp" width="1400" height="875">
-              <img src="assets/img/obras/madeira-e-vidro/capa.webp" width="1000" height="1250" loading="lazy" decoding="async"
+          <span class="obra__fig fx" data-m="expo">
+            <picture class="fx__p">
+              <source media="(max-width: 900px)" srcset="assets/img/obras/madeira-e-vidro/capa-larga.webp?v=3" width="1400" height="875">
+              <img src="assets/img/obras/madeira-e-vidro/capa.webp?v=3" width="1000" height="1250" loading="lazy" decoding="async"
                    alt="Fachada com revestimento em madeira, pele de vidro e volume em pedra">
             </picture>
+            <span class="fx__v" aria-hidden="true"></span>
           </span>
           <span class="obra__cap" aria-hidden="true">
             <span class="obra__n">02</span>
@@ -244,18 +282,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </button>
       </li>
 
-      <li class="obra" data-reveal="mask">
+      <li class="obra">
         <button class="obra__btn" type="button"
           data-title="Living de pé-direito duplo"
           data-sub="Ambientes integrados"
-          data-gallery="assets/img/obras/living-pe-direito-duplo/01.webp|assets/img/obras/living-pe-direito-duplo/02.webp|assets/img/obras/living-pe-direito-duplo/03.webp|assets/img/obras/living-pe-direito-duplo/04.webp|assets/img/obras/living-pe-direito-duplo/05.webp|assets/img/obras/living-pe-direito-duplo/06.webp"
+          data-gallery="assets/img/obras/living-pe-direito-duplo/01.webp?v=3|assets/img/obras/living-pe-direito-duplo/02.webp?v=3|assets/img/obras/living-pe-direito-duplo/03.webp?v=3|assets/img/obras/living-pe-direito-duplo/04.webp?v=3|assets/img/obras/living-pe-direito-duplo/05.webp?v=3|assets/img/obras/living-pe-direito-duplo/06.webp?v=3"
           aria-label="Living de pé-direito duplo. Abrir galeria com 6 fotos">
-          <span class="obra__fig">
-            <picture>
-              <source media="(max-width: 900px)" srcset="assets/img/obras/living-pe-direito-duplo/capa-larga.webp" width="1280" height="800">
-              <img src="assets/img/obras/living-pe-direito-duplo/capa.webp" width="768" height="960" loading="lazy" decoding="async"
-                   alt="Living de pé-direito duplo com escada em balanço, guarda-corpo de vidro e vista para a mata">
+          <span class="obra__fig fx" data-m="expo">
+            <picture class="fx__p">
+              <source media="(max-width: 900px)" srcset="assets/img/obras/living-pe-direito-duplo/capa-larga.webp?v=3" width="908" height="567">
+              <img src="assets/img/obras/living-pe-direito-duplo/capa.webp?v=3" width="728" height="910" loading="lazy" decoding="async"
+                   alt="Escada em balanço com degraus iluminados, guarda-corpo de vidro e parede de mármore">
             </picture>
+            <span class="fx__v" aria-hidden="true"></span>
           </span>
           <span class="obra__cap" aria-hidden="true">
             <span class="obra__n">03</span>
@@ -269,206 +308,239 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- ====================================================== 3. sobre -->
-<section class="sobre" id="sobre" aria-labelledby="h-sobre" data-bg="light">
-  <img class="luz luz--sobre" src="assets/luz/luz-008.svg" alt="" aria-hidden="true" data-parallax="0.08" loading="lazy">
+<section class="sobre" id="sobre" aria-labelledby="h-sobre" data-bg="light" style="--sec-bg:var(--bone)">
+  <img class="luz luz--sobre" src="assets/luz/luz-008.svg" alt="" aria-hidden="true" loading="lazy">
   <div class="wrap sobre__grid">
     <div class="sobre__txt">
-      <p class="label" data-reveal="soft">Sobre a Brisa</p>
-      <h2 class="t-h2 sobre__h" id="h-sobre" data-split>Construímos confiança antes de construir espaços.</h2>
-      <p class="sobre__p" data-reveal>Representamos os interesses de nossos clientes e conduzimos cada
+      <p class="label" data-m="bloco">Sobre a Brisa</p>
+      <h2 class="t-h2 sobre__h" id="h-sobre" data-m="linha">Construímos confiança antes de construir espaços.</h2>
+      <p class="sobre__p" data-m="bloco">Representamos os interesses de nossos clientes e conduzimos cada
         empreendimento de forma exclusiva e personalizada, da estratégia inicial à entrega final.</p>
 
-      <ul class="trio" aria-label="O que nos define" data-reveal>
-        <li><span class="trio__n">01</span>Excelência técnica</li>
-        <li><span class="trio__n">02</span>Gestão estratégica</li>
-        <li><span class="trio__n">03</span>Atendimento personalizado</li>
-      </ul>
+      <div class="trio-w" data-m-group>
+        <span class="filete" data-m="filete" aria-hidden="true"></span>
+        <ul class="trio" aria-label="O que nos define">
+          <li data-m="bloco"><span class="trio__n">01</span>Excelência técnica</li>
+          <li data-m="bloco"><span class="trio__n">02</span>Gestão estratégica</li>
+          <li data-m="bloco"><span class="trio__n">03</span>Atendimento personalizado</li>
+        </ul>
+      </div>
 
-      <p class="assina" data-reveal>
+      <p class="assina" data-m="bloco">
         <span class="assina__nome">Elisa Andrade da Silva</span>
         <span class="assina__cargo">Responsável técnica · CREA PR 115016/D</span>
       </p>
     </div>
 
-    <figure class="sobre__fig" data-reveal="mask">
-      <img src="assets/img/sobre.webp" width="1100" height="1375" loading="lazy" decoding="async"
-           alt="Pele de vidro em pé-direito duplo com caixilhos pretos, vista de dentro da residência">
+    <figure class="placa sobre__fig">
+      <span class="fx" data-m="expo">
+        <picture class="fx__p">
+          <img src="assets/img/sobre.webp?v=3" width="1100" height="1375" loading="lazy" decoding="async"
+               alt="Pele de vidro em pé-direito duplo com caixilhos pretos, vista de dentro da residência">
+        </picture>
+        <span class="fx__v" aria-hidden="true"></span>
+      </span>
+      <figcaption class="leg" data-m="bloco">Pele de vidro em pé-direito duplo</figcaption>
     </figure>
   </div>
 </section>
 
-<!-- ====================================================== 4. faixa -->
-<section class="faixa" aria-labelledby="h-faixa" data-bg="dark">
-  <div class="faixa__media">
-    <img src="assets/img/faixa.webp" width="2200" height="943" loading="lazy" decoding="async" data-parallax="0.1"
-         alt="Vazio de pé-direito duplo com guarda-corpo de vidro, lustre de anéis e escada em mármore">
-  </div>
-  <span class="faixa__veil" aria-hidden="true"></span>
-  <div class="wrap faixa__in">
-    <h2 class="t-quote faixa__q" id="h-faixa" data-split>Mais do que executar uma obra, cuidamos do investimento por trás dela.</h2>
+<!-- ====================================================== 4. faixa (entreato) -->
+<section class="faixa" aria-labelledby="h-faixa" data-bg="dark" style="--sec-bg:var(--ink)">
+  <div class="wrap">
+    <h2 class="t-quote faixa__q" id="h-faixa" data-m="linha">Mais do que executar uma obra, cuidamos do investimento por trás dela.</h2>
+    <figure class="placa faixa__row">
+      <figcaption class="faixa__leg" data-m="bloco">
+        <span class="faixa__legt">Mezanino</span>
+        Parede de mármore e vista para a mata
+      </figcaption>
+      <span class="fx faixa__fx" data-m="expo">
+        <picture class="fx__p">
+          <source media="(max-width:640px)" srcset="assets/img/faixa-m-v4.webp" width="1280" height="853">
+          <img src="assets/img/faixa-v4.webp" width="1280" height="536" loading="lazy" decoding="async"
+               alt="Mezanino com guarda-corpo de vidro, parede de mármore e vista para a mata">
+        </picture>
+        <span class="fx__v" aria-hidden="true"></span>
+      </span>
+    </figure>
   </div>
 </section>
 
 <!-- ====================================================== 5. serviços -->
-<section class="serv" id="servicos" aria-labelledby="h-servicos" data-bg="light">
-  <div class="serv__media" data-reveal="mask" aria-hidden="true">
-    <img class="is-on" data-svc-img="0" src="assets/img/servicos/execucao.webp" width="1100" height="1375" loading="lazy" decoding="async" alt="">
-    <img data-svc-img="1" src="assets/img/servicos/administracao.webp" width="1100" height="1375" loading="lazy" decoding="async" alt="">
-    <img data-svc-img="2" src="assets/img/servicos/solucoes.webp" width="908" height="1135" loading="lazy" decoding="async" alt="">
-    <img data-svc-img="3" src="assets/img/servicos/complementares.webp" width="768" height="960" loading="lazy" decoding="async" alt="">
-  </div>
+<section class="serv" id="servicos" aria-labelledby="h-servicos" data-bg="light" style="--sec-bg:var(--bone-2)">
+  <div class="wrap serv__grid">
+    <figure class="placa serv__fig">
+      <span class="fx serv__media" data-m="expo" aria-hidden="true">
+        <span class="fx__p">
+          <img class="is-on" data-svc-img="0" src="assets/img/servicos/execucao.webp?v=3" width="1100" height="1375" loading="lazy" decoding="async" alt="">
+          <img data-svc-img="1" src="assets/img/servicos/administracao.webp?v=3" width="768" height="960" loading="lazy" decoding="async" alt="">
+          <img data-svc-img="2" src="assets/img/servicos/solucoes.webp?v=3" width="726" height="908" loading="lazy" decoding="async" alt="">
+          <img data-svc-img="3" src="assets/img/servicos/complementares.webp?v=3" width="726" height="908" loading="lazy" decoding="async" alt="">
+        </span>
+        <span class="fx__v"></span>
+      </span>
+      <figcaption class="leg" data-m="bloco" aria-hidden="true"><span class="leg__n" data-svc-n>01</span> / 04 · <span data-svc-leg>Execução completa de obras</span></figcaption>
+    </figure>
 
-  <div class="serv__body">
-    <p class="label" data-reveal="soft">Serviços</p>
-    <h2 class="t-h2 serv__h" id="h-servicos" data-split>Soluções completas para empreendimentos de alto padrão.</h2>
+    <div class="serv__body">
+      <p class="label" data-m="bloco">Serviços</p>
+      <h2 class="t-h2 serv__h" id="h-servicos" data-m="linha">Soluções completas para empreendimentos de alto padrão.</h2>
 
-    <ul class="svc" data-svc data-reveal>
-      <li class="svc__it is-open">
-        <h3 class="svc__h">
-          <button class="svc__btn" type="button" aria-expanded="true" aria-controls="svc-0" id="svc-b0">
-            <span class="svc__n">01</span>
-            <span class="svc__t">Execução completa de obras</span>
-            <span class="svc__ic" aria-hidden="true"><i></i><i></i></span>
-          </button>
-        </h3>
-        <div class="svc__pn" id="svc-0" role="region" aria-labelledby="svc-b0">
-          <div class="svc__pi">
-            <p>Assumimos a condução integral do empreendimento, da implantação do canteiro à entrega,
-              com fidelidade ao projeto em cada etapa.</p>
+      <ul class="svc" data-svc data-m="bloco">
+        <li class="svc__it is-open">
+          <h3 class="svc__h">
+            <button class="svc__btn" type="button" aria-expanded="true" aria-controls="svc-0" id="svc-b0">
+              <span class="svc__n">01</span>
+              <span class="svc__t">Execução completa de obras</span>
+              <span class="svc__ic" aria-hidden="true"><i></i><i></i></span>
+            </button>
+          </h3>
+          <div class="svc__pn" id="svc-0" role="region" aria-labelledby="svc-b0">
+            <div class="svc__pi">
+              <p>Assumimos a condução integral do empreendimento, da implantação do canteiro à entrega,
+                com fidelidade ao projeto em cada etapa.</p>
+            </div>
           </div>
-        </div>
-      </li>
+        </li>
 
-      <li class="svc__it">
-        <h3 class="svc__h">
-          <button class="svc__btn" type="button" aria-expanded="false" aria-controls="svc-1" id="svc-b1">
-            <span class="svc__n">02</span>
-            <span class="svc__t">Obras por administração</span>
-            <span class="svc__ic" aria-hidden="true"><i></i><i></i></span>
-          </button>
-        </h3>
-        <div class="svc__pn" id="svc-1" role="region" aria-labelledby="svc-b1">
-          <div class="svc__pi">
-            <p>Gestão centralizada, transparente e eficiente de todas as frentes da obra.</p>
-            <ul class="svc__list">
-              <li>Contratação e gestão de mão de obra</li>
-              <li>Aquisição de materiais</li>
-              <li>Gestão de fornecedores</li>
-              <li>Acompanhamento físico-financeiro</li>
-              <li>Fiscalização dos serviços executados</li>
-            </ul>
+        <li class="svc__it">
+          <h3 class="svc__h">
+            <button class="svc__btn" type="button" aria-expanded="false" aria-controls="svc-1" id="svc-b1">
+              <span class="svc__n">02</span>
+              <span class="svc__t">Obras por administração</span>
+              <span class="svc__ic" aria-hidden="true"><i></i><i></i></span>
+            </button>
+          </h3>
+          <div class="svc__pn" id="svc-1" role="region" aria-labelledby="svc-b1">
+            <div class="svc__pi">
+              <p>Gestão centralizada, transparente e eficiente de todas as frentes da obra.</p>
+              <ul class="svc__list">
+                <li>Contratação e gestão de mão de obra</li>
+                <li>Aquisição de materiais</li>
+                <li>Gestão de fornecedores</li>
+                <li>Acompanhamento físico-financeiro</li>
+                <li>Fiscalização dos serviços executados</li>
+              </ul>
+            </div>
           </div>
-        </div>
-      </li>
+        </li>
 
-      <li class="svc__it">
-        <h3 class="svc__h">
-          <button class="svc__btn" type="button" aria-expanded="false" aria-controls="svc-2" id="svc-b2">
-            <span class="svc__n">03</span>
-            <span class="svc__t">Soluções construtivas personalizadas</span>
-            <span class="svc__ic" aria-hidden="true"><i></i><i></i></span>
-          </button>
-        </h3>
-        <div class="svc__pn" id="svc-2" role="region" aria-labelledby="svc-b2">
-          <div class="svc__pi">
-            <p>Técnicas, materiais e sistemas construtivos definidos para cada empreendimento, em
-              equilíbrio entre desempenho, estética, eficiência e durabilidade.</p>
+        <li class="svc__it">
+          <h3 class="svc__h">
+            <button class="svc__btn" type="button" aria-expanded="false" aria-controls="svc-2" id="svc-b2">
+              <span class="svc__n">03</span>
+              <span class="svc__t">Soluções construtivas personalizadas</span>
+              <span class="svc__ic" aria-hidden="true"><i></i><i></i></span>
+            </button>
+          </h3>
+          <div class="svc__pn" id="svc-2" role="region" aria-labelledby="svc-b2">
+            <div class="svc__pi">
+              <p>Técnicas, materiais e sistemas construtivos definidos para cada empreendimento, em
+                equilíbrio entre desempenho, estética, eficiência e durabilidade.</p>
+            </div>
           </div>
-        </div>
-      </li>
+        </li>
 
-      <li class="svc__it">
-        <h3 class="svc__h">
-          <button class="svc__btn" type="button" aria-expanded="false" aria-controls="svc-3" id="svc-b3">
-            <span class="svc__n">04</span>
-            <span class="svc__t">Projetos complementares</span>
-            <span class="svc__ic" aria-hidden="true"><i></i><i></i></span>
-          </button>
-        </h3>
-        <div class="svc__pn" id="svc-3" role="region" aria-labelledby="svc-b3">
-          <div class="svc__pi">
-            <p>Desenvolvemos e compatibilizamos os projetos complementares à arquitetura desde as
-              etapas iniciais, para antecipar interferências e dar mais segurança à obra.</p>
+        <li class="svc__it">
+          <h3 class="svc__h">
+            <button class="svc__btn" type="button" aria-expanded="false" aria-controls="svc-3" id="svc-b3">
+              <span class="svc__n">04</span>
+              <span class="svc__t">Projetos complementares</span>
+              <span class="svc__ic" aria-hidden="true"><i></i><i></i></span>
+            </button>
+          </h3>
+          <div class="svc__pn" id="svc-3" role="region" aria-labelledby="svc-b3">
+            <div class="svc__pi">
+              <p>Desenvolvemos e compatibilizamos os projetos complementares à arquitetura desde as
+                etapas iniciais, para antecipar interferências e dar mais segurança à obra.</p>
+            </div>
           </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
 
-    <div class="serv__cta" data-reveal>
-      <a class="btn" data-wa-btn="os serviços da Brisa" href="https://wa.me/5541999243868">
-        <span>Solicitar orçamento</span>
-        <svg class="btn__ar" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M0 6h18.5M13.5 1l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
-      </a>
+      <div class="serv__cta" data-m="bloco">
+        <a class="btn" data-wa-btn="os serviços da Brisa" href="https://wa.me/5541999243868">
+          <span>Solicitar orçamento</span>
+          <svg class="btn__ar" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M0 6h18.5M13.5 1l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+        </a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ====================================================== 6. método (cena travada no desktop) -->
-<section class="metodo" id="metodo" aria-labelledby="h-metodo" data-bg="dark" data-htl>
-  <div class="metodo__stick">
-    <img class="luz luz--metodo" src="assets/luz/luz-014.svg" alt="" aria-hidden="true" loading="lazy">
-    <div class="wrap metodo__in">
-      <div class="metodo__head">
-        <p class="label label--light" data-reveal="soft">O processo Brisa</p>
-        <h2 class="t-h2 metodo__h" id="h-metodo" data-split>Da primeira decisão à entrega das chaves.</h2>
-        <p class="metodo__p" data-reveal>Engenharia além da execução. Um empreendimento de alto padrão
-          exige planejamento, decisões estratégicas e acompanhamento constante.</p>
-      </div>
-
-      <div class="trilho" aria-hidden="true"><span class="trilho__fill" data-htl-fill></span></div>
-
-      <ol class="etapas">
-        <li class="etapa" data-htl-item>
-          <span class="etapa__n">01</span>
-          <h3 class="etapa__t">Imersão</h3>
-          <p>Entendimento do projeto, necessidades e expectativas.</p>
-        </li>
-        <li class="etapa" data-htl-item>
-          <span class="etapa__n">02</span>
-          <h3 class="etapa__t">Planejamento</h3>
-          <p>Estratégia de execução, cronograma, recursos e orçamento.</p>
-        </li>
-        <li class="etapa" data-htl-item>
-          <span class="etapa__n">03</span>
-          <h3 class="etapa__t">Compatibilização</h3>
-          <p>Desenvolvimento de projetos complementares e compatibilização de projetos.</p>
-        </li>
-        <li class="etapa" data-htl-item>
-          <span class="etapa__n">04</span>
-          <h3 class="etapa__t">Execução</h3>
-          <p>Condução técnica e acompanhamento contínuo da obra.</p>
-        </li>
-        <li class="etapa" data-htl-item>
-          <span class="etapa__n">05</span>
-          <h3 class="etapa__t">Controle</h3>
-          <p>Monitoramento de qualidade, custos e prazos.</p>
-        </li>
-        <li class="etapa" data-htl-item>
-          <span class="etapa__n">06</span>
-          <h3 class="etapa__t">Entrega</h3>
-          <p>Vistoria final e conclusão do empreendimento.</p>
-        </li>
-      </ol>
+<!-- ====================================================== 6. método -->
+<section class="metodo" id="metodo" aria-labelledby="h-metodo" data-bg="slate" style="--sec-bg:var(--slate)">
+  <div class="wrap">
+    <div class="metodo__head">
+      <p class="label label--slate" data-m="bloco">O processo Brisa</p>
+      <h2 class="t-h2 metodo__h" id="h-metodo" data-m="linha">Da primeira decisão à entrega das chaves.</h2>
+      <p class="metodo__p" data-m="bloco">Engenharia além da execução. Um empreendimento de alto padrão
+        exige planejamento, decisões estratégicas e acompanhamento constante.</p>
     </div>
+
+    <ol class="etapas">
+      <li class="etapa" data-m-group>
+        <span class="filete filete--slate" data-m="filete" aria-hidden="true"></span>
+        <span class="etapa__n" data-m="bloco">01</span>
+        <h3 class="etapa__t" data-m="bloco">Imersão</h3>
+        <p data-m="bloco">Entendimento do projeto, necessidades e expectativas.</p>
+      </li>
+      <li class="etapa" data-m-group>
+        <span class="filete filete--slate" data-m="filete" aria-hidden="true"></span>
+        <span class="etapa__n" data-m="bloco">02</span>
+        <h3 class="etapa__t" data-m="bloco">Planejamento</h3>
+        <p data-m="bloco">Estratégia de execução, cronograma, recursos e orçamento.</p>
+      </li>
+      <li class="etapa" data-m-group>
+        <span class="filete filete--slate" data-m="filete" aria-hidden="true"></span>
+        <span class="etapa__n" data-m="bloco">03</span>
+        <h3 class="etapa__t" data-m="bloco">Compatibilização</h3>
+        <p data-m="bloco">Desenvolvimento de projetos complementares e compatibilização de projetos.</p>
+      </li>
+      <li class="etapa" data-m-group>
+        <span class="filete filete--slate" data-m="filete" aria-hidden="true"></span>
+        <span class="etapa__n" data-m="bloco">04</span>
+        <h3 class="etapa__t" data-m="bloco">Execução</h3>
+        <p data-m="bloco">Condução técnica e acompanhamento contínuo da obra.</p>
+      </li>
+      <li class="etapa" data-m-group>
+        <span class="filete filete--slate" data-m="filete" aria-hidden="true"></span>
+        <span class="etapa__n" data-m="bloco">05</span>
+        <h3 class="etapa__t" data-m="bloco">Controle</h3>
+        <p data-m="bloco">Monitoramento de qualidade, custos e prazos.</p>
+      </li>
+      <li class="etapa" data-m-group>
+        <span class="filete filete--slate" data-m="filete" aria-hidden="true"></span>
+        <span class="etapa__n" data-m="bloco">06</span>
+        <h3 class="etapa__t" data-m="bloco">Entrega</h3>
+        <p data-m="bloco">Vistoria final e conclusão do empreendimento.</p>
+      </li>
+    </ol>
   </div>
 </section>
 
 <!-- ====================================================== 7. compromisso -->
-<section class="comp" aria-labelledby="h-comp" data-bg="light">
+<section class="comp" aria-labelledby="h-comp" data-bg="light" style="--sec-bg:var(--bone)">
   <div class="wrap comp__grid">
     <div class="comp__txt">
-      <p class="label" data-reveal="soft">Nosso compromisso</p>
-      <h2 class="t-h2 comp__h" id="h-comp" data-split>Cada projeto é&nbsp;único. A&nbsp;engenharia também deve ser.</h2>
+      <p class="label" data-m="bloco">Nosso compromisso</p>
+      <h2 class="t-h2 comp__h" id="h-comp" data-m="linha"><span>Cada projeto é&nbsp;único.</span> <span>A&nbsp;engenharia também deve&nbsp;ser.</span></h2>
 
-      <ul class="pilares" data-reveal>
-        <li><h3>Transparência</h3><p>Informações claras para decisões mais seguras.</p></li>
-        <li><h3>Controle</h3><p>Acompanhamento próximo, do orçamento à vistoria final.</p></li>
-        <li><h3>Excelência</h3><p>Rigor técnico em todas as etapas.</p></li>
-        <li><h3>Personalização</h3><p>Cada empreendimento conduzido de acordo com suas particularidades.</p></li>
-        <li><h3>Confiança</h3><p>Uma relação construída com responsabilidade e comprometimento.</p></li>
-      </ul>
+      <div class="pilares-w" data-m-group>
+        <span class="filete" data-m="filete" aria-hidden="true"></span>
+        <ul class="pilares" data-m="bloco">
+          <li><h3>Transparência</h3><p>Informações claras para decisões mais seguras.</p></li>
+          <li><h3>Controle</h3><p>Acompanhamento próximo, do orçamento à vistoria final.</p></li>
+          <li><h3>Excelência</h3><p>Rigor técnico em todas as etapas.</p></li>
+          <li><h3>Personalização</h3><p>Cada empreendimento conduzido de acordo com suas particularidades.</p></li>
+          <li><h3>Confiança</h3><p>Uma relação construída com responsabilidade e comprometimento.</p></li>
+        </ul>
+      </div>
 
-      <div class="comp__cta" data-reveal>
+      <p class="comp__nota" data-m="bloco"><span class="comp__notat">Detalhes que constroem excelência.</span>
+        O alto padrão está na precisão da execução, na qualidade dos materiais e no cuidado com cada detalhe.</p>
+
+      <div class="comp__cta" data-m="bloco">
         <a class="btn" data-wa-btn href="https://wa.me/5541999243868">
           <span>Solicitar orçamento</span>
           <svg class="btn__ar" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M0 6h18.5M13.5 1l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
@@ -476,38 +548,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
 
-    <figure class="comp__fig">
-      <span class="comp__a" data-reveal="mask">
-        <img src="assets/img/compromisso-1.webp" width="720" height="960" loading="lazy" decoding="async"
-             alt="Escada em balanço com degraus de mármore junto à porta pivotante e parede em pedra">
+    <figure class="placa comp__fig">
+      <span class="fx" data-m="expo">
+        <picture class="fx__p">
+          <img src="assets/img/compromisso-1.webp?v=3" width="720" height="960" loading="lazy" decoding="async"
+               alt="Escada em balanço com degraus de mármore junto à porta pivotante e parede em pedra">
+        </picture>
+        <span class="fx__v" aria-hidden="true"></span>
       </span>
-      <span class="comp__b" data-reveal="mask">
-        <img src="assets/img/compromisso-2.webp" width="1000" height="750" loading="lazy" decoding="async"
-             alt="Cozinha com ilha em pedra natural, marcenaria clara e iluminação embutida">
-      </span>
-      <figcaption class="comp__cap" data-reveal>
-        <span class="comp__capt">Detalhes que constroem excelência.</span>
-        O alto padrão está na precisão da execução, na qualidade dos materiais e no cuidado com cada detalhe.
-      </figcaption>
+      <figcaption class="leg" data-m="bloco">Escada em balanço · Mármore e pedra</figcaption>
     </figure>
   </div>
 </section>
 
 <!-- ====================================================== 8. contato (CTA final, sem etapas) -->
-<section class="cta" id="contato" aria-labelledby="h-contato" data-bg="dark">
-  <img class="luz luz--cta" src="assets/luz/luz-011.svg" alt="" aria-hidden="true" data-parallax="0.06" loading="lazy">
+<section class="cta" id="contato" aria-labelledby="h-contato" data-bg="dark" style="--sec-bg:var(--ink)">
+  <img class="luz luz--cta" src="assets/luz/luz-011.svg" alt="" aria-hidden="true" loading="lazy">
   <div class="wrap cta__grid">
     <div class="cta__txt">
-      <h2 class="t-h2 cta__h" id="h-contato" data-split>Seu projeto merece uma gestão à altura.</h2>
-      <p class="cta__p" data-reveal>Cada empreendimento conduzido com técnica, estratégia e atenção aos detalhes.</p>
+      <h2 class="cta__h" id="h-contato" data-m="linha">Seu projeto merece uma gestão à altura.</h2>
+      <p class="cta__p" data-m="bloco">Cada empreendimento conduzido com técnica, estratégia e atenção aos detalhes.</p>
     </div>
 
-    <div class="cta__end">
-      <a class="btn btn--light btn--lg" data-wa-btn href="https://wa.me/5541999243868" data-reveal>
+    <div class="cta__end" data-m-group>
+      <a class="btn btn--light btn--lg" data-wa-btn href="https://wa.me/5541999243868" data-m="bloco">
         <span>Solicitar orçamento</span>
         <svg class="btn__ar" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M0 6h18.5M13.5 1l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
       </a>
-      <dl class="contatos" data-reveal>
+      <dl class="contatos" data-m="bloco">
         <div><dt>WhatsApp</dt><dd><a href="https://wa.me/5541999243868" target="_blank" rel="noopener">41 9 9924-3868</a></dd></div>
         <div><dt>E-mail</dt><dd><a href="mailto:contato@brisa.eng.br">contato@brisa.eng.br</a></dd></div>
         <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/brisa.eng" target="_blank" rel="noopener">@brisa.eng</a></dd></div>
@@ -521,7 +589,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ====================================================== rodapé -->
 <footer class="ftr" data-bg="dark">
   <div class="wrap">
-    <div class="ftr__top">
+    <div class="ftr__top" data-m="bloco">
       <div class="ftr__brand">
         <img src="assets/logo/logo-brisa-claro.svg" width="1280" height="350" alt="Brisa Engenharia" loading="lazy">
         <p>Planejamento, execução e gestão de empreendimentos de alto padrão.</p>
@@ -563,11 +631,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </footer>
 
-<!-- ====================================================== cursor das obras (decorativo) -->
-<div class="cur" aria-hidden="true"><span class="cur__t">Ver obra</span></div>
-
 <!-- ====================================================== lightbox -->
-<div class="lb" data-open="false" role="dialog" aria-modal="true" aria-labelledby="lb-title">
+<div class="lb" data-open="false" role="dialog" aria-modal="true" aria-labelledby="lb-title" data-lenis-prevent>
   <div class="lb__bar">
     <div class="lb__id">
       <p class="lb__title" id="lb-title"></p>
@@ -602,8 +667,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </div>
 
-<script src="js/motion.js" defer></script>
-<script src="js/app.js" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/SplitText.min.js" defer></script>
+<script src="assets/vendor/CustomEase.min.js" defer></script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="js/motion.js?v=3" defer></script>
+<script src="js/app.js?v=3" defer></script>
 
 <!-- BuildV: Merlin (popup) ================================================
      Carrega 700ms depois do load. O Merlin nao grava cookie e o botao so
