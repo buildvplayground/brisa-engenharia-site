@@ -65,7 +65,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="preload" as="image" href="assets/img/cine/cine-01-d.webp?v=4" media="(min-width:1025px), (min-width:641px) and (orientation:landscape)" fetchpriority="high">
 
 <link rel="stylesheet" href="assets/vendor/lenis.css">
-<link rel="stylesheet" href="css/styles.css?v=4">
+<link rel="stylesheet" href="css/styles.css?v=5">
 <link rel="stylesheet" href="css/motion.css?v=3">
 <script>
 /* Gate do movimento: todo estado inicial invisível vive atrás de html[data-motion].
@@ -189,25 +189,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      O degradê é fixo em relação ao texto: só a foto se move por baixo. -->
 <section class="hero cine" id="topo" aria-labelledby="h-hero" data-bg="dark">
   <div class="cine__media">
-    <div class="cine__s is-on" data-i="0" data-t="Living de pé-direito duplo">
+    <div class="cine__s is-on" data-i="0">
       <picture>
         <source media="(max-width:640px), (max-width:1024px) and (orientation:portrait)" srcset="assets/img/cine/cine-01-m.webp?v=4">
         <img src="assets/img/cine/cine-01-d.webp?v=4" width="1920" height="990" fetchpriority="high" decoding="async"
              alt="Living de pé-direito duplo com pele de vidro, escada em balanço, lustre dourado e vista para a mata">
       </picture>
     </div>
-    <div class="cine__s" data-i="1" data-t="Escada em balanço" aria-hidden="true">
+    <div class="cine__s" data-i="1" aria-hidden="true">
       <picture>
         <source media="(max-width:640px), (max-width:1024px) and (orientation:portrait)" data-srcset="assets/img/cine/cine-02-m.webp?v=4">
         <img data-src="assets/img/cine/cine-02-d.webp?v=4" width="1280" height="850" decoding="async"
              alt="Escada em balanço com degraus de mármore junto a uma parede revestida em madeira">
       </picture>
     </div>
-    <div class="cine__s" data-i="2" data-t="Fachada com laje em balanço" aria-hidden="true">
+    <div class="cine__s" data-i="2" aria-hidden="true">
       <picture>
-        <source media="(max-width:640px), (max-width:1024px) and (orientation:portrait)" data-srcset="assets/img/cine/cine-03-m.webp?v=5">
-        <img data-src="assets/img/cine/cine-03-d.webp?v=5" width="1440" height="850" decoding="async"
-             alt="Fachada de casa finalizada com laje branca em balanço, volume escuro com esquadrias de piso a teto, guarda-corpo de vidro e jardim na frente">
+        <source media="(max-width:640px), (max-width:1024px) and (orientation:portrait)" data-srcset="assets/img/cine/cine-03-m.webp?v=6">
+        <img data-src="assets/img/cine/cine-03-d.webp?v=6" width="1440" height="850" decoding="async"
+             alt="Fachada da Obra HV59 com pele de vidro, moldura revestida em madeira, balcão com guarda-corpo de vidro e céu azul">
       </picture>
     </div>
   </div>
@@ -232,7 +232,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
     <div class="cine__meta">
-      <p class="cine__cap"><span data-cine-t>Living de pé-direito duplo</span></p>
       <span class="cine__prog" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i></span>
       <button class="cine__pause" type="button" hidden aria-pressed="false" aria-label="Pausar a troca de fotos">
         <svg class="cine__ic cine__ic--p" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9M11 3.5v9" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
@@ -258,12 +257,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button class="obra__btn" type="button"
           data-title="Obra HV17"
           data-sub="Projeto arquitetônico: Paola Cury"
-          data-gallery="assets/img/obras/hv17/01.webp?v=3|assets/img/obras/hv17/02.webp?v=3|assets/img/obras/hv17/03.webp?v=3|assets/img/obras/hv17/04.webp?v=3"
+          data-gallery="assets/img/obras/hv17/01.webp?v=4|assets/img/obras/hv17/02.webp?v=4|assets/img/obras/hv17/03.webp?v=4|assets/img/obras/hv17/04.webp?v=4"
           aria-label="Obra HV17, projeto arquitetônico de Paola Cury. Abrir galeria com 4 fotos">
           <span class="obra__fig fx" data-m="expo">
             <picture class="fx__p">
-              <source media="(max-width: 900px)" srcset="assets/img/obras/hv17/capa-larga.webp?v=3" width="1400" height="875">
-              <img src="assets/img/obras/hv17/capa.webp?v=3" width="1000" height="1250" loading="lazy" decoding="async"
+              <source media="(max-width: 900px)" srcset="assets/img/obras/hv17/capa-larga.webp?v=4" width="1400" height="875">
+              <img src="assets/img/obras/hv17/capa.webp?v=4" width="1000" height="1250" loading="lazy" decoding="async"
                    alt="Fachada da Obra HV17, residência concluída, com jardim e pátio de acesso">
             </picture>
             <span class="fx__v" aria-hidden="true"></span>
@@ -278,44 +277,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <li class="obra">
         <button class="obra__btn" type="button"
-          data-title="Obra BPR14"
-          data-sub="Fachada e volumetria"
-          data-gallery="assets/img/obras/BPR14/01.webp?v=3|assets/img/obras/BPR14/02.webp?v=3|assets/img/obras/BPR14/03.webp?v=3"
-          aria-label="Obra BPR14, fachada e volumetria. Abrir galeria com 3 fotos">
+          data-title="Obra HV59"
+          data-sub="Projeto arquitetônico: Maximiliano Scandelari"
+          data-gallery="assets/img/obras/HV59/01.webp?v=4|assets/img/obras/HV59/02.webp?v=4|assets/img/obras/HV59/03.webp?v=4"
+          aria-label="Obra HV59, projeto arquitetônico de Maximiliano Scandelari. Abrir galeria com 3 fotos">
           <span class="obra__fig fx" data-m="expo">
             <picture class="fx__p">
-              <source media="(max-width: 900px)" srcset="assets/img/obras/BPR14/capa-larga.webp?v=3" width="1400" height="875">
-              <img src="assets/img/obras/BPR14/capa.webp?v=3" width="1000" height="1250" loading="lazy" decoding="async"
-                   alt="Fachada com revestimento em madeira, pele de vidro e volume em pedra">
+              <source media="(max-width: 900px)" srcset="assets/img/obras/HV59/capa-larga.webp?v=4" width="1400" height="875">
+              <img src="assets/img/obras/HV59/capa.webp?v=4" width="1000" height="1250" loading="lazy" decoding="async"
+                   alt="Fachada da Obra HV59 com revestimento em madeira, pele de vidro e volume em pedra">
             </picture>
             <span class="fx__v" aria-hidden="true"></span>
           </span>
           <span class="obra__cap" aria-hidden="true">
             <span class="obra__n">02</span>
-            <span class="obra__t">Obra BPR14</span>
-            <span class="obra__m">Fachada e volumetria · 3 fotos</span>
+            <span class="obra__t">Obra HV59</span>
+            <span class="obra__m">Projeto arquitetônico: Maximiliano Scandelari · 3 fotos</span>
           </span>
         </button>
       </li>
 
       <li class="obra">
         <button class="obra__btn" type="button"
-          data-title="Obra HV59"
-          data-sub="Ambientes integrados"
-          data-gallery="assets/img/obras/HV59/01.webp?v=3|assets/img/obras/HV59/02.webp?v=3|assets/img/obras/HV59/03.webp?v=3|assets/img/obras/HV59/04.webp?v=3|assets/img/obras/HV59/05.webp?v=3|assets/img/obras/HV59/06.webp?v=3"
-          aria-label="Obra HV59, ambientes integrados. Abrir galeria com 6 fotos">
+          data-title="Obra BPR14"
+          data-sub="Barigui Park Royale"
+          data-gallery="assets/img/obras/BPR14/01.webp?v=4|assets/img/obras/BPR14/02.webp?v=4|assets/img/obras/BPR14/03.webp?v=4|assets/img/obras/BPR14/04.webp?v=4|assets/img/obras/BPR14/05.webp?v=4|assets/img/obras/BPR14/06.webp?v=4|assets/img/obras/BPR14/07.webp?v=4|assets/img/obras/BPR14/08.webp?v=4|assets/img/obras/BPR14/09.webp?v=4"
+          aria-label="Obra BPR14, Barigui Park Royale. Abrir galeria com 9 fotos">
           <span class="obra__fig fx" data-m="expo">
             <picture class="fx__p">
-              <source media="(max-width: 900px)" srcset="assets/img/obras/HV59/capa-larga.webp?v=3" width="908" height="567">
-              <img src="assets/img/obras/HV59/capa.webp?v=3" width="728" height="910" loading="lazy" decoding="async"
+              <source media="(max-width: 900px)" srcset="assets/img/obras/BPR14/capa-larga.webp?v=4" width="908" height="567">
+              <img src="assets/img/obras/BPR14/capa.webp?v=4" width="728" height="910" loading="lazy" decoding="async"
                    alt="Escada em balanço com degraus iluminados, guarda-corpo de vidro e parede de mármore">
             </picture>
             <span class="fx__v" aria-hidden="true"></span>
           </span>
           <span class="obra__cap" aria-hidden="true">
             <span class="obra__n">03</span>
-            <span class="obra__t">Obra HV59</span>
-            <span class="obra__m">Ambientes integrados · 6 fotos</span>
+            <span class="obra__t">Obra BPR14</span>
+            <span class="obra__m">Barigui Park Royale · 9 fotos</span>
           </span>
         </button>
       </li>
@@ -356,7 +355,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </picture>
         <span class="fx__v" aria-hidden="true"></span>
       </span>
-      <figcaption class="leg" data-m="bloco">Pele de vidro em pé-direito duplo</figcaption>
     </figure>
   </div>
 </section>
@@ -366,10 +364,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="wrap">
     <h2 class="t-quote faixa__q" id="h-faixa" data-m="linha">Mais do que executar uma obra, cuidamos do investimento por trás dela.</h2>
     <figure class="placa faixa__row">
-      <figcaption class="faixa__leg" data-m="bloco">
-        <span class="faixa__legt">Mezanino</span>
-        Parede de mármore e vista para a mata
-      </figcaption>
       <span class="fx faixa__fx" data-m="expo">
         <picture class="fx__p">
           <source media="(max-width:640px)" srcset="assets/img/faixa-m-v4.webp" width="1280" height="853">
@@ -395,7 +389,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </span>
         <span class="fx__v"></span>
       </span>
-      <figcaption class="leg" data-m="bloco" aria-hidden="true"><span class="leg__n" data-svc-n>01</span> / 04 · <span data-svc-leg>Execução completa de obras</span></figcaption>
     </figure>
 
     <div class="serv__body">
@@ -572,7 +565,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </picture>
         <span class="fx__v" aria-hidden="true"></span>
       </span>
-      <figcaption class="leg" data-m="bloco">Escada em balanço · Mármore e pedra</figcaption>
     </figure>
   </div>
 </section>
@@ -676,7 +668,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="assets/vendor/CustomEase.min.js" defer></script>
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="js/motion.js?v=3" defer></script>
-<script src="js/app.js?v=4" defer></script>
+<script src="js/app.js?v=5" defer></script>
 
 <!-- BuildV: Merlin (popup) ================================================
      Carrega 700ms depois do load. O Merlin nao grava cookie e o botao so
