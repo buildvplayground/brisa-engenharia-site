@@ -105,8 +105,6 @@
     var slides = [].slice.call(cine.querySelectorAll(".cine__s"));
     var segs = [].slice.call(cine.querySelectorAll(".cine__prog b"));
     var bPause = cine.querySelector(".cine__pause");
-    var elN = cine.querySelector("[data-cine-n]");
-    var elT = cine.querySelector("[data-cine-t]");
     var HOLD = 6500, FADE = 1600;
     var KB = [
       [{ transform: "scale(1.08)" }, { transform: "scale(1)" }],
@@ -137,8 +135,6 @@
         s.classList.toggle("is-on", ativo);
         s.setAttribute("aria-hidden", ativo ? "false" : "true");
       });
-      elN.textContent = String(i + 1).padStart(2, "0");
-      elT.textContent = slides[i].getAttribute("data-t");
       if (prog) { prog.onfinish = null; prog.cancel(); }
       segs.forEach(function (b, k) { b.style.transform = k < i ? "scaleX(1)" : "scaleX(0)"; });
       prog = segs[i].animate([{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }],
@@ -319,14 +315,11 @@
   markActive();
 
   /* ------------------------------------------ serviços: acordeão + foto
-     Um item aberto por vez. A foto da coluna e a legenda dela acompanham o
-     item aberto. */
+     Um item aberto por vez. A foto da coluna acompanha o item aberto. */
   var svc = document.querySelector("[data-svc]");
   if (svc) {
     var items = [].slice.call(svc.querySelectorAll(".svc__it"));
     var imgs = [].slice.call(document.querySelectorAll("[data-svc-img]"));
-    var legN = document.querySelector("[data-svc-n]");
-    var legT = document.querySelector("[data-svc-leg]");
 
     var abrir = function (idx) {
       items.forEach(function (it, i) {
@@ -337,8 +330,6 @@
       imgs.forEach(function (im) {
         im.classList.toggle("is-on", +im.getAttribute("data-svc-img") === idx);
       });
-      if (legN) legN.textContent = String(idx + 1).padStart(2, "0");
-      if (legT) legT.textContent = items[idx].querySelector(".svc__t").textContent;
     };
 
     items.forEach(function (it, i) {

@@ -152,12 +152,6 @@ strong{font-weight:400;color:var(--ink)}
   opacity:max(var(--ev, 0), var(--xv, 0));
 }
 
-.leg{
-  margin-top:14px;
-  font:400 .75rem/1.5 var(--ff-body);letter-spacing:.16em;text-transform:uppercase;
-  color:var(--muted);
-}
-.leg__n{font:400 1.125rem/1 var(--ff-display);letter-spacing:0;color:var(--olive-ink)}
 
 /* filete: junta de 1px que desenha na entrada (elemento não textual) */
 .filete{display:block;height:1px;background:rgba(39,41,46,.22);transform-origin:0 50%}
@@ -366,10 +360,6 @@ strong{font-weight:400;color:var(--ink)}
 .lnk--light{color:var(--paper)}
 
 .cine__meta{display:flex;align-items:center;gap:12px 22px;flex-wrap:wrap;margin-top:clamp(12px, 2.2svh, 22px);min-height:44px}
-.cine__cap{display:flex;align-items:baseline;gap:14px;font:400 .75rem/1.4 var(--ff-body);letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.92)}
-.cine__n{display:inline-flex;align-items:baseline;font:400 1.0625rem/1 var(--ff-display);letter-spacing:.02em;color:var(--paper)}
-.cine__tot{font-size:.8125rem;color:rgba(255,255,255,.86)}
-.cine:not([data-show]) .cine__tot{display:none}
 .cine__prog{display:none;gap:6px;align-items:center}
 .cine[data-show] .cine__prog{display:inline-flex}
 .cine__prog i{display:block;width:28px;height:1px;background:rgba(255,255,255,.35);overflow:hidden}
@@ -406,7 +396,6 @@ strong{font-weight:400;color:var(--ink)}
   /* o canto inferior direito é da bolha do Merlin (72px) */
   .cine__meta,.cine__acts{padding-right:84px}
   .cine__meta{row-gap:6px}
-  .cine__cap{flex:1 1 100%}
   .cine__veil{
     background:
       linear-gradient(180deg, rgba(22,24,28,.72) 0%, rgba(22,24,28,0) 18%),
@@ -485,19 +474,16 @@ strong{font-weight:400;color:var(--ink)}
   aspect-ratio:4/5;width:auto;max-width:100%;margin-left:auto;
   height:min(calc((5 * var(--c) + 4 * var(--col-gap)) * 1.25), calc(100svh - var(--sec-t) - var(--sec-b) - 2.5rem));
 }
-.sobre__fig .leg{text-align:right}
 
 /* ================================================================= faixa
-   Entreato em ink: a frase sobre fundo sólido, a foto como placa ao lado
-   de uma legenda de museu. Acabou o texto sobre foto. */
+   Entreato em ink: a frase sobre fundo sólido, a foto como placa deslocada
+   à direita, sem legenda (pedido da cliente, 2026-10-01). */
 .faixa{background:var(--ink);color:var(--bone);padding:clamp(72px, 11svh, 120px) 0 clamp(64px, 10svh, 112px)}
 .faixa__q{max-width:19em;color:var(--bone)}
 .faixa__row{
   display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--col-gap);
   align-items:end;margin-top:clamp(36px, 6svh, 64px);
 }
-.faixa__leg{grid-column:1 / span 3;font-size:.8125rem;line-height:1.5;color:var(--on-ink)}
-.faixa__legt{display:block;margin-bottom:4px;font:400 1.0625rem/1.3 var(--ff-display);color:var(--bone)}
 .faixa__fx{grid-column:5 / -1;aspect-ratio:2.39/1;max-height:calc(100svh - 18rem)}
 
 /* ============================================================== serviços */
@@ -589,7 +575,6 @@ strong{font-weight:400;color:var(--ink)}
   aspect-ratio:3/4;width:auto;max-width:100%;margin-left:auto;
   height:min(calc((4 * var(--c) + 3 * var(--col-gap)) * 4 / 3), calc(100svh - var(--sec-t) - var(--sec-b) - 2.5rem));
 }
-.comp__fig .leg{text-align:right}
 
 /* ======================================================= contato (CTA) */
 .cta{
@@ -773,7 +758,6 @@ strong{font-weight:400;color:var(--ink)}
   .sobre__h,.serv__h,.cta__h,.comp__h{max-width:none}
   .sobre__fig{order:-1;margin-bottom:clamp(20px, 3.6svh, 36px)}
   .sobre__fig .fx{width:100%;height:clamp(160px, 26svh, 380px);aspect-ratio:auto}
-  .sobre__fig .leg{text-align:left}
   /* compromisso segue lado a lado no tablet: texto 7 colunas, foto 5 */
   .comp__txt{grid-column:1 / span 7}
   .comp__fig{grid-column:9 / -1}
@@ -783,7 +767,6 @@ strong{font-weight:400;color:var(--ink)}
 
   .faixa__row{grid-template-columns:minmax(0,1fr);row-gap:14px}
   .faixa__fx{grid-column:auto;grid-row:1;max-height:none}
-  .faixa__leg{grid-column:auto;grid-row:2}
 
   .serv__fig{margin-bottom:clamp(20px, 3.6svh, 36px)}
   .serv__media{width:100%;height:clamp(150px, 22svh, 320px);aspect-ratio:auto}
