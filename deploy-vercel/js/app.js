@@ -105,7 +105,6 @@
     var slides = [].slice.call(cine.querySelectorAll(".cine__s"));
     var segs = [].slice.call(cine.querySelectorAll(".cine__prog b"));
     var bPause = cine.querySelector(".cine__pause");
-    var elN = cine.querySelector("[data-cine-n]");
     var elT = cine.querySelector("[data-cine-t]");
     var HOLD = 6500, FADE = 1600;
     var KB = [
@@ -137,7 +136,6 @@
         s.classList.toggle("is-on", ativo);
         s.setAttribute("aria-hidden", ativo ? "false" : "true");
       });
-      elN.textContent = String(i + 1).padStart(2, "0");
       elT.textContent = slides[i].getAttribute("data-t");
       if (prog) { prog.onfinish = null; prog.cancel(); }
       segs.forEach(function (b, k) { b.style.transform = k < i ? "scaleX(1)" : "scaleX(0)"; });
