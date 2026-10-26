@@ -4,31 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- BuildV: consentimento (Google Consent Mode v2) ==========================
-     Vem ANTES do GTM de propósito. O padrão é tudo negado, e o container só
-     libera armazenamento de medição depois do aceite no banner de cookies.
-     A leitura do localStorage é síncrona: quem já aceitou antes entra em
-     granted no primeiro hit, sem perder pageview. -->
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-(function () {
-  var salvo = null;
-  try { salvo = localStorage.getItem("brisa_consent_v1"); } catch (e) { salvo = null; }
-  var ok = salvo === "granted" ? "granted" : "denied";
-  gtag("consent", "default", {
-    ad_storage: ok,
-    ad_user_data: ok,
-    ad_personalization: ok,
-    analytics_storage: ok,
-    functionality_storage: "granted",
-    security_storage: "granted",
-    wait_for_update: 1500
-  });
-})();
-</script>
-<!-- /BuildV: consentimento -->
-
 <!-- BuildV: GTM -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -46,7 +21,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rufina&family=Average+Sans&display=swap">
 <link rel="stylesheet" href="assets/vendor/lenis.css">
-<link rel="stylesheet" href="css/styles.css?v=5">
+<link rel="stylesheet" href="css/styles.css?v=6">
 <link rel="stylesheet" href="css/motion.css?v=3">
 <script>
 (function () {
@@ -68,12 +43,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ====================================================== cookies (LGPD): primeiro na ordem do teclado -->
 <div class="cookie" data-open="false" role="region" aria-label="Aviso de cookies">
   <div class="cookie__in">
-    <p>Usamos cookies para entender como o site é usado e melhorar sua experiência.
-      As tags de medição só são ativadas depois do seu aceite.
+    <p>Usamos cookies para o site funcionar, medir a audiência e mostrar anúncios a quem já nos visitou.
       Saiba mais na <a href="privacidade.html">Política de Privacidade</a>.</p>
+    <ul class="cookie-fins" id="cookie-fins" data-cookie-fins hidden>
+      <li><strong>Essenciais:</strong> fazem o site funcionar.</li>
+      <li><strong>Análise:</strong> Google Analytics e Microsoft Clarity, para saber quais páginas e botões funcionam.</li>
+      <li><strong>Publicidade:</strong> Google Ads, Meta e LinkedIn, para mostrar anúncios a quem já visitou o site.</li>
+    </ul>
     <div class="cookie__acts">
-      <button class="btn btn--sm btn--light" type="button" data-consent="granted">Aceitar</button>
-      <button class="btn btn--sm btn--ghost-light" type="button" data-consent="denied">Recusar</button>
+      <button class="btn btn--sm btn--light" type="button" data-cookie-ok>Entendi</button>
+      <button class="btn btn--sm btn--ghost-light" type="button" data-cookie-more aria-expanded="false" aria-controls="cookie-fins">Ver finalidades</button>
     </div>
   </div>
 </div>
@@ -260,6 +239,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <nav aria-label="Links legais">
         <a href="privacidade.html">Política de Privacidade</a>
         <a href="fornecedores.html">Fornecedores e Trabalhe Conosco</a>
+        <a href="privacidade.html#cookies" data-cookie-prefs>Cookies</a>
       </nav>
     </div>
   </div>
@@ -271,7 +251,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="assets/vendor/CustomEase.min.js" defer></script>
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="js/motion.js?v=3" defer></script>
-<script src="js/app.js?v=5" defer></script>
+<script src="js/app.js?v=6" defer></script>
 <script src="js/form.js" defer></script>
 </body>
 </html>
