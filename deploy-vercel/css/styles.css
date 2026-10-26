@@ -667,6 +667,9 @@ strong{font-weight:400;color:var(--ink)}
 .cookie p{font-size:.875rem;line-height:1.55;color:var(--on-ink)}
 .cookie a{color:var(--bone);text-underline-offset:3px}
 .cookie__acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.cookie-fins{list-style:none;margin:12px 0 0;padding:12px 0 0;border-top:1px solid var(--line-d);display:grid;gap:6px;font-size:.875rem;line-height:1.55;color:var(--on-ink)}
+.cookie-fins[hidden]{display:none}
+.cookie-fins strong{color:var(--bone);font-weight:600}
 
 /* ================================================== widget do Merlin, na paleta
    O vendor injeta o próprio <style> DEPOIS desta folha: aqui !important é a

@@ -469,20 +469,20 @@
     setTimeout(function () { mo.disconnect(); }, 20000);
   }
 
-  /* ------------------------------------------------------- banner de cookies
-     O consentimento emite evento no dataLayer para as tags respeitarem a LGPD.
-     O aviso aparece quando o hero sai (nunca em cima dele); nas páginas sem
-     hero, logo depois da carga. Até lá nada é medido: o Consent Mode já
-     começa em "denied". */
-  var KEY = "brisa_consent_v1";
+  /* ------------------------------------------------------- aviso de cookies
+     Informativo (LGPD): as tags disparam desde o carregamento. O aviso
+     aparece quando o hero sai (nunca em cima dele); nas páginas sem hero,
+     logo depois da carga. "Entendi" grava cookie_notice = "ok"; o link
+     "Cookies" do rodapé reabre o aviso com as finalidades abertas. */
+  var KEY = "cookie_notice";
   var cookie = document.querySelector(".cookie");
 
-  window.dataLayer = window.dataLayer || [];
-  function push(state) { window.dataLayer.push({ event: "brisa_consent", consent_state: state }); }
-
   if (cookie) {
-    var saved = null;
-    try { saved = localStorage.getItem(KEY); } catch (err) { saved = null; }
+    var fins = cookie.querySelector("[data-cookie-fins]");
+    var more = cookie.querySelector("[data-cookie-more]");
+    var ok = cookie.querySelector("[data-cookie-ok]");
+    var seen = null;
+    try { seen = localStorage.getItem(KEY); } catch (err) { seen = null; }
 
     /* WCAG 2.4.7: com o aviso aberto, nada focado pode ficar escondido atrás
        dele. A rolagem por foco respeita scroll-padding, então reservamos a
@@ -494,13 +494,20 @@
       d.style.setProperty("--cookie-h", h + "px");
     };
 
-    if (saved) push(saved);
-    else {
-      /* o aviso pode abrir por cima de algo que JÁ está focado: confere na hora */
-      var mostrar = function () {
-        cookie.dataset.open = "true"; reserva(true);
-        setTimeout(function () { if (window.brisaRevela) window.brisaRevela(document.activeElement); }, 60);
-      };
+    var finsOpen = function (open) {
+      if (!fins || !more) return;
+      fins.hidden = !open;
+      more.setAttribute("aria-expanded", open ? "true" : "false");
+      if (cookie.dataset.open === "true") reserva(true);
+    };
+
+    /* o aviso pode abrir por cima de algo que JÁ está focado: confere na hora */
+    var mostrar = function () {
+      cookie.dataset.open = "true"; reserva(true);
+      setTimeout(function () { if (window.brisaRevela) window.brisaRevela(document.activeElement); }, 60);
+    };
+
+    if (seen !== "ok") {
       if (heroOut) setTimeout(mostrar, 1200);
       else document.addEventListener("brisa:hero-out", function () { setTimeout(mostrar, 400); }, { once: true });
     }
@@ -511,22 +518,20 @@
     aviso.setAttribute("aria-live", "polite");
     document.body.appendChild(aviso);
 
-    cookie.querySelectorAll("[data-consent]").forEach(function (b) {
-      b.addEventListener("click", function () {
-        var state = b.getAttribute("data-consent");
-        try { localStorage.setItem(KEY, state); } catch (err) { /* modo privado */ }
-        if (typeof window.gtag === "function") {
-          window.gtag("consent", "update", {
-            ad_storage: state, ad_user_data: state, ad_personalization: state, analytics_storage: state
-          });
-        }
-        push(state);
-        cookie.dataset.open = "false";
-        reserva(false);
-        document.dispatchEvent(new CustomEvent("brisa:consent", { detail: state }));
-        aviso.textContent = state === "granted"
-          ? "Cookies aceitos. O aviso foi fechado."
-          : "Cookies recusados. O aviso foi fechado e nada será medido.";
+    if (ok) ok.addEventListener("click", function () {
+      try { localStorage.setItem(KEY, "ok"); } catch (err) { /* modo privado */ }
+      cookie.dataset.open = "false";
+      reserva(false);
+      aviso.textContent = "O aviso de cookies foi fechado.";
+    });
+    if (more) more.addEventListener("click", function () { finsOpen(fins.hidden); });
+
+    document.querySelectorAll("[data-cookie-prefs]").forEach(function (b) {
+      b.addEventListener("click", function (e) {
+        e.preventDefault();
+        mostrar();
+        finsOpen(true);
+        if (ok) ok.focus({ preventScroll: true });
       });
     });
   }
